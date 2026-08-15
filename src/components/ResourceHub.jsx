@@ -80,62 +80,88 @@ export function ResourceHub() {
       </div>
 
       {/* Resource Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredResources.map(res => {
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {filteredResources.map((res, idx) => {
           const isCompleted = completedResources.includes(res.id);
           return (
             <div
               key={res.id}
-              className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 shadow-xl hover:border-seafoam-500/40 transition-all flex flex-col justify-between backdrop-blur-md group"
+              className="relative p-6 sm:p-8 min-h-[440px] overflow-visible"
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-slate-900/60 border border-slate-700/60">
-                      {getResourceIcon(res.icon)}
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-seafoam-400">
-                      {res.category}
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {res.readTime}
-                  </span>
-                </div>
-
-                <h3 className="font-display font-bold text-base text-slate-100 group-hover:text-seafoam-300 transition-colors">
-                  {res.title}
-                </h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  {res.summary}
-                </p>
+              <div
+                className="absolute inset-0"
+                style={{
+                  borderRadius: "58% 42% 55% 45% / 55% 45% 58% 42%",
+                  background: "linear-gradient(160deg, #4ADE80, #15803D",
+                  zIndex: 0,
+                }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    borderRadius: "inherit",
+                    background:
+                      "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 50%)",
+                  }}
+                />
               </div>
 
-              <div className="pt-4 mt-4 border-t border-slate-700/40 flex items-center justify-between">
-                <button
-                  onClick={() => setSelectedResource(res)}
-                  className="text-xs font-semibold text-seafoam-400 hover:text-seafoam-300 flex items-center gap-1"
-                >
-                  Read & Practice Guide →
-                </button>
+              <div
+                className="relative h-full rounded-2xl sm:rounded-3xl p-6 sm:p-8 m-6 sm:m-8 shadow-inner flex flex-col justify-between group transition-transform hover:-translate-y-1"
+                style={{
+                  background: "linear-gradient(135deg, #FDF6E2, #EAD5A0)",
+                  borderRadius: "48%, 52%,50%,50%",
+                  margin: "32px",
+                  padding: "32px 28px",
+                  xIndex: 10,
+                }}
+              >
+                <div className="space-y-3 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="p-2 rounded-xl bg-white/50 border border-bluey-900/10">
+                      {getResourceIcon(res.icon)}
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-seafoam-600">
+                      {res.category}
+                    </span>
+                    <span className="text-[11px] text-bluey-900/70 flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {res.readTime}
+                    </span>
+                  </div>
 
-                <button
-                  onClick={() => toggleResourceCompletion(res.id)}
-                  className={`p-1.5 rounded-lg border transition-all ${
-                    isCompleted
-                      ? 'bg-seafoam-500/20 border-seafoam-500/40 text-seafoam-400'
-                      : 'bg-slate-900/60 border-slate-700 text-slate-500 hover:text-slate-300'
-                  }`}
-                  title={isCompleted ? 'Completed' : 'Mark as Complete'}
-                >
-                  <CheckCircle className="w-4 h-4" />
-                </button>
+                  <h3 className="font-display font-bold text-lg text-bluey-950 leading-snug">
+                    {res.title}
+                  </h3>
+                  <p className="text-xs text-bluey-900/80 leading-relaxed break-words overflow-wrap-anywhere max-w-[90%]">
+                    {res.summary}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-bluey-900/15 flex items-center justify-between">
+                  <button
+                    onClick={() => setSelectedResource(res)}
+                    className="text-xs font-semibold text-seafoam-700 hover:text-ocean-800 flex items-center gap-1"
+                  >
+                    Read & Practice Guide →
+                  </button>
+                  <button
+                    onClick={() => toggleResourceCompletion(res.id)}
+                    className={`p-1.5 rounded-lg border transition-all ${
+                      isCompleted
+                        ? "bg-seafoam-500/20 border-seafoam-500/40 text-seafoam-600"
+                        : "bg-white/40 border-bluey-900/10 text-bluey-900 hover:text-bluey-900/70"
+                    }`}
+                    title={isCompleted ? "Completed" : "Mark as Complete"}
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           );
-        })}
-      </div>
+    })}
+  </div>
 
       {/* Guide Detail Modal */}
       {selectedResource && (
