@@ -1,9 +1,9 @@
 import React from 'react';
-import { TrendingUp, Flame, Heart, Target, BookOpen, Award, Sparkles } from 'lucide-react';
+import { TrendingUp, Flame, Heart, Brain, BookOpen, Award, Sparkles } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 
 export function GrowthDashboard() {
-  const { moodLogs, userValues, valueLogs, completedResources, breathingStreak } = useWellness();
+  const { moodLogs, beliefs, beliefPractices, completedResources, breathingStreak } = useWellness();
 
   // Calculate mood counts
   const moodCounts = moodLogs.reduce((acc, log) => {
@@ -11,16 +11,14 @@ export function GrowthDashboard() {
     return acc;
   }, {});
 
-  // Compute total checkins and average alignment score
+  // Compute total checkins and reframe count
   const totalCheckIns = moodLogs.length;
-  const avgAlignment = userValues.length > 0
-    ? (userValues.reduce((sum, v) => sum + v.alignmentScore, 0) / userValues.length).toFixed(1)
-    : 0;
+  const totalReframes = beliefPractices.length;
 
   const milestones = [
     { title: 'First Ocean Check-In', unlocked: totalCheckIns >= 1, desc: 'Logged your first emotional state' },
     { title: 'Breathing Practitioner', unlocked: breathingStreak.count >= 3, desc: '3+ consecutive breathing streak' },
-    { title: 'Values Aligned', unlocked: valueLogs.length >= 2, desc: 'Logged 2+ core value actions' },
+    { title: 'Thought Reframer', unlocked: totalReframes >= 2, desc: 'Reframed a bothering thought twice' },
     { title: 'Scholar of Well-Being', unlocked: completedResources.length >= 1, desc: 'Completed a mental health resource guide' }
   ];
 
@@ -34,7 +32,7 @@ export function GrowthDashboard() {
           Growth & Analytics Dashboard
         </h2>
         <p className="text-sm text-slate-400 max-w-xl mx-auto">
-          Visualizing your emotional journey, core value alignment, and personal milestones over time.
+          Visualizing your emotional journey, thought reframing, and personal milestones over time.
         </p>
       </div>
 
@@ -53,9 +51,9 @@ export function GrowthDashboard() {
         </div>
 
         <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 text-center space-y-1 backdrop-blur-md">
-          <Target className="w-5 h-5 text-seafoam-400 mx-auto" />
-          <div className="font-display text-2xl font-bold text-slate-100">{avgAlignment}/10</div>
-          <div className="text-[11px] text-slate-400 font-medium">Avg Value Alignment</div>
+          <Brain className="w-5 h-5 text-seafoam-400 mx-auto" />
+          <div className="font-display text-2xl font-bold text-slate-100">{totalReframes}</div>
+          <div className="text-[11px] text-slate-400 font-medium">Thoughts Reframed</div>
         </div>
 
         <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 text-center space-y-1 backdrop-blur-md">

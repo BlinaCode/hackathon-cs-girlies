@@ -1,8 +1,9 @@
 // LocalStorage keys for Guest Mode & Offline Sync
 export const STORAGE_KEYS = {
   MOOD_LOGS: 'sisu_mood_logs',
-  USER_VALUES: 'sisu_user_values',
-  VALUE_LOGS: 'sisu_value_logs',
+  BELIEFS: 'sisu_beliefs',
+  BELIEF_PRACTICES: 'sisu_belief_practices',
+  FRIENDS: 'sisu_friends',
   COMPLETED_RESOURCES: 'sisu_completed_resources',
   BREATHING_STREAK: 'sisu_breathing_streak',
   USER_PREFERENCES: 'sisu_user_prefs'

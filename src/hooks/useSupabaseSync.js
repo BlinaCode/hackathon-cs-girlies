@@ -5,7 +5,7 @@ import { supabase } from '../services/supabase';
 
 export function useSupabaseSync() {
   const { user } = useAuth();
-  const { moodLogs, userValues, valueLogs } = useWellness();
+  const { moodLogs } = useWellness();
 
   useEffect(() => {
     if (!user || !supabase) return;

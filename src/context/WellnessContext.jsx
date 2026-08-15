@@ -4,17 +4,11 @@ import { STORAGE_KEYS } from '../services/storage';
 
 const WellnessContext = createContext();
 
-const INITIAL_DEFAULT_VALUES = [
-  { id: 'val-resilience', name: 'Resilience', description: 'Bouncing back from challenges with courage & clarity', alignmentScore: 8 },
-  { id: 'val-mindfulness', name: 'Mindfulness', description: 'Being fully present in the current moment without judgment', alignmentScore: 7 },
-  { id: 'val-compassion', name: 'Self-Compassion', description: 'Offering yourself gentle kindness during difficult times', alignmentScore: 9 },
-  { id: 'val-courage', name: 'Courage', description: 'Stepping into discomfort for authentic personal growth', alignmentScore: 6 }
-];
-
 export function WellnessProvider({ children }) {
   const [moodLogs, setMoodLogs] = useLocalStorage(STORAGE_KEYS.MOOD_LOGS, []);
-  const [userValues, setUserValues] = useLocalStorage(STORAGE_KEYS.USER_VALUES, INITIAL_DEFAULT_VALUES);
-  const [valueLogs, setValueLogs] = useLocalStorage(STORAGE_KEYS.VALUE_LOGS, []);
+  const [beliefs, setBeliefs] = useLocalStorage(STORAGE_KEYS.BELIEFS, []);
+  const [beliefPractices, setBeliefPractices] = useLocalStorage(STORAGE_KEYS.BELIEF_PRACTICES, []);
+  const [friends, setFriends] = useLocalStorage(STORAGE_KEYS.FRIENDS, []);
   const [completedResources, setCompletedResources] = useLocalStorage(STORAGE_KEYS.COMPLETED_RESOURCES, []);
   const [breathingStreak, setBreathingStreak] = useLocalStorage(STORAGE_KEYS.BREATHING_STREAK, {
     count: 3,
@@ -58,21 +52,77 @@ export function WellnessProvider({ children }) {
     }
   };
 
-  // Log core value action
-  const logValueAction = (valueId, actionDescription, reflection) => {
-    const newLog = {
-      id: 'val-log-' + Date.now(),
-      valueId,
-      actionDescription,
-      reflection: reflection || '',
-      timestamp: new Date().toISOString()
+  // Create a new belief to reframe (parent record)
+  const addBelief = (statement, meaningToMe, originHistorical) => {
+    const newBelief = {
+      id: 'belief-' + Date.now(),
+      statement,
+      meaningToMe: meaningToMe || '',
+      originHistorical: originHistorical || '',
+      status: 'active', // active | resolved | archived
+      createdAt: new Date().toISOString()
     };
-    setValueLogs(prev => [newLog, ...prev]);
+    setBeliefs(prev => [newBelief, ...prev]);
+
+    setMascotState({
+      expression: 'thoughtful',
+      speech: `Naming the thought is the first brave step. Let's gently work through it together.`
+    });
+
+    return newBelief.id;
+  };
+
+  // Log a practice session for a belief (child record; same beliefId = re-practice)
+  const addBeliefPractice = (beliefId, practice) => {
+    const newPractice = {
+      id: 'practice-' + Date.now(),
+      beliefId,
+      initialBeliefScore: practice.initialBeliefScore,
+      advantages: practice.advantages || '',
+      disadvantages: practice.disadvantages || '',
+      chosenAlternativeThought: practice.chosenAlternativeThought || '',
+      chosenNewAction: practice.chosenNewAction || '',
+      finalBeliefScore: practice.finalBeliefScore ?? null,
+      aiAssisted: practice.aiAssisted || false,
+      practicedAt: new Date().toISOString()
+    };
+    setBeliefPractices(prev => [newPractice, ...prev]);
 
     setMascotState({
       expression: 'celebrating',
-      speech: `Awesome work! Living according to your core values builds true resilience.`
+      speech: `Beautiful work reframing that thought. Notice how the belief loosened its grip.`
     });
+
+    return newPractice.id;
+  };
+
+  // Update a belief's status (active | resolved | archived)
+  const updateBeliefStatus = (beliefId, status) => {
+    setBeliefs(prev => prev.map(b => b.id === beliefId ? { ...b, status } : b));
+  };
+
+  // Add a friend to the circle (raw answers + app-derived tier)
+  const addFriend = (friend) => {
+    const newFriend = {
+      id: 'friend-' + Date.now(),
+      name: friend.name,
+      contactFrequency: friend.contactFrequency, // Q1, 1..5
+      conversationDepth: friend.conversationDepth, // Q2, 1..4
+      tier: friend.tier, // close_friend | friend | acquaintance
+      createdAt: new Date().toISOString()
+    };
+    setFriends(prev => [newFriend, ...prev]);
+
+    setMascotState({
+      expression: 'joyful',
+      speech: `Connection is nourishment. It's lovely to see who fills your circle.`
+    });
+
+    return newFriend.id;
+  };
+
+  const removeFriend = (friendId) => {
+    setFriends(prev => prev.filter(f => f.id !== friendId));
   };
 
   // Complete a breathing exercise session
@@ -107,26 +157,25 @@ export function WellnessProvider({ children }) {
     });
   };
 
-  // Update value alignment score
-  const updateValueAlignment = (valueId, newScore) => {
-    setUserValues(prev => prev.map(val => val.id === valueId ? { ...val, alignmentScore: newScore } : val));
-  };
-
   return (
     <WellnessContext.Provider
       value={{
         moodLogs,
-        userValues,
-        valueLogs,
+        beliefs,
+        beliefPractices,
+        friends,
         completedResources,
         breathingStreak,
         mascotState,
         setMascotState,
         logMood,
-        logValueAction,
+        addBelief,
+        addBeliefPractice,
+        updateBeliefStatus,
+        addFriend,
+        removeFriend,
         completeBreathingSession,
-        toggleResourceCompletion,
-        updateValueAlignment
+        toggleResourceCompletion
       }}
     >
       {children}
