@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import { Play, Pause, RotateCcw, Compass, CheckCircle } from 'lucide-react';
 import { useBreathingTimer, BREATHING_MODES } from '../hooks/useBreathingTimer';
+import { useBreathingPresence } from '../hooks/useBreathingPresence';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
 
 export function BreathingVisualizer() {
+  const participants = useBreathingPresence();
+
   const {
     modeKey,
     setModeKey,
@@ -48,7 +51,20 @@ export function BreathingVisualizer() {
           Synchronize your breath with expanding ocean waves to calm your nervous system.
         </p>
       </div>
+{/* People breathing with you */}
+{participants.length > 0 && (
+  <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+    <span className="w-2.5 h-2.5 rounded-full bg-seafoam-400 animate-pulse" />
 
+    <span>
+      {participants.length === 1
+        ? `${participants[0].name} is breathing with you`
+        : `${participants[0].name} and ${participants.length - 1} other ${
+            participants.length - 1 === 1 ? 'person' : 'people'
+          } are breathing with you`}
+    </span>
+  </div>
+)}
       {/* Sisu Mascot Speech */}
       <OtterMascot expression={isActive ? 'breathing' : 'caring'} speech={isActive ? 'Breathe with me...' : 'Select your breathing technique below and press Start.'} />
 
