@@ -4,6 +4,7 @@ import { WellnessProvider, useWellness } from './context/WellnessContext';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
 import { Header } from './components/Header';
 import { OtterMascot } from './components/OtterMascot';
+import { WelcomeQuestionnaire } from './components/WelcomeQuestionnaire';
 import { MoodCheckIn } from './components/MoodCheckIn';
 import { BreathingVisualizer } from './components/BreathingVisualizer';
 import { ReframeThoughts } from './components/ReframeThoughts';
@@ -143,8 +144,8 @@ function HomeHub({ setActiveTab }) {
   );
 }
 
-function MainContent() {
-  const [activeTab, setActiveTab] = useState('hub');
+function MainContent({ initialTab = 'hub' }) {
+  const [activeTab, setActiveTab] = useState(initialTab);
   useSupabaseSync();
 
   return (
@@ -172,10 +173,30 @@ function MainContent() {
 }
 
 export default function App() {
+  const [showQuestionnaire, setShowQuestionnaire] = useState(() => {
+    return localStorage.getItem('sisu_questionnaire_completed') !== 'true';
+  });
+
+  const [initialTab, setInitialTab] = useState('hub');
+
+  const handleQuestionnaireComplete = (result) => {
+    localStorage.setItem('sisu_questionnaire_completed', 'true');
+
+    if (result?.redirect) {
+      setInitialTab(result.redirect);
+    }
+
+    setShowQuestionnaire(false);
+  };
+
   return (
     <AuthProvider>
       <WellnessProvider>
-        <MainContent />
+        {showQuestionnaire ? (
+          <WelcomeQuestionnaire onComplete={handleQuestionnaireComplete} />
+        ) : (
+          <MainContent initialTab={initialTab} />
+        )}
       </WellnessProvider>
     </AuthProvider>
   );
