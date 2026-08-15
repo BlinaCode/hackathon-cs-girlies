@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sisu | Health & Wellness Companion</title>
-  <meta name="description" content="Understanding yourself and the world around you through personalized mental health resources, breathing exercises, daily check-ins, and values tracking." />
-  
+  <title>Sisu | Zen Beach & Wellness Companion</title>
+  <meta name="description"
+    content="Find your inner calm with beach-vibes, personalized mental health resources, ocean breathing, ambient shoreline sounds, and mood tracking." />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -13,14 +15,54 @@
       theme: {
         extend: {
           colors: {
-            ocean: { 950: '#0B132B', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
-            seafoam: { 400: '#2DD4BF', 500: '#14B8A6', 600: '#0D9488' },
-            sand: { 100: '#FEF3C7', 200: '#FDE68A' },
-            coral: { 400: '#FB7185', 500: '#F43F5E' }
+            // Light & inviting beachy coastal aqua & teal palette
+            bluey: {
+              50: '#F0FAFA',   // Light airy coastal foam
+              100: '#E0F7F5',  // Soft pastel ocean spray
+              200: '#B2EBF2',  // Soft beachy turquoise-sky accent
+              300: '#80DEEA',  // Inviting sunlit shallow ocean
+              400: '#4DD0E1',  // Bright friendly tropical aqua
+              500: '#00ACC1',  // Signature beachy teal-cyan blue
+              600: '#00897B',  // Warm coastal teal
+              700: '#00695C',  // Deep sea accent blue
+              800: '#1F4E5B',  // Slate coastal navy borders & text
+              900: '#0F3440',  // Midnight ocean depth
+              950: '#061B24',  // Deep cozy ocean night
+            },
+            // Warm sun-baked beach sand & cream accents
+            cream: {
+              50: '#FFFDF9',   // Sandy ivory background
+              100: '#FDF6E2',  // Soft sunlit sand
+              200: '#F7E7C4',  // Warm golden beach sand
+              300: '#EAD5A0',  // Sun-baked sand accent
+              400: '#D6BA7A',  // Rich golden sand
+            },
+            // Pastel pink seashell palette
+            seashell: {
+              50: '#FFF5F7',
+              100: '#FFF0F3',
+              200: '#FFE4E8',
+              300: '#F8B4C4',  // Main pastel pink shell
+              400: '#E88C9E',  // Shell contour & shadow
+              500: '#D45B73',
+            },
+            // Darker brown otter fur colors
+            otter: {
+              light: '#E2C4A8',  // Warm soft cream muzzle & tummy
+              main: '#653B22',   // Rich dark chocolate brown fur body
+              dark: '#4A2511',   // Deep dark brown ears & paws
+              shadow: '#261105', // Facial details
+            },
+            // Legacy compatibility aliases
+            ocean: { 950: '#061B24', 900: '#0F3440', 800: '#1F4E5B', 700: '#00695C' },
+            seafoam: { 300: '#80DEEA', 400: '#4DD0E1', 500: '#00ACC1', 600: '#00897B' },
+            sand: { 100: '#FDF6E2', 200: '#F7E7C4', 300: '#EAD5A0' },
+            coral: { 400: '#F8B4C4', 500: '#E88C9E' }
           },
           fontFamily: {
             display: ['Playfair Display', 'serif'],
-            body: ['Manrope', 'sans-serif']
+            body: ['Manrope', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
           }
         }
       }
@@ -30,20 +72,119 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
 
   <style>
     @keyframes otterFloat {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(1.5deg); }
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-7px) rotate(1.5deg);
+      }
     }
-    @keyframes ripplePulse {
-      0% { transform: scale(0.9); opacity: 0.8; }
-      100% { transform: scale(1.4); opacity: 0; }
+
+    @keyframes waveSlide {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
     }
-    .animate-otter-float { animation: otterFloat 4s ease-in-out infinite; }
-    .animate-ripple { animation: ripplePulse 3s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
-    *:focus-visible { outline: 2px solid #14B8A6; outline-offset: 3px; }
+
+    @keyframes tidePulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.35;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: 0.65;
+      }
+    }
+
+    @keyframes shellGlow {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 5px rgba(248, 180, 196, 0.4));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 14px rgba(248, 180, 196, 0.9));
+      }
+    }
+
+    @keyframes foamFloat {
+      0% {
+        transform: translateY(0px) scale(0.9);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: translateY(-12px) scale(1.1);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(0px) scale(0.9);
+        opacity: 0.4;
+      }
+    }
+
+    .animate-otter-float {
+      animation: otterFloat 4.5s ease-in-out infinite;
+    }
+
+    .animate-wave-slide {
+      animation: waveSlide 22s linear infinite;
+    }
+
+    .animate-tide-pulse {
+      animation: tidePulse 6s ease-in-out infinite;
+    }
+
+    .animate-shell-glow {
+      animation: shellGlow 3.5s ease-in-out infinite;
+    }
+
+    .animate-foam-1 {
+      animation: foamFloat 5s ease-in-out infinite;
+    }
+
+    .animate-foam-2 {
+      animation: foamFloat 7s ease-in-out infinite 1.5s;
+    }
+
+    /* Custom Beachy Glass & Backdrop Styles */
+    .glass-card-day {
+      background: rgba(96, 181, 202, 0.877);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(178, 235, 242, 0.6);
+      box-shadow: 0 12px 32px -8px rgba(0, 172, 193, 0.12), 0 4px 12px -2px rgba(247, 231, 196, 0.3);
+    }
+
+    .glass-card-night {
+      background: rgba(15, 52, 64, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 137, 123, 0.4);
+      box-shadow: 0 12px 36px -8px rgba(6, 27, 36, 0.8), 0 0 20px -4px rgba(0, 172, 193, 0.15);
+    }
+
+    *:focus-visible {
+      outline: 2px solid #00ACC1;
+      outline-offset: 3px;
+    }
   </style>
 
   <!-- React & Babel for Standalone Browser Execution -->
@@ -52,11 +193,12 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
-<body class="bg-ocean-900 text-slate-100 min-h-screen font-body antialiased selection:bg-seafoam-500 selection:text-ocean-950">
+<body
+  class="min-h-screen font-body antialiased transition-colors duration-500 selection:bg-bluey-300 selection:text-bluey-950">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef, createContext, useContext } = React;
+    const { useState, useEffect, useRef } = React;
 
     // --- LOCALSTORAGE STORAGE SERVICE ---
     const STORAGE_KEYS = {
@@ -64,7 +206,8 @@
       USER_VALUES: 'sisu_user_values',
       VALUE_LOGS: 'sisu_value_logs',
       COMPLETED_RESOURCES: 'sisu_completed_resources',
-      BREATHING_STREAK: 'sisu_breathing_streak'
+      BREATHING_STREAK: 'sisu_breathing_streak',
+      THEME_MODE: 'sisu_theme_mode'
     };
 
     const getStored = (key, fallback) => {
@@ -74,12 +217,21 @@
       } catch (e) { return fallback; }
     };
     const setStored = (key, val) => {
-      try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { }
     };
+
+    // --- ZEN BEACH WISDOM & QUOTES ---
+    const BEACH_WISDOM = [
+      { quote: "Notice how the ocean never rushes, yet washes away all footprints on the shore. Give yourself time to settle.", author: "Zen Shoreline Reflection" },
+      { quote: "You cannot stop the waves, but you can learn to float upon them with gentle grace.", author: "Jon Kabat-Zinn" },
+      { quote: "Like sea glass shaped by gentle tides, your struggles carve out your unique beauty and resilience.", author: "Coastal Wisdom" },
+      { quote: "Inhale the fresh salty breeze of clarity, exhale what no longer serves your peace.", author: "Ocean Meditation" },
+      { quote: "Peace is not the absence of ocean storms, but finding your quiet anchor deep beneath the surface.", author: "Aquatic Zen" }
+    ];
 
     const INITIAL_VALUES = [
       { id: 'val-resilience', name: 'Resilience', description: 'Bouncing back from challenges with clarity & courage', alignmentScore: 8 },
-      { id: 'val-mindfulness', name: 'Mindfulness', description: 'Being present in the moment without judgment', alignmentScore: 7 },
+      { id: 'val-mindfulness', name: 'Mindfulness', description: 'Being present in the moment like still shallow waters', alignmentScore: 7 },
       { id: 'val-compassion', name: 'Self-Compassion', description: 'Offering yourself gentle kindness during stress', alignmentScore: 9 },
       { id: 'val-courage', name: 'Courage', description: 'Stepping into discomfort for authentic personal growth', alignmentScore: 6 }
     ];
@@ -87,81 +239,229 @@
     const STARTER_RESOURCES = [
       {
         id: 'res-54321',
-        title: '5-4-3-2-1 Sensory Grounding Technique',
+        title: '5-4-3-2-1 Coastal Grounding Exercise',
         category: 'Anxiety & Panic Relief',
-        readTime: '3 min read',
-        summary: 'A simple, powerful sensory exercise to anchor your mind back to the present moment during anxiety or overwhelming thoughts.',
+        readTime: '3 min practice',
+        summary: 'Anchor your nervous system using your physical senses — imagine listening to distant ocean tides and feeling warm sand underfoot.',
         steps: [
-          '5 things you can SEE around you right now.',
-          '4 things you can TOUCH (your clothes, chair, cold water).',
-          '3 things you can HEAR (ambient room noise, your breath).',
-          '2 things you can SMELL (coffee, fresh air, soap).',
-          '1 thing you can TASTE (mint or water).'
+          '5 things you can SEE (light filtering through water, soft cloud shapes).',
+          '4 things you can TOUCH (your fingertips, smooth sea glass, warm breeze).',
+          '3 things you can HEAR (ambient room hum, soft ocean waves, your breathing).',
+          '2 things you can SMELL (fresh sea air, warm tea).',
+          '1 thing you can TASTE (cool water, mint).'
         ],
-        content: 'When stress spikes, your nervous system enters fight-or-flight. The 5-4-3-2-1 technique forces your brain to switch from internal anxious loops to external physical reality.'
+        content: 'When anxious thoughts cycle, sensory grounding redirects your central nervous system away from stress loops and anchors you safely in the present moment.'
       },
       {
         id: 'res-cbt-reframing',
-        title: 'CBT Thought Reframing Cards',
+        title: 'CBT Wave Reframing Cards',
         category: 'Cognitive Reframing',
         readTime: '5 min exercise',
-        summary: 'Identify cognitive distortions like catastrophizing or all-or-nothing thinking, and reframe them into balanced perspectives.',
+        summary: 'Observe negative automatic thoughts like passing ocean waves. Learn to reframe catastrophizing into balanced, grounded clarity.',
         steps: [
-          'Identify the Automatic Thought (e.g. "I am failing").',
-          'Spot the Distortion (Catastrophizing).',
-          'Examine Evidence (What facts contradict this?).',
-          'Write a Balanced Reframe (e.g. "Today was tough, but I am learning").'
+          'Acknowledge the Heavy Wave (e.g., "I feel overwhelmed by everything").',
+          'Identify Cognitive Distortion (All-or-nothing thinking).',
+          'Examine Grounded Evidence (What calm facts exist right now?).',
+          'Craft a Balanced Reframe (e.g., "This wave is tall, but I am floating safely through it").'
         ],
-        content: 'Cognitive Behavioral Therapy shows that emotional reaction stems from mental interpretation of an event, not the event itself.'
+        content: 'Cognitive Behavioral Therapy helps you realize thoughts are mental events, not permanent realities. You are the deep ocean beneath the surface waves.'
       },
       {
         id: 'res-sleep-winddown',
-        title: 'Evening Sleep Hygiene & Wind-Down',
+        title: 'Twilight Coastal Sleep Wind-Down',
         category: 'Sleep & Relaxation',
-        readTime: '4 min read',
-        summary: 'Prepare your mind and body for restorative sleep with gentle twilight habits and screen-free transitions.',
+        readTime: '4 min ritual',
+        summary: 'Transition into restorative sleep with gentle twilight habits inspired by peaceful sea shorelines.',
         steps: [
-          'Dim ambient lights 1 hour before sleep.',
-          'Sip warm caffeine-free chamomile tea.',
-          'Practice 3 minutes of 4-7-8 relaxing breathing.',
-          'Write down 3 things you let go of until tomorrow.'
+          'Dim ambient lights 1 hour before sleep to mimic sunset colors.',
+          'Sip warm caffeine-free chamomile or lavender tea.',
+          'Practice 3 minutes of slow 4-7-8 tide breathing.',
+          'Write down 3 thoughts you release to the evening sea until tomorrow.'
         ],
-        content: 'Quality sleep is the fundamental pillar of emotional regulation. A predictable 20-minute wind-down routine signals safety to your nervous system.'
+        content: 'Restful sleep is the fundamental foundation for mental wellness. A calm wind-down signals complete safety to your brain and body.'
       }
     ];
 
+    // --- WEB AUDIO API OCEAN WAVES SOUND SYNTHESIZER ---
+    const useOceanSound = () => {
+      const [isPlaying, setIsPlaying] = useState(false);
+      const audioCtxRef = useRef(null);
+      const noiseSourceRef = useRef(null);
+
+      const toggleSound = () => {
+        if (isPlaying) {
+          if (audioCtxRef.current) {
+            audioCtxRef.current.close();
+            audioCtxRef.current = null;
+          }
+          setIsPlaying(false);
+        } else {
+          try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            audioCtxRef.current = ctx;
+
+            // Generate 4 seconds of brown noise for deep ocean waves
+            const bufferSize = ctx.sampleRate * 4;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            let lastOut = 0.0;
+            for (let i = 0; i < bufferSize; i++) {
+              const white = Math.random() * 2 - 1;
+              data[i] = (lastOut + (0.02 * white)) / 1.02;
+              lastOut = data[i];
+              data[i] *= 3.2;
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true;
+
+            // Lowpass filter for smooth ocean water sound
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 320;
+
+            // Gain node for main volume
+            const gain = ctx.createGain();
+            gain.gain.value = 0.12;
+
+            // Low Frequency Oscillator for swelling wave rhythm
+            const lfo = ctx.createOscillator();
+            lfo.frequency.value = 0.11; // ~9 second ocean tide cycle
+            const lfoGain = ctx.createGain();
+            lfoGain.gain.value = 0.08;
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(gain.gain);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+
+            noise.start();
+            lfo.start();
+            noiseSourceRef.current = noise;
+            setIsPlaying(true);
+          } catch (e) {
+            console.error('Audio synthesis not supported', e);
+          }
+        }
+      };
+
+      useEffect(() => {
+        return () => {
+          if (audioCtxRef.current) {
+            audioCtxRef.current.close();
+          }
+        };
+      }, []);
+
+      return { isPlaying, toggleSound };
+    };
+
     // --- OTTER MASCOT COMPONENT ---
-    function OtterMascot({ expression = 'caring', speech }) {
+    // Render Sisu the Light Brown Otter holding a Pastel Pink Seashell with Zen Beach aesthetics
+    function OtterMascot({ expression = 'caring', speech, isSkyMode = true }) {
       return (
-        <div className="flex items-start gap-4 max-w-xl mx-auto my-4">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 max-w-2xl mx-auto my-3">
           <div className="relative shrink-0">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500/20 to-seafoam-500/30 border border-seafoam-500/40 p-2 flex items-center justify-center shadow-xl animate-otter-float">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <circle cx="50" cy="50" r="45" fill="#14B8A6" fillOpacity="0.15" />
-                <path d="M 30 75 C 30 55, 70 55, 70 75 C 70 88, 30 88, 30 75 Z" fill="#8D5B4C" />
-                <circle cx="50" cy="45" r="24" fill="#A06A58" />
-                <ellipse cx="50" cy="52" rx="14" ry="10" fill="#FCE7D0" />
-                <circle cx="28" cy="32" r="6" fill="#8D5B4C" />
-                <circle cx="72" cy="32" r="6" fill="#8D5B4C" />
-                <ellipse cx="50" cy="48" rx="4" ry="3" fill="#3D261D" />
-                {expression === 'breathing' ? (
-                  <g stroke="#3D261D" strokeWidth="2.5" strokeLinecap="round" fill="none">
-                    <path d="M 40 42 Q 44 46 48 42" /><path d="M 52 42 Q 56 46 60 42" />
+            {/* Ambient Water Glow behind Otter */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-bluey-300 to-seashell-300 rounded-full blur-lg opacity-40 animate-tide-pulse"></div>
+
+            <div className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl p-2 flex items-center justify-center shadow-xl animate-otter-float transition-all ${isSkyMode
+              ? 'bg-gradient-to-br from-cream-100 via-bluey-50 to-bluey-100 border-2 border-bluey-200/90 shadow-bluey-300/30'
+              : 'bg-gradient-to-br from-bluey-900 via-bluey-950 to-bluey-900 border-2 border-bluey-700 shadow-bluey-950/80'
+              }`}>
+              <svg viewBox="0 0 100 100" className="w-full h-full animate-shell-glow">
+                {/* Soft pastel background aura */}
+                <circle cx="50" cy="50" r="46" fill={isSkyMode ? '#B2EBF2' : '#1F4E5B'} fillOpacity="0.4" stroke={isSkyMode ? '#80DEEA' : '#00897B'} strokeWidth="1.5" />
+
+                {/* Subtle water ripple lines in background */}
+                <path d="M 12 70 Q 50 65 88 70" stroke={isSkyMode ? '#4DD0E1' : '#00897B'} strokeWidth="1" fill="none" opacity="0.4" />
+                <path d="M 18 78 Q 50 74 82 78" stroke={isSkyMode ? '#80DEEA' : '#00695C'} strokeWidth="1" fill="none" opacity="0.3" />
+
+                {/* Otter Ears (Darker Brown Fur) */}
+                <circle cx="25" cy="29" r="8" fill="#4A2511" />
+                <circle cx="25" cy="29" r="4.5" fill="#E2C4A8" />
+                <circle cx="75" cy="29" r="8" fill="#4A2511" />
+                <circle cx="75" cy="29" r="4.5" fill="#E2C4A8" />
+
+                {/* Otter Head (Rich Dark Chocolate Brown Fur) */}
+                <circle cx="50" cy="41" r="25" fill="#653B22" />
+
+                {/* Otter Body (Darker Brown Fur) */}
+                <path d="M 26 64 C 26 49, 74 49, 74 64 C 74 89, 26 89, 26 64 Z" fill="#653B22" />
+
+                {/* Tummy Patch (Warm Light Cream) */}
+                <path d="M 34 64 C 34 53, 66 53, 66 64 C 66 86, 34 86, 34 64 Z" fill="#E2C4A8" />
+
+                {/* Muzzle */}
+                <ellipse cx="50" cy="48" rx="14.5" ry="10" fill="#E2C4A8" />
+
+                {/* Nose */}
+                <ellipse cx="50" cy="44" rx="4.8" ry="3.6" fill="#261105" />
+                <ellipse cx="48.2" cy="42.8" rx="1.3" ry="1" fill="#FFFFFF" opacity="0.8" />
+
+                {/* Eyes */}
+                {expression === 'breathing' || expression === 'zen' ? (
+                  <g stroke="#261105" strokeWidth="2.5" strokeLinecap="round" fill="none">
+                    <path d="M 38 39 Q 42 43 46 39" />
+                    <path d="M 54 39 Q 58 43 62 39" />
                   </g>
                 ) : (
-                  <g fill="#3D261D">
-                    <circle cx="43" cy="41" r="3" /><circle cx="57" cy="41" r="3" />
-                    <circle cx="44" cy="40" r="1" fill="#FFF" /><circle cx="58" cy="40" r="1" fill="#FFF" />
+                  <g fill="#261105">
+                    <circle cx="40" cy="37.5" r="3.8" />
+                    <circle cx="60" cy="37.5" r="3.8" />
+                    <circle cx="41.3" cy="36.2" r="1.4" fill="#FFF" />
+                    <circle cx="61.3" cy="36.2" r="1.4" fill="#FFF" />
                   </g>
                 )}
-                <path d="M 46 63 L 54 63 L 50 58 Z" fill="#FDE68A" />
+
+                {/* Soft Rosy Cheeks */}
+                <ellipse cx="32" cy="44" rx="3.8" ry="2.8" fill="#F8B4C4" opacity="0.8" />
+                <ellipse cx="68" cy="44" rx="3.8" ry="2.8" fill="#F8B4C4" opacity="0.8" />
+
+                {/* Mouth */}
+                <path d="M 45.5 51 Q 50 54.5 54.5 51" stroke="#261105" strokeWidth="2" strokeLinecap="round" fill="none" />
+
+                {/* PASTEL PINK SEASHELL (Held in Otter's paws) */}
+                <g id="pastel-pink-seashell">
+                  {/* Shell Base */}
+                  <path d="M 39 67 C 37 57, 63 57, 61 67 C 64 77, 36 77, 39 67 Z" fill="#F8B4C4" stroke="#E88C9E" strokeWidth="1.5" />
+                  {/* Shell Fan Ridges */}
+                  <path d="M 50 76 L 42 64" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" opacity="0.9" />
+                  <path d="M 50 76 L 50 60" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" opacity="0.9" />
+                  <path d="M 50 76 L 58 64" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" opacity="0.9" />
+                  {/* Shell Hinge Notch */}
+                  <path d="M 44 76 L 56 76 C 54 79, 46 79, 44 76 Z" fill="#E88C9E" />
+                  {/* Shell Shimmer Highlight */}
+                  <circle cx="56.5" cy="62.5" r="1.6" fill="#FFFFFF" />
+                </g>
+
+                {/* Otter Paws Holding the Pink Seashell */}
+                <ellipse cx="35" cy="69" rx="4.8" ry="4.2" fill="#4A2511" />
+                <ellipse cx="65" cy="69" rx="4.8" ry="4.2" fill="#4A2511" />
+                <circle cx="35" cy="69" r="2.2" fill="#653B22" opacity="0.5" />
+                <circle cx="65" cy="69" r="2.2" fill="#653B22" opacity="0.5" />
               </svg>
             </div>
           </div>
+
           {speech && (
-            <div className="relative flex-1 bg-slate-800 border border-slate-700/80 rounded-2xl p-4 text-slate-200 text-xs sm:text-sm shadow-xl">
-              <div className="font-bold text-[11px] uppercase tracking-wider text-seafoam-400 mb-1">Sisu the Otter 🦦</div>
-              <p className="leading-relaxed font-medium">{speech}</p>
+            <div className={`relative flex-1 rounded-3xl p-5 text-xs sm:text-sm shadow-xl border transition-all ${isSkyMode
+              ? 'glass-card-day text-bluey-950'
+              : 'glass-card-night text-bluey-50'
+              }`}>
+              <div className="flex items-center justify-between font-bold text-[11px] uppercase tracking-wider text-bluey-600 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <span>Sisu the Otter</span>
+                  <span className="text-base">🦦</span>
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-seashell-100/90 text-seashell-500 text-[10px] font-bold border border-seashell-300/80 shadow-xs">
+                  🦪 Gather Your Shells
+                </span>
+              </div>
+              <p className="leading-relaxed font-medium text-slate-700 dark:text-bluey-100">{speech}</p>
             </div>
           )}
         </div>
@@ -169,72 +469,123 @@
     }
 
     // --- MOOD CHECK-IN COMPONENT ---
-    function MoodCheckIn({ onLogMood }) {
+    function MoodCheckIn({ onLogMood, isSkyMode }) {
       const [mood, setMood] = useState('Calm');
       const [energy, setEnergy] = useState(3);
       const [reflection, setReflection] = useState('');
       const [saved, setSaved] = useState(false);
 
       const options = [
-        { name: 'Calm', emoji: '🌊' }, { name: 'Happy', emoji: '☀️' }, { name: 'Hopeful', emoji: '🌱' },
-        { name: 'Anxious', emoji: '🌀' }, { name: 'Overwhelmed', emoji: '🌧️' }, { name: 'Exhausted', emoji: '🌙' }
+        { name: 'Calm', emoji: '🌊', desc: 'Peaceful tide' },
+        { name: 'Happy', emoji: '☀️', desc: 'Sunlit joy' },
+        { name: 'Grounded', emoji: '🐚', desc: 'Centered & safe' },
+        { name: 'Anxious', emoji: '🌀', desc: 'Swirling waters' },
+        { name: 'Overwhelmed', emoji: '🌧️', desc: 'Heavy tide' },
+        { name: 'Exhausted', emoji: '🌙', desc: 'Quiet rest' }
       ];
 
       const handleSubmit = (e) => {
         e.preventDefault();
         onLogMood(mood, energy, reflection);
         setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+        setTimeout(() => setSaved(false), 3200);
       };
 
       return (
         <div className="max-w-3xl mx-auto space-y-6">
           <div className="text-center space-y-1">
-            <h2 className="font-display text-3xl font-bold text-slate-100">Daily Emotional Check-In</h2>
-            <p className="text-xs text-slate-400">Honoring how you feel right now is the first step toward inner calm.</p>
+            <h2 className={`font-display text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-bluey-50'}`}>
+              Daily Emotional Shoreline Check-In
+            </h2>
+            <p className={`text-xs ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
+              Honoring how your inner waters feel right now is the first step toward zen clarity.
+            </p>
           </div>
 
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+          <div className={`rounded-3xl p-6 sm:p-8 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+            }`}>
             {saved ? (
-              <div className="text-center py-8 space-y-2">
-                <div className="text-4xl">✨</div>
-                <h3 className="font-display text-xl font-bold text-slate-100">Check-In Saved!</h3>
-                <p className="text-xs text-slate-300">Your feelings have been safely recorded in your personal growth journal.</p>
+              <div className="text-center py-10 space-y-3">
+                <div className="text-5xl animate-bounce">🐚✨</div>
+                <h3 className={`font-display text-2xl font-bold ${isSkyMode ? 'text-bluey-900' : 'text-bluey-50'}`}>
+                  Check-In Saved to Your Journal!
+                </h3>
+                <p className={`text-xs max-w-md mx-auto ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
+                  Your feelings have been gently recorded in your personal growth history. Sisu keeps your space safe.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">1. Select Feeling</label>
-                  <div className="grid grid-cols-3 gap-2">
+                <div className="space-y-3">
+                  <label className={`block text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
+                    1. Select Your Current Feeling
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {options.map(item => (
                       <button
                         key={item.name}
                         type="button"
                         onClick={() => setMood(item.name)}
-                        className={`p-3 rounded-2xl border text-center transition-all ${
-                          mood === item.name ? 'border-seafoam-500 bg-seafoam-500/20 text-slate-100 font-bold' : 'border-slate-700 bg-slate-900/40 text-slate-300'
-                        }`}
+                        className={`p-4 rounded-2xl border text-center transition-all ${mood === item.name
+                          ? (isSkyMode
+                            ? 'border-bluey-500 bg-gradient-to-br from-bluey-100 to-bluey-50 text-bluey-950 font-bold ring-2 ring-bluey-400 shadow-md shadow-bluey-200/50'
+                            : 'border-bluey-400 bg-bluey-800 text-white font-bold ring-2 ring-bluey-500 shadow-lg shadow-bluey-950/80')
+                          : (isSkyMode
+                            ? 'border-bluey-200/80 bg-white/60 text-bluey-800 hover:bg-bluey-50 hover:border-bluey-300'
+                            : 'border-bluey-800/80 bg-bluey-950/50 text-bluey-200 hover:bg-bluey-800/40')
+                          }`}
                       >
-                        <div className="text-2xl">{item.emoji}</div>
-                        <div className="text-xs mt-1">{item.name}</div>
+                        <div className="text-3xl">{item.emoji}</div>
+                        <div className="text-xs font-bold mt-1.5">{item.name}</div>
+                        <div className="text-[10px] opacity-75 font-normal mt-0.5">{item.desc}</div>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">2. Reflection (Optional)</label>
+                  <div className="flex justify-between items-center">
+                    <label className={`text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
+                      2. Energy Level (1 = Low Tide, 5 = High Energy)
+                    </label>
+                    <span className="text-xs font-bold text-bluey-500">{energy} / 5</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="5"
+                    value={energy}
+                    onChange={e => setEnergy(parseInt(e.target.value))}
+                    className="w-full h-2 bg-bluey-200 dark:bg-bluey-800 rounded-lg appearance-none cursor-pointer accent-bluey-500"
+                  />
+                  <div className="flex justify-between text-[10px] text-bluey-600 dark:text-bluey-400 font-medium px-1">
+                    <span>🌊 Low Tide Rest</span>
+                    <span>☀️ High Energy Flow</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className={`block text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
+                    3. Reflection & Journal (Optional)
+                  </label>
                   <textarea
                     value={reflection}
                     onChange={e => setReflection(e.target.value)}
-                    placeholder="Express your thoughts freely..."
+                    placeholder="Express your feelings freely, like releasing a note into calm waters..."
                     rows="3"
-                    className="w-full px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-100 text-xs focus:border-seafoam-500"
+                    className={`w-full px-4 py-3 rounded-2xl border text-xs focus:ring-2 focus:ring-bluey-400 focus:outline-none transition-all ${isSkyMode
+                      ? 'bg-cream-50/80 border-bluey-200 text-bluey-950 placeholder-bluey-400'
+                      : 'bg-bluey-950/80 border-bluey-700 text-bluey-50 placeholder-bluey-400'
+                      }`}
                   />
                 </div>
 
-                <button type="submit" className="w-full py-3.5 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400 shadow-xl">
-                  Save Check-In
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-bluey-500 via-bluey-600 to-bluey-700 hover:from-bluey-400 hover:to-bluey-600 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2"
+                >
+                  <span>Record Mood Check-In</span>
+                  <span>🌊</span>
                 </button>
               </form>
             )}
@@ -244,7 +595,7 @@
     }
 
     // --- BREATHING VISUALIZER COMPONENT ---
-    function BreathingVisualizer({ onComplete }) {
+    function BreathingVisualizer({ onComplete, isSkyMode, isAudioPlaying, toggleAudio }) {
       const [seconds, setSeconds] = useState(4);
       const [phase, setPhase] = useState('Inhale');
       const [isActive, setIsActive] = useState(false);
@@ -258,6 +609,7 @@
               setPhase(p => {
                 if (p === 'Inhale') return 'Hold';
                 if (p === 'Hold') return 'Exhale';
+                if (p === 'Exhale') return 'Hold Rest';
                 setCycles(c => c + 1);
                 return 'Inhale';
               });
@@ -271,31 +623,64 @@
 
       return (
         <div className="max-w-3xl mx-auto space-y-6 text-center">
-          <h2 className="font-display text-3xl font-bold text-slate-100">Ocean Wave Breathing</h2>
-          <p className="text-xs text-slate-400">Box Breathing (4-4-4-4) to synchronize your heart rate variability.</p>
+          <div className="space-y-1">
+            <h2 className={`font-display text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-bluey-50'}`}>
+              Breathe in Your Bubble
+            </h2>
+            <p className={`text-xs ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
+              Flow with 4-4-4-4 Box Breathing to calm your heart rate and settle anxious waves.
+            </p>
+          </div>
 
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-12 shadow-2xl flex flex-col items-center justify-center space-y-6">
-            <div className={`w-64 h-64 rounded-full border-4 border-seafoam-400 flex flex-col items-center justify-center transition-all duration-1000 ${
-              phase === 'Inhale' ? 'scale-110 bg-seafoam-500/20' : 'scale-90 bg-ocean-950'
+          <div className={`rounded-3xl p-8 sm:p-14 flex flex-col items-center justify-center space-y-8 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
             }`}>
-              <span className="text-xs font-bold uppercase tracking-widest text-seafoam-300">{phase}</span>
-              <span className="font-display text-6xl font-bold text-slate-100">{seconds}s</span>
-              <span className="text-xs text-slate-400 mt-2">Cycle {cycles}</span>
+            <div className="relative">
+              {/* Outer Pulsing Tide Ring */}
+              <div className={`absolute -inset-3 rounded-full transition-all duration-1000 blur-md ${phase === 'Inhale'
+                ? 'bg-bluey-300/60 scale-125'
+                : phase === 'Exhale'
+                  ? 'bg-seashell-300/40 scale-95'
+                  : 'bg-bluey-200/30 scale-105'
+                }`}></div>
+
+              {/* Main Breathing Circle - Translucent Bubble Look */}
+              <div className={`relative w-64 h-64 rounded-full border flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl backdrop-blur-md ${phase === 'Inhale'
+                ? (isSkyMode ? 'scale-110 bg-gradient-to-br from-bluey-100/30 to-bluey-200/30 border-bluey-300/60 ring-8 ring-bluey-200/40 shadow-[inset_0_2px_14px_rgba(255,255,255,0.6)]' : 'scale-110 bg-bluey-800/30 border-bluey-400/60 ring-8 ring-bluey-600/30 shadow-[inset_0_2px_14px_rgba(255,255,255,0.25)]')
+                : (isSkyMode ? 'scale-90 bg-cream-50/30 border-bluey-200/40 shadow-inner' : 'scale-90 bg-bluey-950/30 border-bluey-700/40 shadow-inner')
+                }`}>
+                <span className={`text-xs font-bold uppercase tracking-widest ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>{phase}</span>
+                <span className={`font-display text-6xl font-bold my-1 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>{seconds}s</span>
+                <span className={`text-[11px] font-semibold px-3 py-1 rounded-full mt-[5px] ${isSkyMode ? 'bg-bluey-100/80 text-bluey-800' : 'bg-bluey-900 text-bluey-200'}`}>
+                  Wave Cycle {cycles}
+                </span>
+              </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-3 justify-center items-center pt-2">
               <button
                 onClick={() => setIsActive(!isActive)}
-                className="px-6 py-3 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400"
+                className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-bluey-500 to-bluey-600 hover:from-bluey-400 hover:to-bluey-500 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all flex items-center gap-2"
               >
-                {isActive ? 'Pause' : 'Start Practice'}
+                <span>{isActive ? 'Pause Tide' : 'Start Wave Practice'}</span>
+                <span>{isActive ? '⏸️' : '🌊'}</span>
               </button>
+
+              <button
+                onClick={toggleAudio}
+                className={`px-5 py-3.5 rounded-2xl border text-xs font-bold transition-all flex items-center gap-2 ${isAudioPlaying
+                  ? 'bg-bluey-500 border-bluey-600 text-white shadow-md'
+                  : (isSkyMode ? 'bg-white border-bluey-300 text-bluey-900 hover:bg-bluey-50' : 'bg-bluey-900 border-bluey-700 text-bluey-100 hover:bg-bluey-800')
+                  }`}
+              >
+                <span>{isAudioPlaying ? '🔊 Ambient Waves On' : '🔇 Play Ocean Sound'}</span>
+              </button>
+
               {cycles > 0 && (
                 <button
                   onClick={() => { onComplete(); setIsActive(false); }}
-                  className="px-6 py-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs"
+                  className="px-5 py-3.5 rounded-2xl bg-seashell-200 border border-seashell-300 text-seashell-500 font-bold text-xs shadow-sm hover:bg-seashell-100 transition-all"
                 >
-                  Complete Practice
+                  Complete Practice ✨
                 </button>
               )}
             </div>
@@ -307,102 +692,249 @@
     // --- MAIN APP RENDERER ---
     function App() {
       const [tab, setTab] = useState('hub');
+      const [themeMode, setThemeMode] = useState(() => getStored(STORAGE_KEYS.THEME_MODE, 'sky'));
       const [moodLogs, setMoodLogs] = useState(() => getStored(STORAGE_KEYS.MOOD_LOGS, []));
       const [values] = useState(() => getStored(STORAGE_KEYS.USER_VALUES, INITIAL_VALUES));
       const [streak, setStreak] = useState(() => getStored(STORAGE_KEYS.BREATHING_STREAK, { count: 3 }));
-      const [speech, setSpeech] = useState('Welcome back! Take a deep breath and explore Sisu.');
+      const [wisdomIndex, setWisdomIndex] = useState(0);
+      const [speech, setSpeech] = useState('Welcome to your beach sanctuary! Take a deep breath with Sisu and your pastel pink shell.');
+
+      const { isPlaying: isAudioPlaying, toggleSound: toggleAudio } = useOceanSound();
+      const isSkyMode = themeMode === 'sky';
+
+      useEffect(() => {
+        setStored(STORAGE_KEYS.THEME_MODE, themeMode);
+        document.body.className = isSkyMode
+          ? 'bg-gradient-to-b from-cream-50 via-bluey-50 to-bluey-100 text-bluey-950 min-h-screen font-body antialiased selection:bg-bluey-300 selection:text-bluey-950'
+          : 'bg-gradient-to-b from-[#061B24] via-[#0E3442] to-[#061B24] text-bluey-50 min-h-screen font-body antialiased selection:bg-bluey-500 selection:text-white';
+      }, [themeMode, isSkyMode]);
 
       const handleLogMood = (mood, energy, reflection) => {
         const newLog = { id: Date.now(), mood, energy, reflection, timestamp: new Date().toISOString() };
         const updated = [newLog, ...moodLogs];
         setMoodLogs(updated);
         setStored(STORAGE_KEYS.MOOD_LOGS, updated);
-        setSpeech(`Logged ${mood.toLowerCase()} mood! Naming your emotions builds inner strength.`);
+        setSpeech(`Logged ${mood.toLowerCase()} mood! Naming your feelings allows stress to wash away like calm tide.`);
       };
 
       const handleCompleteBreathing = () => {
         const updated = { count: streak.count + 1 };
         setStreak(updated);
         setStored(STORAGE_KEYS.BREATHING_STREAK, updated);
-        setSpeech('Wonderful breathing session! Feel that ocean calm within you.');
+        setSpeech('Wonderful breathing session! Feel that soothing wave of tranquility flow through you.');
+      };
+
+      const nextWisdom = () => {
+        setWisdomIndex((prev) => (prev + 1) % BEACH_WISDOM.length);
       };
 
       return (
-        <div className="min-h-screen flex flex-col">
-          {/* Header */}
-          <header className="bg-ocean-950 border-b border-slate-800 p-4 sticky top-0 z-50">
+        <div className="min-h-screen flex flex-col relative overflow-hidden">
+          {/* Subtle Background Beach Decor - Water Ripples */}
+          <div className="pointer-events-none absolute top-0 left-0 right-0 h-96 opacity-30 z-0">
+            <svg viewBox="0 0 1440 320" className="w-full h-full object-cover">
+              <path fill={isSkyMode ? '#B2EBF2' : '#00695C'} fillOpacity="0.4" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,150,768,203,864,208C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+            </svg>
+          </div>
+
+          {/* Sticky Navigation Header */}
+          <header className={`p-4 sticky top-0 z-50 border-b backdrop-blur-xl transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200/80 shadow-sm' : 'bg-bluey-950/90 border-bluey-800 shadow-md'
+            }`}>
             <div className="max-w-6xl mx-auto flex justify-between items-center">
-              <div className="flex items-center gap-2 cursor-pointer" onClick={() => setTab('hub')}>
-                <div className="w-10 h-10 rounded-xl bg-seafoam-500 text-ocean-950 flex items-center justify-center text-xl font-bold">🦦</div>
+              <div className="flex items-center gap-3 cursor-pointer" onClick={() => setTab('hub')}>
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-bluey-400 to-bluey-600 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-bluey-400/30 transform hover:scale-105 transition-all">
+                  🦦
+                </div>
                 <div>
-                  <span className="font-display font-bold text-xl text-slate-100">Sisu</span>
-                  <span className="text-[10px] text-seafoam-400 block">Health & Wellness Companion</span>
+                  <span className={`font-display font-bold text-xl block leading-tight ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>Sisu</span>
+                  <span className={`text-[10px] block font-semibold tracking-wide ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>Zen Beach Companion</span>
                 </div>
               </div>
 
-              <nav className="flex gap-2">
-                {['hub', 'checkin', 'breathing', 'resources'].map(t => (
+              <nav className="flex items-center gap-1 sm:gap-2">
+                {[
+                  { id: 'hub', label: 'Zen Hub', icon: '🐚' },
+                  { id: 'checkin', label: 'Check-In', icon: '🌊' },
+                  { id: 'breathing', label: 'Breathing', icon: '💨' },
+                  { id: 'resources', label: 'Library', icon: '📖' }
+                ].map(t => (
                   <button
-                    key={t}
-                    onClick={() => setTab(t)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider ${
-                      tab === t ? 'bg-seafoam-500 text-ocean-950' : 'text-slate-300 hover:bg-slate-800'
-                    }`}
+                    key={t.id}
+                    onClick={() => setTab(t.id)}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center gap-1.5 ${tab === t.id
+                      ? 'bg-bluey-500 text-white shadow-md shadow-bluey-500/30'
+                      : (isSkyMode ? 'text-bluey-800 hover:bg-bluey-100/80' : 'text-bluey-200 hover:bg-bluey-800/60')
+                      }`}
                   >
-                    {t}
+                    <span>{t.icon}</span>
+                    <span className="hidden sm:inline">{t.label}</span>
                   </button>
                 ))}
               </nav>
 
-              <div className="text-xs px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
-                🔥 {streak.count} Streak
+              <div className="flex items-center gap-2">
+                {/* Audio Soundscape Toggle */}
+                <button
+                  onClick={toggleAudio}
+                  title="Toggle Ocean Waves Sound"
+                  className={`p-2 sm:px-3 sm:py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all ${isAudioPlaying
+                    ? 'bg-bluey-500 border-bluey-600 text-white shadow-md'
+                    : (isSkyMode ? 'bg-cream-100 border-cream-300 text-bluey-900 hover:bg-cream-200' : 'bg-bluey-900 border-bluey-700 text-bluey-100 hover:bg-bluey-800')
+                    }`}
+                >
+                  <span>{isAudioPlaying ? '🔊 Waves On' : '🌊 Ocean Sound'}</span>
+                </button>
+
+                {/* Day / Night Theme Toggle */}
+                <button
+                  onClick={() => setThemeMode(isSkyMode ? 'night' : 'sky')}
+                  title="Toggle Beach Day / Coastal Night Theme"
+                  className={`p-2 sm:px-3 sm:py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all ${isSkyMode ? 'bg-bluey-100 border-bluey-300 text-bluey-950 hover:bg-bluey-200' : 'bg-bluey-900 border-bluey-700 text-bluey-100 hover:bg-bluey-800'
+                    }`}
+                >
+                  <span>{isSkyMode ? '🌤️ Beach Day' : '🌙 Ocean Night'}</span>
+                </button>
+
+                <div className="hidden md:flex text-xs px-3 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-bold items-center gap-1.5">
+                  <span>🔥</span> {streak.count} Streak
+                </div>
               </div>
             </div>
           </header>
 
-          {/* Main Content */}
-          <main className="flex-1 max-w-6xl mx-auto w-full p-6 space-y-8">
-            <OtterMascot expression={tab === 'breathing' ? 'breathing' : 'caring'} speech={speech} />
+          {/* Main Content Area */}
+          <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
+            <OtterMascot expression={tab === 'breathing' ? 'breathing' : 'caring'} speech={speech} isSkyMode={isSkyMode} />
 
             {tab === 'hub' && (
               <div className="space-y-8">
-                <div className="bg-slate-800 border border-slate-700 rounded-3xl p-8 text-center space-y-4">
-                  <h1 className="font-display text-4xl font-bold text-slate-100">Understanding Yourself, One Wave at a Time</h1>
-                  <p className="text-xs text-slate-300 max-w-lg mx-auto">Explore daily mood check-ins, practice ocean wave breathing, track core values, and access evidence-based mental health guides.</p>
-                  <div className="flex justify-center gap-4 pt-2">
-                    <button onClick={() => setTab('checkin')} className="px-6 py-3 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400">Start Mood Check-In</button>
-                    <button onClick={() => setTab('breathing')} className="px-6 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-200 font-bold text-xs hover:bg-slate-800">Practice Breathing</button>
+                {/* Hero Coastal Card */}
+                <div className={`rounded-3xl p-8 sm:p-12 text-center space-y-5 shadow-2xl relative overflow-hidden transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+                  }`}>
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-seashell-100/90 border border-seashell-300 text-seashell-500 text-xs font-bold mb-1 shadow-sm">
+                    <span>🦪 Inviting Beach & Aquatic Vibes</span>
+                  </div>
+
+                  <h1 className={`font-display text-3xl sm:text-5xl font-bold leading-tight ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
+                    Find Your Inner Calm, One Wave at a Time
+                  </h1>
+
+                  <p className={`text-xs sm:text-base max-w-xl mx-auto leading-relaxed ${isSkyMode ? 'text-bluey-800' : 'text-bluey-200'}`}>
+                    Welcome to Sisu. Practice ocean tide breathing, record your feelings with shoreline check-ins, and anchor your daily mental wellness.
+                  </p>
+
+                  <div className="flex flex-wrap justify-center gap-3 pt-3">
+                    <button
+                      onClick={() => setTab('checkin')}
+                      className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-bluey-500 to-bluey-600 hover:from-bluey-400 hover:to-bluey-500 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all flex items-center gap-2"
+                    >
+                      <span>Start Mood Check-In</span>
+                      <span>🌊</span>
+                    </button>
+                    <button
+                      onClick={() => setTab('breathing')}
+                      className={`px-7 py-3.5 rounded-2xl border font-bold text-xs transition-all flex items-center gap-2 ${isSkyMode
+                        ? 'bg-white border-bluey-300 text-bluey-950 hover:bg-bluey-50 shadow-sm'
+                        : 'bg-bluey-800 border-bluey-700 text-bluey-100 hover:bg-bluey-700'
+                        }`}
+                    >
+                      <span>Practice Ocean Breathing</span>
+                      <span>💨</span>
+                    </button>
                   </div>
                 </div>
 
+                {/* Zen Beach Wisdom Quote Card */}
+                <div className={`rounded-3xl p-6 sm:p-8 space-y-3 relative transition-all ${isSkyMode ? 'bg-gradient-to-r from-cream-100/90 via-bluey-50/80 to-cream-100/90 border border-cream-300/80 shadow-md' : 'bg-gradient-to-r from-bluey-900/90 via-bluey-950 to-bluey-900/90 border border-bluey-700 shadow-md'
+                  }`}>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-bluey-600 dark:text-bluey-300 flex items-center gap-1.5">
+                      <span>✨</span> Beach Wisdom of the Day
+                    </span>
+                    <button
+                      onClick={nextWisdom}
+                      className="text-[11px] font-bold text-bluey-600 dark:text-bluey-300 hover:underline flex items-center gap-1"
+                    >
+                      <span>Next Wave</span> <span>🌊</span>
+                    </button>
+                  </div>
+                  <blockquote className={`font-display text-lg sm:text-xl italic font-medium ${isSkyMode ? 'text-bluey-950' : 'text-bluey-50'}`}>
+                    "{BEACH_WISDOM[wisdomIndex].quote}"
+                  </blockquote>
+                  <p className={`text-xs font-semibold text-right ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
+                    — {BEACH_WISDOM[wisdomIndex].author}
+                  </p>
+                </div>
+
+                {/* Quick Statistics Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
-                    <div className="text-2xl font-bold text-seafoam-400">{moodLogs.length}</div>
-                    <div className="text-xs text-slate-400">Check-Ins Logged</div>
+                  <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+                    }`}>
+                    <div className="text-4xl font-display font-bold text-bluey-500">{moodLogs.length}</div>
+                    <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Check-Ins Logged</div>
                   </div>
-                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
-                    <div className="text-2xl font-bold text-amber-400">{streak.count} Days</div>
-                    <div className="text-xs text-slate-400">Breathing Streak</div>
+                  <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+                    }`}>
+                    <div className="text-4xl font-display font-bold text-amber-500">{streak.count} Days</div>
+                    <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Breathing Streak</div>
                   </div>
-                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
-                    <div className="text-2xl font-bold text-rose-400">{values.length} Values</div>
-                    <div className="text-xs text-slate-400">Core Values Tracked</div>
+                  <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+                    }`}>
+                    <div className="text-4xl font-display font-bold text-seashell-500">{values.length} Values</div>
+                    <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Core Values Tracked</div>
                   </div>
                 </div>
               </div>
             )}
 
-            {tab === 'checkin' && <MoodCheckIn onLogMood={handleLogMood} />}
-            {tab === 'breathing' && <BreathingVisualizer onComplete={handleCompleteBreathing} />}
+            {tab === 'checkin' && <MoodCheckIn onLogMood={handleLogMood} isSkyMode={isSkyMode} />}
+
+            {tab === 'breathing' && (
+              <BreathingVisualizer
+                onComplete={handleCompleteBreathing}
+                isSkyMode={isSkyMode}
+                isAudioPlaying={isAudioPlaying}
+                toggleAudio={toggleAudio}
+              />
+            )}
+
             {tab === 'resources' && (
               <div className="space-y-6 max-w-4xl mx-auto">
-                <h2 className="font-display text-3xl font-bold text-slate-100 text-center">Smart Resource Library</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="text-center space-y-1">
+                  <h2 className={`font-display text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
+                    Smart Coastal Resource Library
+                  </h2>
+                  <p className={`text-xs ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
+                    Evidence-based psychological tools formatted for gentle self-guided practice.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {STARTER_RESOURCES.map(r => (
-                    <div key={r.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-5 space-y-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-seafoam-400">{r.category}</span>
-                      <h3 className="font-display font-bold text-lg text-slate-100">{r.title}</h3>
-                      <p className="text-xs text-slate-400">{r.summary}</p>
+                    <div key={r.id} className={`rounded-2xl p-6 space-y-3 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
+                      }`}>
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-seashell-100 border border-seashell-200 text-seashell-500">
+                          {r.category}
+                        </span>
+                        <span className={`text-[10px] font-semibold ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>
+                          {r.readTime}
+                        </span>
+                      </div>
+                      <h3 className={`font-display font-bold text-xl ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>{r.title}</h3>
+                      <p className={`text-xs leading-relaxed ${isSkyMode ? 'text-bluey-800' : 'text-bluey-200'}`}>{r.summary}</p>
+
+                      <div className="pt-2 space-y-1.5 border-t border-bluey-200/50 dark:border-bluey-800/50">
+                        <span className={`text-[11px] font-bold block ${isSkyMode ? 'text-bluey-900' : 'text-bluey-200'}`}>Key Practice Steps:</span>
+                        <ul className="space-y-1 text-[11px]">
+                          {r.steps.map((step, idx) => (
+                            <li key={idx} className={`flex items-start gap-1.5 ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
+                              <span className="text-bluey-500 font-bold">•</span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -410,8 +942,17 @@
             )}
           </main>
 
-          <footer className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-            © 2026 Sisu Health & Wellness • Powered by React & Supabase Dual Mode
+          {/* Coastal Footer */}
+          <footer className={`border-t py-6 text-center text-xs font-medium relative z-10 transition-all ${isSkyMode ? 'border-bluey-200 text-bluey-700 bg-cream-50/70' : 'border-bluey-800 text-bluey-300 bg-bluey-950'
+            }`}>
+            <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+              <div>© 2026 Sisu Health & Wellness • Beach Vibes & Zen Companion</div>
+              <div className="flex items-center gap-3 text-[11px]">
+                <span>🌊 Ocean Shoreline Theme</span>
+                <span>•</span>
+                <span>🦦 Sisu & Pastel Shell</span>
+              </div>
+            </div>
           </footer>
         </div>
       );
@@ -420,4 +961,5 @@
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
+
 </html>
