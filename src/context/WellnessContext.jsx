@@ -201,6 +201,18 @@ export function WellnessProvider({ children }) {
     setCompletedResources(prev => Array.from(new Set([...prev, ...cloudResourceIds])));
   };
 
+  // Wipe all local wellness state. Called when the authenticated identity on
+  // this browser changes (logout, or a different account signing in) so one
+  // person's private data can never be attributed to the next.
+  const clearAllLocalData = () => {
+    setMoodLogs([]);
+    setBeliefs([]);
+    setBeliefPractices([]);
+    setFriends([]);
+    setCompletedResources([]);
+    setBreathingStreak({ count: 0, lastCompletedDate: null });
+  };
+
   return (
     <WellnessContext.Provider
       value={{
@@ -224,7 +236,8 @@ export function WellnessProvider({ children }) {
         completeBreathingSession,
         mergeBreathingStreakFromCloud,
         toggleResourceCompletion,
-        mergeCompletedResourcesFromCloud
+        mergeCompletedResourcesFromCloud,
+        clearAllLocalData
       }}
     >
       {children}

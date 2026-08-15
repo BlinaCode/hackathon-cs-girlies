@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
 
 const AuthContext = createContext();
@@ -8,6 +8,10 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isGuestMode, setIsGuestMode] = useState(true);
+  // Which action ('login' | 'signup' | 'logout') most recently changed the
+  // session — lets sync logic tell "logging into an existing account" apart
+  // from "signing up a new one" when both start from a guest identity.
+  const lastAuthActionRef = useRef(null);
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
@@ -42,6 +46,7 @@ export function AuthProvider({ children }) {
 
   const loginWithEmail = async (email, password) => {
     if (!supabase) throw new Error('Supabase is not configured yet.');
+    lastAuthActionRef.current = 'login';
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     return data;
@@ -49,6 +54,7 @@ export function AuthProvider({ children }) {
 
   const signUpWithEmail = async (email, password, displayName, aiFeaturesEnabled = false) => {
     if (!supabase) throw new Error('Supabase is not configured yet.');
+    lastAuthActionRef.current = 'signup';
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -59,6 +65,7 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
+    lastAuthActionRef.current = 'logout';
     if (supabase) {
       await supabase.auth.signOut();
     }
@@ -77,7 +84,8 @@ export function AuthProvider({ children }) {
         isSupabaseConfigured,
         loginWithEmail,
         signUpWithEmail,
-        logout
+        logout,
+        lastAuthActionRef
       }}
     >
       {children}

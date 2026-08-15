@@ -84,8 +84,13 @@ const toCompletedResourceRow = (resourceId, userId) => ({
   resource_id: resourceId
 });
 
+// Tracks who this browser's local data actually belongs to, so a logout or a
+// different account signing in never gets a stale identity's data attributed
+// to it. Persisted (not just a ref) so it survives page reloads.
+const IDENTITY_STORAGE_KEY = 'sisu_last_synced_identity';
+
 export function useSupabaseSync() {
-  const { user } = useAuth();
+  const { user, loading, lastAuthActionRef } = useAuth();
   const {
     moodLogs,
     beliefs,
@@ -97,11 +102,58 @@ export function useSupabaseSync() {
     breathingStreak,
     mergeBreathingStreakFromCloud,
     completedResources,
-    mergeCompletedResourcesFromCloud
+    mergeCompletedResourcesFromCloud,
+    clearAllLocalData
   } = useWellness();
 
   const knownFriendIdsRef = useRef(new Set());
   const knownCompletedResourceIdsRef = useRef(new Set());
+  // 'PENDING' until the identity-check effect below runs at least once this
+  // commit — fails closed, so a push effect never fires before the check has
+  // had a chance to clear stale data.
+  const identityRef = useRef('PENDING');
+
+  // Detect a change in WHO this browser is authenticated as, and wipe local
+  // data unless this is specifically a guest SIGNING UP for a new account
+  // (the one case where local data should merge in, not be discarded).
+  // - Real account -> anything else (logout, or a different account): wipe.
+  // - Guest -> logging into an EXISTING account: wipe (that account's own
+  //   cloud data should be all that's visible — local guest scribbles aren't
+  //   theirs to inherit).
+  // - Guest -> signing UP a new account: keep (local data becomes theirs).
+  //
+  // Gated on `loading`: AuthContext's `user` briefly passes through null on
+  // every page load while it restores an existing session — without this
+  // gate, that transient null would look like "logged out" and wipe a
+  // still-logged-in user's data on a plain refresh.
+  //
+  // Declared first so its synchronous portion runs before the push effects
+  // below in the same commit (see identityRef gate).
+  useEffect(() => {
+    if (loading) return;
+
+    const currentIdentity = user?.id ?? 'guest';
+    const storedIdentity = localStorage.getItem(IDENTITY_STORAGE_KEY);
+    const identityChanged = storedIdentity !== null && storedIdentity !== currentIdentity;
+    const authAction = lastAuthActionRef.current;
+    lastAuthActionRef.current = null; // consume — applies to this transition only
+
+    if (identityChanged) {
+      const wasRealAccount = storedIdentity !== 'guest';
+      const isGuestSignup = !wasRealAccount && authAction === 'signup';
+
+      if (wasRealAccount || !isGuestSignup) {
+        clearAllLocalData();
+        identityRef.current = 'JUST_CLEARED';
+      } else {
+        identityRef.current = 'OK';
+      }
+    } else {
+      identityRef.current = 'OK';
+    }
+
+    localStorage.setItem(IDENTITY_STORAGE_KEY, currentIdentity);
+  }, [user, loading]);
 
   // Push all local mood checkins to Supabase, keyed by id so repeats update
   // the same row instead of inserting duplicates.
@@ -109,6 +161,8 @@ export function useSupabaseSync() {
     if (!user || !supabase || moodLogs.length === 0) return;
 
     const syncMoodLogs = async () => {
+      if (identityRef.current !== 'OK') return;
+
       const rows = moodLogs.map(log => ({
         id: log.id,
         user_id: user.id,
@@ -168,6 +222,8 @@ export function useSupabaseSync() {
     if (beliefs.length === 0 && beliefPractices.length === 0) return;
 
     const syncBeliefWork = async () => {
+      if (identityRef.current !== 'OK') return;
+
       if (beliefs.length > 0) {
         const beliefRows = beliefs.map(b => toBeliefRow(b, user.id));
         const { error } = await supabase.from('beliefs').upsert(beliefRows, { onConflict: 'id' });
@@ -214,6 +270,8 @@ export function useSupabaseSync() {
     if (!user || !supabase) return;
 
     const syncFriends = async () => {
+      if (identityRef.current !== 'OK') return;
+
       const currentIds = new Set(friends.map(f => f.id));
       const removedIds = [...knownFriendIdsRef.current].filter(id => !currentIds.has(id));
 
@@ -260,6 +318,8 @@ export function useSupabaseSync() {
     if (!user || !supabase) return;
 
     const syncStreak = async () => {
+      if (identityRef.current !== 'OK') return;
+
       const { error } = await supabase
         .from('breathing_streaks')
         .upsert(toStreakRow(breathingStreak, user.id), { onConflict: 'user_id' });
@@ -298,6 +358,8 @@ export function useSupabaseSync() {
     if (!user || !supabase) return;
 
     const syncCompletedResources = async () => {
+      if (identityRef.current !== 'OK') return;
+
       const currentIds = new Set(completedResources);
       const removedIds = [...knownCompletedResourceIdsRef.current].filter(id => !currentIds.has(id));
 
