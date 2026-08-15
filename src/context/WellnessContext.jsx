@@ -24,7 +24,7 @@ export function WellnessProvider({ children }) {
   // Log a new mood check-in
   const logMood = (mood, energyLevel, tags, reflection) => {
     const newEntry = {
-      id: 'mood-' + Date.now(),
+      id: crypto.randomUUID(),
       mood,
       energyLevel,
       tags: tags || [],
@@ -55,7 +55,7 @@ export function WellnessProvider({ children }) {
   // Create a new belief to reframe (parent record)
   const addBelief = (statement, meaningToMe, originHistorical) => {
     const newBelief = {
-      id: 'belief-' + Date.now(),
+      id: crypto.randomUUID(),
       statement,
       meaningToMe: meaningToMe || '',
       originHistorical: originHistorical || '',
@@ -75,7 +75,7 @@ export function WellnessProvider({ children }) {
   // Log a practice session for a belief (child record; same beliefId = re-practice)
   const addBeliefPractice = (beliefId, practice) => {
     const newPractice = {
-      id: 'practice-' + Date.now(),
+      id: crypto.randomUUID(),
       beliefId,
       initialBeliefScore: practice.initialBeliefScore,
       advantages: practice.advantages || '',
@@ -101,10 +101,28 @@ export function WellnessProvider({ children }) {
     setBeliefs(prev => prev.map(b => b.id === beliefId ? { ...b, status } : b));
   };
 
+  // Merge belief rows pulled from Supabase into local state, keyed by id
+  // (cloud wins on shared ids; local-only rows not yet pushed are kept).
+  const mergeBeliefsFromCloud = (cloudBeliefs) => {
+    setBeliefs(prev => {
+      const map = new Map(prev.map(b => [b.id, b]));
+      cloudBeliefs.forEach(b => map.set(b.id, b));
+      return Array.from(map.values());
+    });
+  };
+
+  const mergeBeliefPracticesFromCloud = (cloudPractices) => {
+    setBeliefPractices(prev => {
+      const map = new Map(prev.map(p => [p.id, p]));
+      cloudPractices.forEach(p => map.set(p.id, p));
+      return Array.from(map.values());
+    });
+  };
+
   // Add a friend to the circle (raw answers + app-derived tier)
   const addFriend = (friend) => {
     const newFriend = {
-      id: 'friend-' + Date.now(),
+      id: crypto.randomUUID(),
       name: friend.name,
       contactFrequency: friend.contactFrequency, // Q1, 1..5
       conversationDepth: friend.conversationDepth, // Q2, 1..4
@@ -125,6 +143,15 @@ export function WellnessProvider({ children }) {
     setFriends(prev => prev.filter(f => f.id !== friendId));
   };
 
+  // Merge friend rows pulled from Supabase into local state, keyed by id
+  const mergeFriendsFromCloud = (cloudFriends) => {
+    setFriends(prev => {
+      const map = new Map(prev.map(f => [f.id, f]));
+      cloudFriends.forEach(f => map.set(f.id, f));
+      return Array.from(map.values());
+    });
+  };
+
   // Complete a breathing exercise session
   const completeBreathingSession = () => {
     const today = new Date().toISOString().split('T')[0];
@@ -138,6 +165,18 @@ export function WellnessProvider({ children }) {
     setMascotState({
       expression: 'celebrating',
       speech: `You completed your breathing practice! Feel that ocean calm within you.`
+    });
+  };
+
+  // Merge the breathing streak pulled from Supabase into local state.
+  // Whichever record has the more recent last-completed date wins (it reflects
+  // the newest activity, e.g. logged from another device).
+  const mergeBreathingStreakFromCloud = (cloudStreak) => {
+    if (!cloudStreak) return;
+    setBreathingStreak(prev => {
+      if (!prev.lastCompletedDate || cloudStreak.lastCompletedDate > prev.lastCompletedDate) return cloudStreak;
+      if (cloudStreak.lastCompletedDate === prev.lastCompletedDate && cloudStreak.count > prev.count) return cloudStreak;
+      return prev;
     });
   };
 
@@ -157,6 +196,11 @@ export function WellnessProvider({ children }) {
     });
   };
 
+  // Merge completed-resource ids pulled from Supabase into local state
+  const mergeCompletedResourcesFromCloud = (cloudResourceIds) => {
+    setCompletedResources(prev => Array.from(new Set([...prev, ...cloudResourceIds])));
+  };
+
   return (
     <WellnessContext.Provider
       value={{
@@ -172,10 +216,15 @@ export function WellnessProvider({ children }) {
         addBelief,
         addBeliefPractice,
         updateBeliefStatus,
+        mergeBeliefsFromCloud,
+        mergeBeliefPracticesFromCloud,
         addFriend,
         removeFriend,
+        mergeFriendsFromCloud,
         completeBreathingSession,
-        toggleResourceCompletion
+        mergeBreathingStreakFromCloud,
+        toggleResourceCompletion,
+        mergeCompletedResourcesFromCloud
       }}
     >
       {children}
