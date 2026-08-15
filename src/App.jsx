@@ -6,10 +6,11 @@ import { Header } from './components/Header';
 import { OtterMascot } from './components/OtterMascot';
 import { MoodCheckIn } from './components/MoodCheckIn';
 import { BreathingVisualizer } from './components/BreathingVisualizer';
-import { ValueTracker } from './components/ValueTracker';
+import { ReframeThoughts } from './components/ReframeThoughts';
+import { FriendCircle } from './components/FriendCircle';
 import { ResourceHub } from './components/ResourceHub';
 import { GrowthDashboard } from './components/GrowthDashboard';
-import { Compass, Heart, Target, BookOpen, Flame, Sparkles, ArrowRight } from 'lucide-react';
+import { Compass, Heart, Brain, Users, BookOpen, Flame, Sparkles, ArrowRight } from 'lucide-react';
 
 function HomeHub({ setActiveTab }) {
   const { mascotState, breathingStreak, moodLogs } = useWellness();
@@ -30,11 +31,18 @@ function HomeHub({ setActiveTab }) {
       badge: `${breathingStreak.count} Day Streak`
     },
     {
-      id: 'values',
-      title: 'Core Values & Alignment',
-      desc: 'Track personal values and log daily value-aligned actions.',
-      icon: <Target className="w-6 h-6 text-amber-400" />,
-      badge: 'Long-Term Growth'
+      id: 'beliefs',
+      title: 'Reframe Thoughts',
+      desc: 'Examine a bothering thought and find a kinder alternative.',
+      icon: <Brain className="w-6 h-6 text-amber-400" />,
+      badge: 'CBT Tool'
+    },
+    {
+      id: 'friends',
+      title: 'Friend Circle',
+      desc: 'Two quick questions place each person in your circle.',
+      icon: <Users className="w-6 h-6 text-seafoam-400" />,
+      badge: 'Connection'
     },
     {
       id: 'resources',
@@ -147,7 +155,8 @@ function MainContent() {
         {activeTab === 'hub' && <HomeHub setActiveTab={setActiveTab} />}
         {activeTab === 'checkin' && <MoodCheckIn />}
         {activeTab === 'breathing' && <BreathingVisualizer />}
-        {activeTab === 'values' && <ValueTracker />}
+        {activeTab === 'beliefs' && <ReframeThoughts />}
+        {activeTab === 'friends' && <FriendCircle />}
         {activeTab === 'resources' && <ResourceHub />}
         {activeTab === 'growth' && <GrowthDashboard />}
       </main>
