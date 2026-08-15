@@ -1,0 +1,27 @@
+// LocalStorage keys for Guest Mode & Offline Sync
+export const STORAGE_KEYS = {
+  MOOD_LOGS: 'sisu_mood_logs',
+  USER_VALUES: 'sisu_user_values',
+  VALUE_LOGS: 'sisu_value_logs',
+  COMPLETED_RESOURCES: 'sisu_completed_resources',
+  BREATHING_STREAK: 'sisu_breathing_streak',
+  USER_PREFERENCES: 'sisu_user_prefs'
+};
+
+export const getStoredItem = (key, fallback) => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : fallback;
+  } catch (error) {
+    console.error(`Error reading ${key} from LocalStorage:`, error);
+    return fallback;
+  }
+};
+
+export const setStoredItem = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error writing ${key} to LocalStorage:`, error);
+  }
+};

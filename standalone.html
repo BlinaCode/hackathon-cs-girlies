@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sisu | Health & Wellness Companion</title>
+  <meta name="description" content="Understanding yourself and the world around you through personalized mental health resources, breathing exercises, daily check-ins, and values tracking." />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ocean: { 950: '#0B132B', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            seafoam: { 400: '#2DD4BF', 500: '#14B8A6', 600: '#0D9488' },
+            sand: { 100: '#FEF3C7', 200: '#FDE68A' },
+            coral: { 400: '#FB7185', 500: '#F43F5E' }
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            body: ['Manrope', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    @keyframes otterFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1.5deg); }
+    }
+    @keyframes ripplePulse {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+    .animate-otter-float { animation: otterFloat 4s ease-in-out infinite; }
+    .animate-ripple { animation: ripplePulse 3s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
+    *:focus-visible { outline: 2px solid #14B8A6; outline-offset: 3px; }
+  </style>
+
+  <!-- React & Babel for Standalone Browser Execution -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body class="bg-ocean-900 text-slate-100 min-h-screen font-body antialiased selection:bg-seafoam-500 selection:text-ocean-950">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, createContext, useContext } = React;
+
+    // --- LOCALSTORAGE STORAGE SERVICE ---
+    const STORAGE_KEYS = {
+      MOOD_LOGS: 'sisu_mood_logs',
+      USER_VALUES: 'sisu_user_values',
+      VALUE_LOGS: 'sisu_value_logs',
+      COMPLETED_RESOURCES: 'sisu_completed_resources',
+      BREATHING_STREAK: 'sisu_breathing_streak'
+    };
+
+    const getStored = (key, fallback) => {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : fallback;
+      } catch (e) { return fallback; }
+    };
+    const setStored = (key, val) => {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    };
+
+    const INITIAL_VALUES = [
+      { id: 'val-resilience', name: 'Resilience', description: 'Bouncing back from challenges with clarity & courage', alignmentScore: 8 },
+      { id: 'val-mindfulness', name: 'Mindfulness', description: 'Being present in the moment without judgment', alignmentScore: 7 },
+      { id: 'val-compassion', name: 'Self-Compassion', description: 'Offering yourself gentle kindness during stress', alignmentScore: 9 },
+      { id: 'val-courage', name: 'Courage', description: 'Stepping into discomfort for authentic personal growth', alignmentScore: 6 }
+    ];
+
+    const STARTER_RESOURCES = [
+      {
+        id: 'res-54321',
+        title: '5-4-3-2-1 Sensory Grounding Technique',
+        category: 'Anxiety & Panic Relief',
+        readTime: '3 min read',
+        summary: 'A simple, powerful sensory exercise to anchor your mind back to the present moment during anxiety or overwhelming thoughts.',
+        steps: [
+          '5 things you can SEE around you right now.',
+          '4 things you can TOUCH (your clothes, chair, cold water).',
+          '3 things you can HEAR (ambient room noise, your breath).',
+          '2 things you can SMELL (coffee, fresh air, soap).',
+          '1 thing you can TASTE (mint or water).'
+        ],
+        content: 'When stress spikes, your nervous system enters fight-or-flight. The 5-4-3-2-1 technique forces your brain to switch from internal anxious loops to external physical reality.'
+      },
+      {
+        id: 'res-cbt-reframing',
+        title: 'CBT Thought Reframing Cards',
+        category: 'Cognitive Reframing',
+        readTime: '5 min exercise',
+        summary: 'Identify cognitive distortions like catastrophizing or all-or-nothing thinking, and reframe them into balanced perspectives.',
+        steps: [
+          'Identify the Automatic Thought (e.g. "I am failing").',
+          'Spot the Distortion (Catastrophizing).',
+          'Examine Evidence (What facts contradict this?).',
+          'Write a Balanced Reframe (e.g. "Today was tough, but I am learning").'
+        ],
+        content: 'Cognitive Behavioral Therapy shows that emotional reaction stems from mental interpretation of an event, not the event itself.'
+      },
+      {
+        id: 'res-sleep-winddown',
+        title: 'Evening Sleep Hygiene & Wind-Down',
+        category: 'Sleep & Relaxation',
+        readTime: '4 min read',
+        summary: 'Prepare your mind and body for restorative sleep with gentle twilight habits and screen-free transitions.',
+        steps: [
+          'Dim ambient lights 1 hour before sleep.',
+          'Sip warm caffeine-free chamomile tea.',
+          'Practice 3 minutes of 4-7-8 relaxing breathing.',
+          'Write down 3 things you let go of until tomorrow.'
+        ],
+        content: 'Quality sleep is the fundamental pillar of emotional regulation. A predictable 20-minute wind-down routine signals safety to your nervous system.'
+      }
+    ];
+
+    // --- OTTER MASCOT COMPONENT ---
+    function OtterMascot({ expression = 'caring', speech }) {
+      return (
+        <div className="flex items-start gap-4 max-w-xl mx-auto my-4">
+          <div className="relative shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-teal-500/20 to-seafoam-500/30 border border-seafoam-500/40 p-2 flex items-center justify-center shadow-xl animate-otter-float">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <circle cx="50" cy="50" r="45" fill="#14B8A6" fillOpacity="0.15" />
+                <path d="M 30 75 C 30 55, 70 55, 70 75 C 70 88, 30 88, 30 75 Z" fill="#8D5B4C" />
+                <circle cx="50" cy="45" r="24" fill="#A06A58" />
+                <ellipse cx="50" cy="52" rx="14" ry="10" fill="#FCE7D0" />
+                <circle cx="28" cy="32" r="6" fill="#8D5B4C" />
+                <circle cx="72" cy="32" r="6" fill="#8D5B4C" />
+                <ellipse cx="50" cy="48" rx="4" ry="3" fill="#3D261D" />
+                {expression === 'breathing' ? (
+                  <g stroke="#3D261D" strokeWidth="2.5" strokeLinecap="round" fill="none">
+                    <path d="M 40 42 Q 44 46 48 42" /><path d="M 52 42 Q 56 46 60 42" />
+                  </g>
+                ) : (
+                  <g fill="#3D261D">
+                    <circle cx="43" cy="41" r="3" /><circle cx="57" cy="41" r="3" />
+                    <circle cx="44" cy="40" r="1" fill="#FFF" /><circle cx="58" cy="40" r="1" fill="#FFF" />
+                  </g>
+                )}
+                <path d="M 46 63 L 54 63 L 50 58 Z" fill="#FDE68A" />
+              </svg>
+            </div>
+          </div>
+          {speech && (
+            <div className="relative flex-1 bg-slate-800 border border-slate-700/80 rounded-2xl p-4 text-slate-200 text-xs sm:text-sm shadow-xl">
+              <div className="font-bold text-[11px] uppercase tracking-wider text-seafoam-400 mb-1">Sisu the Otter 🦦</div>
+              <p className="leading-relaxed font-medium">{speech}</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // --- MOOD CHECK-IN COMPONENT ---
+    function MoodCheckIn({ onLogMood }) {
+      const [mood, setMood] = useState('Calm');
+      const [energy, setEnergy] = useState(3);
+      const [reflection, setReflection] = useState('');
+      const [saved, setSaved] = useState(false);
+
+      const options = [
+        { name: 'Calm', emoji: '🌊' }, { name: 'Happy', emoji: '☀️' }, { name: 'Hopeful', emoji: '🌱' },
+        { name: 'Anxious', emoji: '🌀' }, { name: 'Overwhelmed', emoji: '🌧️' }, { name: 'Exhausted', emoji: '🌙' }
+      ];
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        onLogMood(mood, energy, reflection);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      };
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="text-center space-y-1">
+            <h2 className="font-display text-3xl font-bold text-slate-100">Daily Emotional Check-In</h2>
+            <p className="text-xs text-slate-400">Honoring how you feel right now is the first step toward inner calm.</p>
+          </div>
+
+          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            {saved ? (
+              <div className="text-center py-8 space-y-2">
+                <div className="text-4xl">✨</div>
+                <h3 className="font-display text-xl font-bold text-slate-100">Check-In Saved!</h3>
+                <p className="text-xs text-slate-300">Your feelings have been safely recorded in your personal growth journal.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">1. Select Feeling</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {options.map(item => (
+                      <button
+                        key={item.name}
+                        type="button"
+                        onClick={() => setMood(item.name)}
+                        className={`p-3 rounded-2xl border text-center transition-all ${
+                          mood === item.name ? 'border-seafoam-500 bg-seafoam-500/20 text-slate-100 font-bold' : 'border-slate-700 bg-slate-900/40 text-slate-300'
+                        }`}
+                      >
+                        <div className="text-2xl">{item.emoji}</div>
+                        <div className="text-xs mt-1">{item.name}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">2. Reflection (Optional)</label>
+                  <textarea
+                    value={reflection}
+                    onChange={e => setReflection(e.target.value)}
+                    placeholder="Express your thoughts freely..."
+                    rows="3"
+                    className="w-full px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-100 text-xs focus:border-seafoam-500"
+                  />
+                </div>
+
+                <button type="submit" className="w-full py-3.5 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400 shadow-xl">
+                  Save Check-In
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // --- BREATHING VISUALIZER COMPONENT ---
+    function BreathingVisualizer({ onComplete }) {
+      const [seconds, setSeconds] = useState(4);
+      const [phase, setPhase] = useState('Inhale');
+      const [isActive, setIsActive] = useState(false);
+      const [cycles, setCycles] = useState(0);
+
+      useEffect(() => {
+        if (!isActive) return;
+        const interval = setInterval(() => {
+          setSeconds(prev => {
+            if (prev <= 1) {
+              setPhase(p => {
+                if (p === 'Inhale') return 'Hold';
+                if (p === 'Hold') return 'Exhale';
+                setCycles(c => c + 1);
+                return 'Inhale';
+              });
+              return 4;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+        return () => clearInterval(interval);
+      }, [isActive]);
+
+      return (
+        <div className="max-w-3xl mx-auto space-y-6 text-center">
+          <h2 className="font-display text-3xl font-bold text-slate-100">Ocean Wave Breathing</h2>
+          <p className="text-xs text-slate-400">Box Breathing (4-4-4-4) to synchronize your heart rate variability.</p>
+
+          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-12 shadow-2xl flex flex-col items-center justify-center space-y-6">
+            <div className={`w-64 h-64 rounded-full border-4 border-seafoam-400 flex flex-col items-center justify-center transition-all duration-1000 ${
+              phase === 'Inhale' ? 'scale-110 bg-seafoam-500/20' : 'scale-90 bg-ocean-950'
+            }`}>
+              <span className="text-xs font-bold uppercase tracking-widest text-seafoam-300">{phase}</span>
+              <span className="font-display text-6xl font-bold text-slate-100">{seconds}s</span>
+              <span className="text-xs text-slate-400 mt-2">Cycle {cycles}</span>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsActive(!isActive)}
+                className="px-6 py-3 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400"
+              >
+                {isActive ? 'Pause' : 'Start Practice'}
+              </button>
+              {cycles > 0 && (
+                <button
+                  onClick={() => { onComplete(); setIsActive(false); }}
+                  className="px-6 py-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold text-xs"
+                >
+                  Complete Practice
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- MAIN APP RENDERER ---
+    function App() {
+      const [tab, setTab] = useState('hub');
+      const [moodLogs, setMoodLogs] = useState(() => getStored(STORAGE_KEYS.MOOD_LOGS, []));
+      const [values] = useState(() => getStored(STORAGE_KEYS.USER_VALUES, INITIAL_VALUES));
+      const [streak, setStreak] = useState(() => getStored(STORAGE_KEYS.BREATHING_STREAK, { count: 3 }));
+      const [speech, setSpeech] = useState('Welcome back! Take a deep breath and explore Sisu.');
+
+      const handleLogMood = (mood, energy, reflection) => {
+        const newLog = { id: Date.now(), mood, energy, reflection, timestamp: new Date().toISOString() };
+        const updated = [newLog, ...moodLogs];
+        setMoodLogs(updated);
+        setStored(STORAGE_KEYS.MOOD_LOGS, updated);
+        setSpeech(`Logged ${mood.toLowerCase()} mood! Naming your emotions builds inner strength.`);
+      };
+
+      const handleCompleteBreathing = () => {
+        const updated = { count: streak.count + 1 };
+        setStreak(updated);
+        setStored(STORAGE_KEYS.BREATHING_STREAK, updated);
+        setSpeech('Wonderful breathing session! Feel that ocean calm within you.');
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col">
+          {/* Header */}
+          <header className="bg-ocean-950 border-b border-slate-800 p-4 sticky top-0 z-50">
+            <div className="max-w-6xl mx-auto flex justify-between items-center">
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => setTab('hub')}>
+                <div className="w-10 h-10 rounded-xl bg-seafoam-500 text-ocean-950 flex items-center justify-center text-xl font-bold">🦦</div>
+                <div>
+                  <span className="font-display font-bold text-xl text-slate-100">Sisu</span>
+                  <span className="text-[10px] text-seafoam-400 block">Health & Wellness Companion</span>
+                </div>
+              </div>
+
+              <nav className="flex gap-2">
+                {['hub', 'checkin', 'breathing', 'resources'].map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setTab(t)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider ${
+                      tab === t ? 'bg-seafoam-500 text-ocean-950' : 'text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="text-xs px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
+                🔥 {streak.count} Streak
+              </div>
+            </div>
+          </header>
+
+          {/* Main Content */}
+          <main className="flex-1 max-w-6xl mx-auto w-full p-6 space-y-8">
+            <OtterMascot expression={tab === 'breathing' ? 'breathing' : 'caring'} speech={speech} />
+
+            {tab === 'hub' && (
+              <div className="space-y-8">
+                <div className="bg-slate-800 border border-slate-700 rounded-3xl p-8 text-center space-y-4">
+                  <h1 className="font-display text-4xl font-bold text-slate-100">Understanding Yourself, One Wave at a Time</h1>
+                  <p className="text-xs text-slate-300 max-w-lg mx-auto">Explore daily mood check-ins, practice ocean wave breathing, track core values, and access evidence-based mental health guides.</p>
+                  <div className="flex justify-center gap-4 pt-2">
+                    <button onClick={() => setTab('checkin')} className="px-6 py-3 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400">Start Mood Check-In</button>
+                    <button onClick={() => setTab('breathing')} className="px-6 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-slate-200 font-bold text-xs hover:bg-slate-800">Practice Breathing</button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
+                    <div className="text-2xl font-bold text-seafoam-400">{moodLogs.length}</div>
+                    <div className="text-xs text-slate-400">Check-Ins Logged</div>
+                  </div>
+                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
+                    <div className="text-2xl font-bold text-amber-400">{streak.count} Days</div>
+                    <div className="text-xs text-slate-400">Breathing Streak</div>
+                  </div>
+                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-center space-y-1">
+                    <div className="text-2xl font-bold text-rose-400">{values.length} Values</div>
+                    <div className="text-xs text-slate-400">Core Values Tracked</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {tab === 'checkin' && <MoodCheckIn onLogMood={handleLogMood} />}
+            {tab === 'breathing' && <BreathingVisualizer onComplete={handleCompleteBreathing} />}
+            {tab === 'resources' && (
+              <div className="space-y-6 max-w-4xl mx-auto">
+                <h2 className="font-display text-3xl font-bold text-slate-100 text-center">Smart Resource Library</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {STARTER_RESOURCES.map(r => (
+                    <div key={r.id} className="bg-slate-800 border border-slate-700 rounded-2xl p-5 space-y-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-seafoam-400">{r.category}</span>
+                      <h3 className="font-display font-bold text-lg text-slate-100">{r.title}</h3>
+                      <p className="text-xs text-slate-400">{r.summary}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </main>
+
+          <footer className="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+            © 2026 Sisu Health & Wellness • Powered by React & Supabase Dual Mode
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

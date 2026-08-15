@@ -2,174 +2,180 @@
 
 These rules are NON-NEGOTIABLE.
 
-They protect the integrity of the Aura Chocolaterie frontend architecture and enforce high standards for accessibility, design fidelity, and clean, modular vanilla web development.
+They protect the integrity of the Sisu Health & Wellness application architecture and enforce high standards for accessibility, design fidelity, mascot engagement, state persistence, and clean component-driven development.
 
 If any rule is violated: STOP implementation and fix the issue before proceeding.
 
 ---
 
-# 1) Vanilla Stack Rule (No Heavy Frameworks)
+# 1) Modern Component & Dual-Storage Stack Rule
 
-The application MUST use Vanilla HTML, CSS, and JavaScript.
+The application MUST use React, Vite, Tailwind CSS / Custom CSS System, Supabase JS Client, and LocalStorage.
 
 Why this exists:
-- Keeps the frontend lightweight and fast.
-- Ensures deep understanding of native web APIs.
-- Prevents dependency bloat and complex build steps for a project that doesn't require them.
+- Provides a fast, modular frontend component architecture for interactive wellness tools.
+- Enables friction-free instant guest access alongside secure cloud synchronization.
+- Ensures type-safe state handling and clean maintainability for hackathon development and scaling.
 
 Mandatory:
-- Write raw HTML5, CSS3, and ES6+ JavaScript.
-- Use native DOM methods (`querySelector`, `addEventListener`).
+- Write modular React components (ES6+/JSX).
+- Use custom React hooks (`useLocalStorage`, `useSupabaseSync`, `useBreathingTimer`) for state management.
+- Integrate Supabase JS Client for Cloud Auth and PostgreSQL sync.
+- Use CSS Variables / Tailwind CSS for responsive sea-themed styling.
 
 Forbidden:
-- Introducing React, Vue, Angular, or Svelte.
-- Introducing utility-first CSS frameworks like Tailwind (unless explicitly authorized to change architecture).
-- Introducing jQuery.
+- Direct, unmanaged imperative DOM manipulations (`document.getElementById`) bypassing React state.
+- Monolithic, single-file applications without modular component decomposition.
+- Storing unencrypted sensitive credentials or API keys directly in source files.
 
 Do this instead:
-- Embrace CSS Variables (`:root`) and CSS Grid/Flexbox for styling.
-- Use modular JS files to handle logic.
+- Create modular components (`/components/MoodCheckIn`, `/components/BreathingVisualizer`, `/components/ValueTracker`, `/components/OtterMascot`).
+- Isolate state & storage logic inside dedicated hooks (`/hooks`) and service files (`/services`).
 
 ---
 
 # 2) Separation of Concerns Rule
 
-Structure, Presentation, and Logic MUST remain strictly separated.
+Structure (JSX), Presentation (CSS/Tailwind), Business Logic (Hooks), and Data Services (Supabase/Storage) MUST remain strictly separated.
 
 Why this exists:
-- Prevents spaghetti code where styles, structure, and behavior are tangled.
-- Makes debugging UI issues straightforward.
-- Ensures HTML remains readable and semantic.
+- Prevents spaghetti code where API logic, UI rendering, and state mutations are tangled.
+- Makes testing and debugging specific wellness tools straightforward.
+- Ensures clean code readability and modular reuse.
 
 Mandatory:
-- HTML defines the content and semantic structure.
-- CSS handles all visual styling and animations.
-- JS handles interactivity and state management.
+- React components define the JSX structure and UI component trees.
+- CSS Custom Properties and Tailwind handle visual presentation, sea themes, and animations.
+- Custom Hooks encapsulate state management and user interactions.
+- Service modules (`/services/supabase.js`, `/services/storage.js`) handle data persistence and API calls.
 
 Forbidden:
-- Inline styles (`<div style="color: red;">`).
-- Inline event handlers (`<button onclick="doSomething()">`).
-- Complex CSS logic written inside JavaScript (except for dynamic layout calculations).
+- Embedding raw API fetch logic directly inside UI render blocks.
+- Inline styles (`style={{ color: 'red' }}`) unless dynamically computed (e.g., breathing scale timers).
+- Complex state mutations directly inside JSX event handlers.
 
 Do this instead:
-- Use JS to toggle CSS classes (e.g., `element.classList.add('is-active')`) rather than applying direct styles.
+- Handle interactions via custom hooks and helper functions, triggering explicit state updates that re-render components cleanly.
 
 ---
 
-# 3) Mobile-First and Responsive Rule
+# 3) Mobile-First and Responsive Sea-Theme Rule
 
-All designs MUST be implemented mobile-first.
+All designs MUST be implemented mobile-first for sea-themed layouts and interactive components.
 
 Why this exists:
-- The majority of users browse e-commerce sites on mobile devices.
-- Mobile-first CSS is easier to write and maintain; scaling up is simpler than scaling down.
+- Users engage with mental health check-ins and breathing visualizers across mobile phones, tablets, and desktop displays.
+- Mobile-first layouts ensure fluid responsiveness on small screens before scaling up.
 
 Mandatory:
-- Base CSS rules apply to the smallest screens.
-- Use `min-width` media queries to add layout complexity for larger screens.
-- Use fluid units (`clamp()`, `vw`, `vh`, `%`, `rem`) for typography and spacing.
+- Base CSS rules and layouts target small mobile screens first.
+- Use responsive CSS Grid / Flexbox and `min-width` media queries for desktop layouts.
+- Use fluid units (`clamp()`, `rem`, `vw`, `%`) for typography, breathing visualizers, and card grids.
 
 Forbidden:
-- Desktop-only designs that break on mobile.
-- Fixed pixel widths that cause horizontal scrolling on small screens.
+- Fixed pixel container dimensions causing horizontal scrolling on mobile screens.
+- Desktop-only interactive visualizers that break on touch devices.
 
 Do this instead:
-- Use CSS Grid and Flexbox with `flex-wrap: wrap` to allow content to flow naturally based on screen size.
+- Utilize fluid containers (`w-full max-w-4xl mx-auto`), flexible CSS Grid grids, and responsive SVG visualizers.
 
 ---
 
-# 4) Accessibility (a11y) Rule
+# 4) Accessibility (a11y) & Calm UX Rule
 
-The application MUST be accessible to all users, including those using screen readers or keyboard navigation.
+The application MUST be fully accessible to all users, including those using screen readers or keyboard navigation, with empathetic, calming interactions.
 
 Why this exists:
-- It is a fundamental web standard and ethical requirement.
-- Good accessibility improves overall SEO and user experience.
+- Health and mental wellness applications must be inclusive, soothing, and accessible to everyone.
+- Good accessibility improves overall usability and user trust.
 
 Mandatory:
-- Use semantic HTML tags (`<header>`, `<main>`, `<nav>`, `<article>`, `<button>`).
-- Interactive elements MUST have visible focus states (`:focus-visible`).
-- Images MUST have descriptive `alt` attributes.
-- Include `.sr-only` utility classes for screen-reader text.
-- Provide a `skip-link` for keyboard users to bypass navigation.
+- Use semantic HTML tags (`<header>`, `<main>`, `<nav>`, `<article>`, `<section>`, `<button>`).
+- All interactive elements MUST have visible focus states (`:focus-visible`).
+- Interactive breathing controls, mood sliders, and soundscape toggles MUST include descriptive ARIA labels.
+- Provide `.sr-only` utility text for screen readers (e.g., Sisu the Otter mascot status updates).
 
 Forbidden:
-- Using `<div>` or `<span>` for buttons or links without `role` and `tabindex` attributes.
-- Removing focus outlines without providing a visible alternative (e.g., `outline: none` without a fallback).
+- Using non-interactive elements (`<div>`, `<span>`) as clickable buttons without `role="button"` and `tabindex="0"`.
+- Removing focus outlines without an explicit accessible fallback.
+- Auto-playing loud audio soundscapes without explicit user consent and volume mute controls.
 
 Do this instead:
-- Use `<button>` for actions and `<a>` for navigation.
-- Test the site using only the Tab key.
+- Use native `<button>` elements, provide screen-reader announcements, and allow complete keyboard navigation using `Tab` and `Enter/Space`.
 
 ---
 
-# 5) State Management and Persistence Rule
+# 5) State Management & Dual Persistence Rule
 
-Client-side state (like the shopping cart) MUST be persisted and synchronized accurately.
+Client-side state MUST be persisted locally (Instant Guest Access) and synchronized with Supabase Cloud DB when authenticated.
 
 Why this exists:
-- Users expect their cart items to remain if they refresh the page or navigate away.
-- Desynchronized UI and state lead to confusing user experiences and lost sales.
+- Users expect instant, friction-free access to check in their emotions and practice breathing without forced login.
+- When logged in, user data (mood logs, core value entries, resource progress, streaks) must sync seamlessly across devices.
 
 Mandatory:
-- Use `localStorage` to save critical state across sessions.
-- Isolate state mutation logic from DOM update logic.
-- Ensure the UI immediately reflects the underlying state after any change.
+- Maintain an offline-first local state using `localStorage` for Guest mode.
+- Synchronize local state with Supabase Database when user logs in via Supabase Auth.
+- Trigger optimistic UI updates so user interactions feel instantaneous.
 
 Forbidden:
-- Relying solely on the DOM to store state (e.g., reading data attributes to calculate totals, rather than having a JavaScript state object).
-- Failing silently if `localStorage` quota is exceeded.
+- Losing user check-ins or value progress upon page refresh in Guest mode.
+- Failing silently if offline or if Supabase database sync fails.
 
 Do this instead:
-- Create a central state object or array in JS, update it, save to `localStorage`, and then trigger a UI render function.
+- Use a central state management pattern (Custom React Context or Zustand/Hook state), save to `localStorage`, and push to Supabase in the background.
 
 ---
 
-# 6) Performance and Asset Rule
+# 6) Performance & Soothing Asset Rule
 
-Assets MUST be optimized to prevent slow load times.
+Audio soundscapes, otter mascot vector graphics, and breathing visualizer animations MUST be optimized for fluid, instant performance.
 
 Why this exists:
-- E-commerce conversion rates drop significantly with every second of load delay.
-- Heavy assets cause layout shifts and poor First Contentful Paint metrics.
+- Laggy animations or broken audio playback destroy the calming effect of breathing exercises.
+- Heavy unoptimized assets cause slow load times and poor user retention.
 
 Mandatory:
-- Compress images and use modern formats (like WebP).
-- Size images appropriately for their container.
-- Use CSS transitions/animations (`transform`, `opacity`) over JavaScript-driven animations.
+- Use compressed vector SVG assets or optimized WebP images for Sisu the Otter mascot expressions.
+- Compress ambient sea soundscapes (WebM/MP3 formats) and lazy-load audio assets on demand.
+- Use hardware-accelerated CSS properties (`transform`, `opacity`) for smooth 60fps breathing visualizer animations.
 
 Forbidden:
-- Loading massive 4K images for small product thumbnails.
-- Triggering layout thrashing by constantly reading and writing to the DOM in JS loops.
+- Uncompressed multi-megabyte image or audio files.
+- Triggering layout thrashing or main-thread freezing during breathing visualizer timers.
 
 Do this instead:
-- Use CSS `aspect-ratio` to reserve space for images before they load, preventing Cumulative Layout Shift (CLS).
+- Pre-render SVG visualizers, use `requestAnimationFrame` or CSS keyframes for animations, and reserve space using `aspect-ratio` to prevent cumulative layout shifts.
 
 ---
 
-# 7) Design Consistency and Brand Identity Rule
+# 7) Design Consistency & Sisu Sea-Themed Identity Rule
 
-The UI MUST maintain the established elegant, premium aesthetic of the Aura brand.
+The UI MUST maintain the soothing aquatic aesthetic of the Sisu brand with Sisu the Otter mascot integration.
 
 Why this exists:
-- The brand sells high-end fine aroma chocolate; the digital experience must reflect that quality.
-- Inconsistent colors or fonts break user trust and cheapen the brand.
+- Sisu offers a safe, soothing digital sanctuary; visual harmony reinforces tranquility and user trust.
+- The mascot Sisu the Otter provides friendly, Duolingo-style emotional encouragement throughout the user journey.
 
 Mandatory:
-- Stick strictly to defined CSS Custom Properties for colors (`--color-bg`, `--color-text`, `--color-accent`, etc.).
-- Use the defined typography stack (`Playfair Display` for headings, `Manrope`/`Inter` for body).
-- Ensure hover states and transitions are smooth and subtle (e.g., `transition: all 0.3s ease`).
+- Stick strictly to defined CSS Custom Properties for the Sisu Sea Palette:
+  - Deep Ocean Slate: `--color-bg-deep` (`#0F172A`), `--color-card-bg` (`#1E293B`)
+  - Seafoam Teal: `--color-primary-teal` (`#14B8A6`), `--color-accent-teal` (`#0D9488`)
+  - Warm Sand Neutral: `--color-sand-light` (`#FEF3C7`), `--color-sand-accent` (`#FDE68A`)
+  - Soft Coral Accent: `--color-coral` (`#F43F5E`)
+- Typography stack: `Playfair Display` for headings and milestones; `Manrope`/`Inter` for body copy and resource guides.
+- Display Sisu the Otter with dynamic expressions (Joyful, Breathing, Caring, Thoughtful, Milestone Celebration).
 
 Forbidden:
-- Introducing generic colors (plain `#F00`, `#00F`) outside the palette.
-- Using default browser fonts or harsh, unstyled form inputs.
+- Introducing generic jarring colors (harsh `#F00`, `#00F`) outside the brand palette.
+- Default browser form controls or cold clinical UI styling.
 
 Do this instead:
-- Reference the CSS `:root` variables for every color and font assignment.
-- Pay attention to whitespace, padding, and alignment to create a breathable, elegant layout.
+- Reference CSS variables (`var(--color-primary-teal)`) for all styling, use rounded organic cards (`rounded-2xl`), subtle hover transitions (`transition-all duration-300 ease-in-out`), and soft floating wave visualizers.
 
 ---
 
 # Final Principle
 
-Prefer simplicity and semantic correctness over clever hacks. Write code that you and others can easily read and maintain. Every change MUST improve the user experience, accessibility, or visual fidelity of the application. If it does not, it MUST be revised.
+Prefer empathy, clarity, simplicity, and semantic correctness over clever hacks. Write code that you and others can easily read, maintain, and expand. Every change MUST improve user well-being, accessibility, or visual/emotional fidelity of Sisu. If it does not, it MUST be revised.
+
