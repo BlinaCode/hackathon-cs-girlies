@@ -78,19 +78,19 @@ export function BreathingVisualizer() {
           
           {/* Wave Pulse Aura */}
           <div
-            className={`absolute inset-0 rounded-full border-4 border-seafoam-400/40 bg-seafoam-500/10 transition-all duration-1000 ${
+            className={`absolute inset-3 rounded-full border-2 border-seafoam-400/40 bg-seafoam-500/10 transition-all duration-1000 ${
               isActive ? 'animate-ripple' : ''
             }`}
           />
           
-          {/* Phase Expanding Circle */}
+          {/* Phase Expanding Circle - Translucent Bubble Look */}
           <div
-            className={`w-52 h-52 sm:w-64 sm:h-64 rounded-full border-2 border-seafoam-400 flex flex-col items-center justify-center shadow-2xl transition-all duration-1000 ${
+            className={`w-52 h-52 sm:w-64 sm:h-64 rounded-full border flex flex-col items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-1000 ${
               currentPhase.name === 'Inhale'
-                ? 'scale-110 bg-seafoam-500/25 border-seafoam-300 shadow-seafoam-500/50'
+                ? 'scale-110 bg-seafoam-400/20 border-seafoam-300/60 shadow-[inset_0_2px_14px_rgba(255,255,255,0.3)] ring-4 ring-seafoam-400/20'
                 : currentPhase.name === 'Exhale'
-                ? 'scale-90 bg-ocean-950/80 border-teal-500/40'
-                : 'scale-100 bg-teal-500/20 border-teal-400'
+                ? 'scale-90 bg-ocean-950/30 border-teal-400/30 shadow-[inset_0_2px_8px_rgba(255,255,255,0.15)]'
+                : 'scale-100 bg-teal-400/20 border-teal-300/50 shadow-[inset_0_2px_12px_rgba(255,255,255,0.25)]'
             }`}
           >
             <span className="text-xs uppercase font-bold tracking-widest text-seafoam-300 mb-1">
@@ -99,7 +99,7 @@ export function BreathingVisualizer() {
             <span className="font-display text-5xl sm:text-6xl font-bold text-slate-100">
               {secondsRemaining}s
             </span>
-            <span className="text-xs text-slate-400 mt-2">
+            <span className="text-xs text-slate-400 mt-[13px]">
               Cycle {completedCycles}
             </span>
           </div>
