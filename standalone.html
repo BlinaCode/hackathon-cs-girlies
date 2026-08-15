@@ -643,10 +643,10 @@
                   : 'bg-bluey-200/30 scale-105'
                 }`}></div>
 
-              {/* Main Breathing Circle */}
-              <div className={`relative w-64 h-64 rounded-full border-2 flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl ${phase === 'Inhale'
-                ? (isSkyMode ? 'scale-110 bg-gradient-to-br from-bluey-100/80 to-bluey-200/80 border-bluey-400 ring-8 ring-bluey-200/70 shadow-bluey-300/50' : 'scale-110 bg-bluey-800/80 border-bluey-400 ring-8 ring-bluey-600/70 shadow-bluey-950/80')
-                : (isSkyMode ? 'scale-90 bg-gradient-to-br from-cream-50/80 to-bluey-50/80 border-bluey-300 shadow-inner' : 'scale-90 bg-bluey-950/80 border-bluey-700 shadow-inner')
+              {/* Main Breathing Circle - Translucent Bubble Look */}
+              <div className={`relative w-64 h-64 rounded-full border flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl backdrop-blur-md ${phase === 'Inhale'
+                ? (isSkyMode ? 'scale-110 bg-gradient-to-br from-bluey-100/30 to-bluey-200/30 border-bluey-300/60 ring-8 ring-bluey-200/40 shadow-[inset_0_2px_14px_rgba(255,255,255,0.6)]' : 'scale-110 bg-bluey-800/30 border-bluey-400/60 ring-8 ring-bluey-600/30 shadow-[inset_0_2px_14px_rgba(255,255,255,0.25)]')
+                : (isSkyMode ? 'scale-90 bg-cream-50/30 border-bluey-200/40 shadow-inner' : 'scale-90 bg-bluey-950/30 border-bluey-700/40 shadow-inner')
                 }`}>
                 <span className={`text-xs font-bold uppercase tracking-widest ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>{phase}</span>
                 <span className={`font-display text-6xl font-bold my-1 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>{seconds}s</span>

@@ -83,14 +83,14 @@ export function BreathingVisualizer() {
             }`}
           />
           
-          {/* Phase Expanding Circle */}
+          {/* Phase Expanding Circle - Translucent Bubble Look */}
           <div
-            className={`w-52 h-52 sm:w-64 sm:h-64 rounded-full border border-seafoam-400 flex flex-col items-center justify-center shadow-2xl transition-all duration-1000 ${
+            className={`w-52 h-52 sm:w-64 sm:h-64 rounded-full border flex flex-col items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-1000 ${
               currentPhase.name === 'Inhale'
-                ? 'scale-110 bg-seafoam-500/80 border-seafoam-300 shadow-seafoam-500/50'
+                ? 'scale-110 bg-seafoam-400/20 border-seafoam-300/60 shadow-[inset_0_2px_14px_rgba(255,255,255,0.3)] ring-4 ring-seafoam-400/20'
                 : currentPhase.name === 'Exhale'
-                ? 'scale-90 bg-ocean-950/80 border-teal-500/40'
-                : 'scale-100 bg-teal-500/80 border-teal-400'
+                ? 'scale-90 bg-ocean-950/30 border-teal-400/30 shadow-[inset_0_2px_8px_rgba(255,255,255,0.15)]'
+                : 'scale-100 bg-teal-400/20 border-teal-300/50 shadow-[inset_0_2px_12px_rgba(255,255,255,0.25)]'
             }`}
           >
             <span className="text-xs uppercase font-bold tracking-widest text-seafoam-300 mb-1">
