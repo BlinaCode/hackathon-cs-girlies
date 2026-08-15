@@ -90,6 +90,13 @@ CREATE TABLE IF NOT EXISTS public.completed_resources (
   UNIQUE (user_id, resource_id)
 );
 
+-- 6. Breathing Streak Table (one row per user; mirrors local streak state)
+CREATE TABLE IF NOT EXISTS public.breathing_streaks (
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE PRIMARY KEY,
+  count INT DEFAULT 0,
+  last_completed_date DATE
+);
+
 -- Enable Row Level Security (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.mood_checkins ENABLE ROW LEVEL SECURITY;
@@ -97,6 +104,7 @@ ALTER TABLE public.beliefs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.belief_practices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.friends ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.completed_resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.breathing_streaks ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can manage own profile" ON public.profiles FOR ALL USING (auth.uid() = id);
 CREATE POLICY "Users can manage own mood checkins" ON public.mood_checkins FOR ALL USING (auth.uid() = user_id);
@@ -104,3 +112,4 @@ CREATE POLICY "Users can manage own beliefs" ON public.beliefs FOR ALL USING (au
 CREATE POLICY "Users can manage own belief practices" ON public.belief_practices FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage own friends" ON public.friends FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "Users can manage own completed resources" ON public.completed_resources FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can manage own breathing streak" ON public.breathing_streaks FOR ALL USING (auth.uid() = user_id);
