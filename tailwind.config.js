@@ -21,13 +21,10 @@ export default {
           900: '#0F3440',
           950: '#061B24',
         },
-        // Warm sun-baked beach sand & cream accents
-        cream: {
-          50: '#FFFDF9',
-          100: '#FDF6E2',
-          200: '#F7E7C4',
-          300: '#EAD5A0',
-          400: '#D6BA7A',
+        seafoam: {
+          400: '#2ea394ff',
+          500: '#14B8A6',
+          600: '#0D9488',
         },
         // Pastel pink seashell palette
         seashell: {
