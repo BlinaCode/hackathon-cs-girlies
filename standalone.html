@@ -909,11 +909,36 @@
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {STARTER_RESOURCES.map(r => (
-                    <div key={r.id} className={`rounded-2xl p-6 space-y-3 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
-                      }`}>
-                      <div className="flex justify-between items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
+                  {STARTER_RESOURCES.map((r, idx) => (
+                    <div key={r.id} className={`relative p-4 sm:p-5 
+                      `}>
+      <div
+        className={`absolute inset-0 `}
+        style={{ borderRadius: '48% 52% 55% 45% / 55% 48% 52% 45%' }}
+      >
+        {/* Faint concentric wave lines, echoing your header wave SVG */}
+        <svg className="absolute inset-0 w-full h-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M5 55 Q 50 45 95 55" stroke="white" strokeWidth="0.8" fill="none" opacity="0.5" />
+          <path d="M8 68 Q 50 60 92 68" stroke="white" strokeWidth="0.6" fill="none" opacity="0.35" />
+        </svg>
+        {/* Floating foam using your existing animate-foam-1 / animate-foam-2 keyframes */}
+        <span className="absolute top-3 left-5 text-base animate-foam-1 opacity-80">🫧</span>
+        <span className="absolute bottom-5 right-6 text-sm animate-foam-2 opacity-70">🫧</span>
+      </div>
+      <div
+        className="relative p-6 space-y-3 shadow-xl transition-transform hover:-translate-y-1"
+        style={{
+          background: isSkyMode
+            ? 'linear-gradient(135deg, #FDF6E2, #EAD5A0)'
+            : 'linear-gradient(135deg, #D6BA7A, #B89A5E)',
+          borderRadius: '58% 42% 45% 55% / 48% 55% 45% 52%',
+          margin: '16px'
+        }}
+      >
+        <div className="absolute -top-5 left-8 text-2xl drop-shadow-md">🌴</div>
+
+                      <div className="flex justify-between items-center pt-3">
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-seashell-100 border border-seashell-200 text-seashell-500">
                           {r.category}
                         </span>
@@ -921,20 +946,21 @@
                           {r.readTime}
                         </span>
                       </div>
-                      <h3 className={`font-display font-bold text-xl ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>{r.title}</h3>
-                      <p className={`text-xs leading-relaxed ${isSkyMode ? 'text-bluey-800' : 'text-bluey-200'}`}>{r.summary}</p>
+                      <h3 className={"font-display font-bold text-xl text-bluey-950"}>{r.title}</h3>
+                      <p className={`text-xs leading-relaxed text-bluey-900/80`}>{r.summary}</p>
 
-                      <div className="pt-2 space-y-1.5 border-t border-bluey-200/50 dark:border-bluey-800/50">
-                        <span className={`text-[11px] font-bold block ${isSkyMode ? 'text-bluey-900' : 'text-bluey-200'}`}>Key Practice Steps:</span>
-                        <ul className="space-y-1 text-[11px]">
-                          {r.steps.map((step, idx) => (
-                            <li key={idx} className={`flex items-start gap-1.5 ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
-                              <span className="text-bluey-500 font-bold">•</span>
+                      <div className={"pt-2 space-y-1.5 border-t border-bluey-900/15"}>
+                         <span className={"text-[11px] font-bold block text-bluey-950"}>Key Practice Steps:</span>
+                         <ul className={"space-y-1 text-[11px]"}> 
+                         {r.steps.map((step, stepIdx) => (
+                            <li key={stepIdx} className="flex items-start gap-1.5 text-bluey-900/80">
+                              <span className="text-bluey-600 font-bold">•</span>
                               <span>{step}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
+                    </div>
                     </div>
                   ))}
                 </div>
