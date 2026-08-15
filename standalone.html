@@ -142,6 +142,16 @@
       }
     }
 
+    @keyframes wave-drift {
+      from {
+        background-position: 0 0;
+      }
+
+      to {
+        background-position: 200px 0;
+      }
+    }
+
     .animate-otter-float {
       animation: otterFloat 4.5s ease-in-out infinite;
     }
@@ -359,6 +369,43 @@
       return { isPlaying, toggleSound };
     };
 
+    // --- SANDY SHORELINE DECOR: SHELLS & ROCKS ---
+    const SAND_DECOR_ITEMS = [
+      { id: 1, type: 'shell', left: '4%', bottom: '18px', size: 34, rotation: -12 },
+      { id: 2, type: 'rock', left: '11%', bottom: '8px', size: 46, rotation: 0 },
+      { id: 3, type: 'shell', left: '19%', bottom: '28px', size: 26, rotation: 20 },
+      { id: 4, type: 'rock', left: '27%', bottom: '14px', size: 32, rotation: 0 },
+      { id: 5, type: 'shell', left: '35%', bottom: '10px', size: 30, rotation: -30 },
+      { id: 6, type: 'rock', left: '44%', bottom: '22px', size: 38, rotation: 0 },
+      { id: 7, type: 'shell', left: '53%', bottom: '16px', size: 28, rotation: 8 },
+      { id: 8, type: 'rock', left: '61%', bottom: '6px', size: 42, rotation: 0 },
+      { id: 9, type: 'shell', left: '70%', bottom: '26px', size: 32, rotation: -18 },
+      { id: 10, type: 'rock', left: '78%', bottom: '12px', size: 36, rotation: 0 },
+      { id: 11, type: 'shell', left: '87%', bottom: '20px', size: 30, rotation: 25 },
+      { id: 12, type: 'rock', left: '93%', bottom: '8px', size: 30, rotation: 0 },
+    ];
+
+    function SeashellIcon() {
+      return (
+        <svg viewBox="0 0 40 40" className="w-full h-full">
+          <path d="M 8 30 C 6 18, 34 18, 32 30 C 35 36, 5 36, 8 30 Z" fill="#F8B4C4" stroke="#E88C9E" strokeWidth="1" />
+          <path d="M 20 34 L 12 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
+          <path d="M 20 34 L 20 16" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" opacity="0.8" />
+          <path d="M 20 34 L 28 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
+        </svg>
+      );
+    }
+
+    function RockIcon() {
+      return (
+        <svg viewBox="0 0 40 30" className="w-full h-full">
+          <ellipse cx="20" cy="20" rx="17" ry="9" fill="#8A9B9E" />
+          <ellipse cx="20" cy="17" rx="17" ry="9" fill="#A9B8BA" />
+          <ellipse cx="14" cy="14" rx="4" ry="2.2" fill="#C3CFD1" opacity="0.6" />
+        </svg>
+      );
+    }
+
     // --- OTTER MASCOT COMPONENT ---
     // Render Sisu the Light Brown Otter holding a Pastel Pink Seashell with Zen Beach aesthetics
     function OtterMascot({ expression = 'caring', speech, isSkyMode = true }) {
@@ -461,7 +508,7 @@
                   🦪 Gather Your Shells
                 </span>
               </div>
-              <p className="leading-relaxed font-medium text-slate-700 dark:text-bluey-100">{speech}</p>
+              <p className={`leading-relaxed font-medium ${isSkyMode ? 'text-bluey-800' : 'text-bluey-100'}`}>{speech}</p>
             </div>
           )}
         </div>
@@ -558,7 +605,7 @@
                     onChange={e => setEnergy(parseInt(e.target.value))}
                     className="w-full h-2 bg-bluey-200 dark:bg-bluey-800 rounded-lg appearance-none cursor-pointer accent-bluey-500"
                   />
-                  <div className="flex justify-between text-[10px] text-bluey-350 dark:text-bluey-800 font-medium px-1">
+                  <div className={`flex justify-between text-[10px] font-medium px-1 ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
                     <span>🌊 Low Tide Rest</span>
                     <span>☀️ High Energy Flow</span>
                   </div>
@@ -601,6 +648,37 @@
       const [isActive, setIsActive] = useState(false);
       const [cycles, setCycles] = useState(0);
       const [completed, setCompleted] = useState(false);
+
+      const [otherBreathers, setOtherBreathers] = useState([]);
+
+      useEffect(() => {
+        const fetchBreathers = async () => {
+          try {
+            const res = await fetch('/api/breathing-activity'); // <-- replace with your real endpoint
+            const data = await res.json();
+            // Expected shape: [{ id, phase }, ...] — one entry per active external user
+            setOtherBreathers(data);
+          } catch (err) {
+            console.error('Failed to fetch breathing activity', err);
+          }
+        };
+
+        fetchBreathers();
+        const poll = setInterval(fetchBreathers, 1000);
+        return () => clearInterval(poll);
+      }, []);
+
+      const getBubblePosition = (index, total) => {
+        const angle = (2 * Math.PI * index) / total;
+        const radius = 34 + Math.min(total * 1.2, 14); // spreads out a bit more as more people join
+        return {
+          top: `${50 + radius * Math.sin(angle)}%`,
+          left: `${50 + radius * Math.cos(angle)}%`,
+        };
+      };
+
+      const phaseScaleValue = (p) =>
+        p === 'Inhale' ? 1.25 : p === 'Exhale' ? 0.75 : 1;
 
       useEffect(() => {
         if (!isActive) return;
@@ -649,12 +727,42 @@
             </p>
           </div>
 
-          <div className={`rounded-3xl p-8 sm:p-14 flex flex-col items-center justify-center space-y-8 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'
-            }`}>
+          <div
+            className={`relative overflow-hidden rounded-3xl p-8 sm:p-14 flex flex-col items-center justify-center space-y-8 transition-all ${isSkyMode
+              ? 'bg-gradient-to-b from-bluey-50 via-bluey-100 to-bluey-200'
+              : 'bg-gradient-to-b from-bluey-950 via-bluey-900 to-bluey-800'
+              }`}
+            style={{ minHeight: `${Math.max(340, 220 + otherBreathers.length * 16)}px` }}
+          >
+            {/* Underwater shimmer layer */}
+            <div
+              className="absolute inset-0 z-0 opacity-20 pointer-events-none animate-[wave-drift_8s_linear_infinite]"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(120deg, transparent, transparent 40px, rgba(255,255,255,0.15) 40px, rgba(255,255,255,0.15) 80px)'
+              }}
+            />
+
+            {/* Other breathers — each bubble reflects that external user's own phase */}
+            {!completed && otherBreathers.map((user, i) => {
+              const pos = getBubblePosition(i, otherBreathers.length);
+              return (
+                <div
+                  key={user.id}
+                  className={`absolute z-0 rounded-full transition-transform duration-1000 ease-in-out ${isSkyMode ? 'bg-bluey-300/30' : 'bg-bluey-400/20'}`}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    top: pos.top,
+                    left: pos.left,
+                    transform: `translate(-50%, -50%) scale(${phaseScaleValue(user.phase)})`,
+                  }}
+                />
+              );
+            })}
 
             {completed ? (
               /* === COMPLETION VIEW: Sisu inside the bubble === */
-              <div className="relative" style={{ marginTop: '-5px' }}>
+              <div className="relative z-10" style={{ marginTop: '-3px' }}>
                 {/* Outer Celebration Glow */}
                 <div className={`absolute rounded-full transition-all duration-1000 blur-md bg-seashell-300/50 scale-110 animate-tide-pulse`} style={{ inset: '-5px' }}></div>
 
@@ -705,7 +813,7 @@
               </div>
             ) : (
               /* === ACTIVE/IDLE BREATHING VIEW === */
-              <div className="relative" style={{ marginTop: '-3px' }}>
+              <div className="relative z-10" style={{ marginTop: '-3px' }}>
                 {/* Outer Pulsing Tide Ring */}
                 <div style={{ inset: '-5px' }} className={`absolute rounded-full transition-all duration-1000 blur-md ${phase === 'Inhale'
                   ? 'bg-bluey-300/60 scale-125'
@@ -1021,6 +1129,35 @@
               </div>
             )}
           </main>
+
+          {/* Sandy Shoreline Decor */}
+          <div
+            className="relative w-full h-28 sm:h-40 overflow-hidden bg-cream-200"
+            style={{
+              maskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
+            }}
+          >
+            <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+              backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, transparent 2px, transparent 20px)'
+            }}></div>
+
+            {SAND_DECOR_ITEMS.map(item => (
+              <div
+                key={item.id}
+                className="absolute"
+                style={{
+                  left: item.left,
+                  bottom: item.bottom,
+                  width: item.size,
+                  height: item.size,
+                  transform: `rotate(${item.rotation}deg)`,
+                }}
+              >
+                {item.type === 'shell' ? <SeashellIcon /> : <RockIcon />}
+              </div>
+            ))}
+          </div>
 
           {/* Coastal Footer */}
           <footer className={`border-t py-6 text-center text-xs font-medium relative z-10 transition-all ${isSkyMode ? 'border-bluey-200 text-bluey-700 bg-cream-50/70' : 'border-bluey-800 text-bluey-300 bg-bluey-950'
