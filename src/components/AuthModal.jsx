@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, LogIn, UserPlus, ShieldCheck, AlertCircle } from 'lucide-react';
+import { X, LogIn, UserPlus, ShieldCheck, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function AuthModal({ onClose }) {
@@ -9,6 +9,7 @@ export function AuthModal({ onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [aiFeaturesEnabled, setAiFeaturesEnabled] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +20,7 @@ export function AuthModal({ onClose }) {
 
     try {
       if (isSignUp) {
-        await signUpWithEmail(email, password, displayName);
+        await signUpWithEmail(email, password, displayName, aiFeaturesEnabled);
       } else {
         await loginWithEmail(email, password);
       }
@@ -121,6 +122,21 @@ export function AuthModal({ onClose }) {
                 required
               />
             </div>
+
+            {isSignUp && (
+              <label className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-900/60 border border-slate-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={aiFeaturesEnabled}
+                  onChange={e => setAiFeaturesEnabled(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded accent-seafoam-500 shrink-0"
+                />
+                <span className="text-xs text-slate-300 flex items-center gap-1.5 flex-wrap">
+                  <Sparkles className="w-3.5 h-3.5 text-seafoam-400 shrink-0" />
+                  Use AI-generated suggestions when reframing thoughts (optional, you can change this later)
+                </span>
+              </label>
+            )}
 
             <button
               type="submit"

@@ -47,12 +47,12 @@ export function AuthProvider({ children }) {
     return data;
   };
 
-  const signUpWithEmail = async (email, password, displayName) => {
+  const signUpWithEmail = async (email, password, displayName, aiFeaturesEnabled = false) => {
     if (!supabase) throw new Error('Supabase is not configured yet.');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName } }
+      options: { data: { display_name: displayName, ai_features_enabled: aiFeaturesEnabled } }
     });
     if (error) throw error;
     return data;
