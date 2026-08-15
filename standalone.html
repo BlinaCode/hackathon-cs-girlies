@@ -625,7 +625,7 @@
         <div className="max-w-3xl mx-auto space-y-6 text-center">
           <div className="space-y-1">
             <h2 className={`font-display text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-bluey-50'}`}>
-              Ocean Tide Synchronized Breathing
+              Breathe in Your Bubble
             </h2>
             <p className={`text-xs ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
               Flow with 4-4-4-4 Box Breathing to calm your heart rate and settle anxious waves.
@@ -636,7 +636,7 @@
             }`}>
             <div className="relative">
               {/* Outer Pulsing Tide Ring */}
-              <div className={`absolute -inset-6 rounded-full transition-all duration-1000 blur-md ${phase === 'Inhale'
+              <div className={`absolute -inset-3 rounded-full transition-all duration-1000 blur-md ${phase === 'Inhale'
                 ? 'bg-bluey-300/60 scale-125'
                 : phase === 'Exhale'
                   ? 'bg-seashell-300/40 scale-95'
@@ -644,13 +644,13 @@
                 }`}></div>
 
               {/* Main Breathing Circle */}
-              <div className={`relative w-64 h-64 rounded-full border-4 flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl ${phase === 'Inhale'
-                ? (isSkyMode ? 'scale-110 bg-gradient-to-br from-bluey-100 to-bluey-200 border-bluey-400 ring-8 ring-bluey-200/70 shadow-bluey-300/50' : 'scale-110 bg-bluey-800 border-bluey-400 ring-8 ring-bluey-600/70 shadow-bluey-950/80')
-                : (isSkyMode ? 'scale-90 bg-gradient-to-br from-cream-50 to-bluey-50 border-bluey-300 shadow-inner' : 'scale-90 bg-bluey-950 border-bluey-700 shadow-inner')
+              <div className={`relative w-64 h-64 rounded-full border-2 flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl ${phase === 'Inhale'
+                ? (isSkyMode ? 'scale-110 bg-gradient-to-br from-bluey-100/80 to-bluey-200/80 border-bluey-400 ring-8 ring-bluey-200/70 shadow-bluey-300/50' : 'scale-110 bg-bluey-800/80 border-bluey-400 ring-8 ring-bluey-600/70 shadow-bluey-950/80')
+                : (isSkyMode ? 'scale-90 bg-gradient-to-br from-cream-50/80 to-bluey-50/80 border-bluey-300 shadow-inner' : 'scale-90 bg-bluey-950/80 border-bluey-700 shadow-inner')
                 }`}>
                 <span className={`text-xs font-bold uppercase tracking-widest ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>{phase}</span>
                 <span className={`font-display text-6xl font-bold my-1 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>{seconds}s</span>
-                <span className={`text-[11px] font-semibold px-3 py-1 rounded-full ${isSkyMode ? 'bg-bluey-100/80 text-bluey-800' : 'bg-bluey-900 text-bluey-200'}`}>
+                <span className={`text-[11px] font-semibold px-3 py-1 rounded-full mt-[5px] ${isSkyMode ? 'bg-bluey-100/80 text-bluey-800' : 'bg-bluey-900 text-bluey-200'}`}>
                   Wave Cycle {cycles}
                 </span>
               </div>
