@@ -1,236 +1,1282 @@
 import React, { useState } from 'react';
-import { BookOpen, CheckCircle, Clock, Search, X, Sparkles, Compass, Brain, Moon, Heart } from 'lucide-react';
+import { BookOpen, CheckCircle, Clock, Search, X, Sparkles, Compass, Brain, Moon, Heart, ArrowRight } from 'lucide-react';
 import { STARTER_RESOURCES } from '../services/resourcesData';
 import { useWellness } from '../context/WellnessContext';
-import { OtterMascot } from './OtterMascot';
 import { CountryCrisisLines } from './CountryCrisisLines';
 
-export function ResourceHub() {
-  const { completedResources, toggleResourceCompletion, mascotState, isSkyMode } = useWellness();
+function FishIcon() {
+  return (
+    <svg viewBox="0 0 50 30" className="w-full h-full drop-shadow-sm" aria-hidden="true">
+      <path d="M 8 15 C 8 8, 28 6, 36 15 C 28 24, 8 22, 8 15 Z" fill="#A4D3DE" stroke="#7AABB8" strokeWidth="1.5" />
+      <path d="M 36 15 L 46 8 L 44 15 L 46 22 Z" fill="#A4D3DE" stroke="#7AABB8" strokeWidth="1.5" />
+      <circle cx="15" cy="12" r="1.8" fill="#4A2511" />
+      <path d="M 22 10 C 20 13, 20 17, 22 20" stroke="#7AABB8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      <path d="M 27 11 C 25 14, 25 16, 27 19" stroke="#7AABB8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+
+function SeaweedIcon() {
+  return (
+    <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm" aria-hidden="true">
+      <path d="M 12 38 C 6 28, 18 20, 12 10 C 8 4, 14 2, 14 2" stroke="#8BAE7B" strokeWidth="4" strokeLinecap="round" fill="none" />
+      <path d="M 24 38 C 30 26, 18 18, 25 10 C 29 4, 24 2, 25 2" stroke="#A5C496" strokeWidth="4" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+
+function BalanceRocksIcon() {
+  return (
+    <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm" aria-hidden="true">
+      <ellipse cx="20" cy="32" rx="14" ry="5.5" fill="#788487" />
+      <ellipse cx="19" cy="23" rx="10" ry="4.5" fill="#95A3A5" />
+      <ellipse cx="21" cy="15" rx="6.5" ry="3.5" fill="#B3C0C2" />
+    </svg>
+  );
+}
+
+
+function SeashellIcon() {
+  return (
+    <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm" aria-hidden="true">
+      <path
+        d="M 10 32 C 6 16, 34 16, 30 32 C 34 37, 6 37, 10 32 Z"
+        fill="#F5B2B8"
+        stroke="#E08B95"
+        strokeWidth="1.2"
+      />
+      <path
+        d="M 20 35 L 13 20"
+        stroke="#FFFFFF"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.8"
+      />
+      <path
+        d="M 20 35 L 20 17"
+        stroke="#FFFFFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.8"
+      />
+      <path
+        d="M 20 35 L 27 20"
+        stroke="#FFFFFF"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.8"
+      />
+    </svg>
+  );
+}
+
+
+function SandDollarIcon() {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      className="w-full h-full drop-shadow-sm"
+      aria-hidden="true"
+    >
+      <circle
+        cx="20"
+        cy="20"
+        r="16"
+        fill="#F5E8C9"
+        stroke="#E3CE9E"
+        strokeWidth="1.5"
+      />
+
+      <g
+        stroke="#D1B882"
+        strokeWidth="1.2"
+        fill="none"
+        opacity="0.85"
+        strokeLinecap="round"
+      >
+        <path d="M20 10 C21.5 15, 21.5 20, 20 25 M20 10 C18.5 15, 18.5 20, 20 25" />
+        <path d="M10 20 C15 21.5, 20 21.5, 25 20 M10 20 C15 18.5, 20 18.5, 25 20" />
+      </g>
+    </svg>
+  );
+}
+
+
+function SeaGlassIcon() {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      className="w-full h-full drop-shadow-sm"
+      aria-hidden="true"
+    >
+      <path
+        d="M 18 6 C 28 4, 35 14, 32 26 C 28 35, 14 36, 8 28 C 4 18, 10 8, 18 6 Z"
+        fill="#CFE2F3"
+        stroke="#A4D3DE"
+        strokeWidth="1.5"
+        opacity="0.9"
+      />
+      <path
+        d="M 16 10 C 24 10, 28 16, 26 26"
+        stroke="#FFFFFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.6"
+      />
+    </svg>
+  );
+}
+
+
+function CoastalElementIcon() {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      className="w-full h-full drop-shadow-sm"
+      aria-hidden="true"
+    >
+      <path
+        d="M 20 36 L 20 6 M 20 12 L 30 6 M 20 18 L 32 12 M 20 24 L 30 18 M 20 12 L 10 6 M 20 18 L 8 12 M 20 24 L 10 18"
+        stroke="#84A8A6"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+export function ResourceHub({ setActiveTab }) {
+
+  const {
+    completedResources,
+    toggleResourceCompletion,
+    mascotState,
+    isSkyMode
+  } = useWellness();
 
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedResource, setSelectedResource] = useState(null);
 
-  const categories = ['All', 'Anxiety & Panic Relief', 'Cognitive Reframing', 'Sleep & Relaxation', 'Mindfulness & Self-Care'];
+
+  const skyColors = {
+    pageText: '#3A2415',
+    secondaryText: '#5C4635',
+    mutedText: '#7A5A3A',
+
+    title: '#4A2511',
+    subtitle: '#7A5A3A',
+
+    searchBackground: '#FFFFFF',
+    searchBorder: '#D6CBAE',
+    searchText: '#3A2415',
+    searchIcon: '#6B5140',
+    placeholder: '#8A765E',
+
+    inactiveTabBackground: '#FAFBF0',
+    inactiveTabBorder: '#D6CBAE',
+    inactiveTabText: '#3A2415',
+    inactiveTabHover: '#FFFFFF',
+
+    activeTabBackground: '#E88C9E',
+    activeTabBorder: '#E88C9E',
+    activeTabText: '#FFFFFF',
+
+    waterStart: '#CFE2F3',
+    waterEnd: '#A4D3DE',
+
+    cardStart: '#F5E8C7',
+    cardEnd: '#EAD5A0',
+
+    cardText: '#4A2511',
+    cardSecondaryText: '#7A5A3A',
+    cardMutedText: '#A98F6B',
+
+    iconBackground: 'rgba(255,255,255,0.60)',
+
+    incompleteCheckBackground: 'rgba(255,255,255,0.70)',
+    incompleteCheckBorder: '#D6CBAE',
+    incompleteCheckText: '#7A6A58',
+
+    completedCheckBackground: '#D9E7D0',
+    completedCheckBorder: '#8FAE7B',
+    completedCheckText: '#4E6D45',
+
+    modalOverlay: 'rgba(74,37,17,0.60)',
+    modalBackground: '#FAFBF0',
+    modalBorder: '#E8E2D1',
+
+    contentBackground: '#F5E8C7',
+    contentBorder: '#EAD5A0',
+    contentText: '#3A2415',
+
+    stepBackground: '#FFFFFF',
+    stepBorder: '#EAD5A0',
+    stepText: '#3A2415',
+
+    numberBackground: '#CFE2F3',
+    numberText: '#3A2415',
+
+    primaryButton: '#E88C9E',
+    primaryButtonText: '#FFFFFF',
+
+    ctaStart: '#CFE2F3',
+    ctaEnd: '#A4D3DE',
+    ctaBorder: '#7AABB8',
+    ctaTitle: '#1F3A42',
+    ctaText: '#2F4F58'
+  };
+
+  const nightColors = {
+    pageText: '#F8EFD7',
+    secondaryText: '#C5B8A8',
+    mutedText: '#D8C7B0',
+
+    title: '#F5E8C7',
+    subtitle: '#D6CBAE',
+
+    searchBackground: '#17212B',
+    searchBorder: '#52616B',
+    searchText: '#F8EFD7',
+    searchIcon: '#B8AC9E',
+    placeholder: '#9BA8AD',
+
+    inactiveTabBackground: '#24313B',
+    inactiveTabBorder: '#52616B',
+    inactiveTabText: '#F8EFD7',
+    inactiveTabHover: '#30404A',
+
+    activeTabBackground: '#D47A8C',
+    activeTabBorder: '#D47A8C',
+    activeTabText: '#FFFFFF',
+
+    waterStart: '#173B46',
+    waterEnd: '#102A33',
+
+    cardStart: '#3B4650',
+    cardEnd: '#29343D',
+
+    cardText: '#F8EFD7',
+    cardSecondaryText: '#C5B8A8',
+    cardMutedText: '#B8AC9E',
+
+    iconBackground: 'rgba(23,33,43,0.75)',
+
+    incompleteCheckBackground: 'rgba(48,64,74,0.85)',
+    incompleteCheckBorder: '#52616B',
+    incompleteCheckText: '#C5D0D4',
+
+    completedCheckBackground: '#294238',
+    completedCheckBorder: '#6F9D7E',
+    completedCheckText: '#B7D9B0',
+
+    modalOverlay: 'rgba(0,0,0,0.72)',
+    modalBackground: '#17212B',
+    modalBorder: '#52616B',
+
+    contentBackground: '#24313B',
+    contentBorder: '#52616B',
+    contentText: '#F1E8D7',
+
+    stepBackground: '#202B34',
+    stepBorder: '#52616B',
+    stepText: '#F1E8D7',
+
+    numberBackground: '#38515B',
+    numberText: '#F8EFD7',
+
+    primaryButton: '#D47A8C',
+    primaryButtonText: '#FFFFFF',
+
+    ctaStart: '#173B46',
+    ctaEnd: '#29434C',
+    ctaBorder: '#5D8791',
+    ctaTitle: '#F4F1E8',
+    ctaText: '#D4DFE2'
+  };
+
+  const colors = isSkyMode
+    ? skyColors
+    : nightColors;
+
+  const categories = [
+    'All',
+    'Anxiety & Panic Relief',
+    'Cognitive Reframing',
+    'Sleep & Relaxation',
+    'Mindfulness & Self-Care'
+  ];
 
   const filteredResources = STARTER_RESOURCES.filter(res => {
-    const matchesCat = activeCategory === 'All' || res.category === activeCategory;
-    const matchesQuery = res.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         res.summary.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCat =
+      activeCategory === 'All' ||
+      res.category === activeCategory;
+
+    const matchesQuery =
+      res.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      res.summary
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+
     return matchesCat && matchesQuery;
   });
 
   const getResourceIcon = (iconName) => {
+
     switch (iconName) {
-      case 'Brain': return <Brain className="w-5 h-5 text-purple-400" />;
-      case 'Moon': return <Moon className="w-5 h-5 text-indigo-400" />;
-      case 'Heart': return <Heart className="w-5 h-5 text-rose-400" />;
+
+      case 'Brain':
+        return (
+          <Brain
+            className="w-5 h-5"
+            style={{
+              color: isSkyMode
+                ? '#638C55'
+                : '#A5C496'
+            }}
+          />
+        );
+
+      case 'Moon':
+        return (
+          <Moon
+            className="w-5 h-5"
+            style={{
+              color: isSkyMode
+                ? '#527F8A'
+                : '#A4D3DE'
+            }}
+          />
+        );
+
+      case 'Heart':
+        return (
+          <Heart
+            className="w-5 h-5"
+            style={{
+              color: isSkyMode
+                ? '#C85F73'
+                : '#F5B2B8'
+            }}
+          />
+        );
+
       case 'Compass':
-      default: return <Compass className="w-5 h-5 text-seafoam-400" />;
+      default:
+        return (
+          <Compass
+            className="w-5 h-5"
+            style={{
+              color: isSkyMode
+                ? '#4F91A5'
+                : '#A4D3DE'
+            }}
+          />
+        );
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-10">
-      
-      {/* Title */}
+    <div
+      className="max-w-4xl mx-auto space-y-8 pb-10"
+      style={{
+        color: colors.pageText
+      }}
+    >
+
       <div className="text-center space-y-2">
-        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
-          <BookOpen className={`w-7 h-7 ${isSkyMode ? 'text-bluey-500' : 'text-seafoam-400'}`} />
+
+        <h2
+          className="font-display text-3xl font-bold flex items-center justify-center gap-2"
+          style={{
+            color: colors.title
+          }}
+        >
+
+          <BookOpen
+            className="w-7 h-7"
+            style={{
+              color: isSkyMode
+                ? '#5E9FB2'
+                : '#A4D3DE'
+            }}
+          />
+
           Smart Mental Health Library
+
         </h2>
-        <p className={`text-xs sm:text-sm max-w-xl mx-auto font-semibold ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
-          Evidence-based guides, grounding practices, and CBT tools available whenever you need guidance.
+
+        <p
+          className="text-xs sm:text-sm max-w-xl mx-auto font-semibold"
+          style={{
+            color: colors.subtitle
+          }}
+        >
+          Evidence-based guides, grounding practices, and CBT tools
+          available whenever you need guidance.
         </p>
+
       </div>
 
-      <OtterMascot expression={mascotState.expression} speech={mascotState.speech} />
 
       <CountryCrisisLines />
 
-      {/* Filter & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
-        
-        {/* Category Tabs */}
+
         <div className="flex overflow-x-auto gap-2 w-full sm:w-auto py-1 no-scrollbar">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
-                activeCategory === cat
-                  ? (isSkyMode ? 'bg-bluey-500 text-white shadow-md' : 'bg-bluey-600 text-white shadow-md shadow-bluey-900/50')
-                  : (isSkyMode ? 'bg-white border border-bluey-200 text-bluey-800 hover:border-bluey-400' : 'bg-bluey-900/60 border border-bluey-700 text-bluey-300 hover:border-bluey-500')
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+
+          {categories.map(cat => {
+
+            const isActive =
+              activeCategory === cat;
+
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className="
+                  px-3.5
+                  py-1.5
+                  rounded-full
+                  text-xs
+                  font-bold
+                  whitespace-nowrap
+                  transition-all
+                  border
+                "
+                style={{
+                  background: isActive
+                    ? colors.activeTabBackground
+                    : colors.inactiveTabBackground,
+
+                  borderColor: isActive
+                    ? colors.activeTabBorder
+                    : colors.inactiveTabBorder,
+
+                  color: isActive
+                    ? colors.activeTabText
+                    : colors.inactiveTabText,
+
+                  boxShadow:
+                    isActive && isSkyMode
+                      ? '0 4px 10px rgba(232,140,158,0.35)'
+                      : 'none'
+                }}
+              >
+                {cat}
+              </button>
+            );
+          })}
+
         </div>
 
-        {/* Search input */}
         <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 text-bluey-400 absolute left-3 top-3" />
+
+          <Search
+            className="w-4 h-4 absolute left-3 top-3"
+            style={{
+              color: colors.searchIcon
+            }}
+          />
+
           <input
             type="text"
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e =>
+              setSearchQuery(e.target.value)
+            }
             placeholder="Search guides..."
-            className={`w-full pl-9 pr-4 py-2 rounded-xl border text-sm font-medium focus:ring-2 resize-none transition-colors ${
-              isSkyMode 
-                ? 'bg-white/80 border-bluey-200 text-bluey-950 placeholder-bluey-400 focus:border-bluey-400 focus:ring-bluey-200' 
-                : 'bg-bluey-950/60 border-bluey-700 text-bluey-50 placeholder-bluey-500 focus:border-bluey-500 focus:ring-bluey-800'
-            }`}
+            className="
+              w-full
+              pl-9
+              pr-4
+              py-2
+              rounded-xl
+              border
+              text-sm
+              font-medium
+              outline-none
+              transition-colors
+              focus:ring-2
+            "
+            style={{
+              background: colors.searchBackground,
+              borderColor: colors.searchBorder,
+              color: colors.searchText,
+
+              '--tw-ring-color': isSkyMode
+                ? '#A4D3DE'
+                : '#5E8994'
+            }}
           />
+
         </div>
+
       </div>
 
-      {/* Resource Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
-        {filteredResources.map((res, idx) => {
-          const isCompleted = completedResources.includes(res.id);
-          return (
-            <div
-              key={res.id}
-              className="relative p-6 sm:p-8 min-h-[440px] overflow-visible"
-            >
-              <div
-                className={`absolute inset-0 transition-colors duration-700`}
-                style={{ borderRadius: '100% 90% 55% 85% / 80% 90% 55% 100%', background: isSkyMode ? 'linear-gradient(160deg, #4DD0E1, #00897B)' : 'linear-gradient(160deg, #0F3440, #1F4E5B)' }}
-              >
-                {/* Faint concentric wave lines, echoing your header wave SVG */}
-                <svg className="absolute inset-0 w-full h-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
-                  <path d="M5 55 Q 50 45 95 55" stroke="white" strokeWidth="0.8" fill="none" opacity="0.5" />
-                  <path d="M8 68 Q 50 60 92 68" stroke="white" strokeWidth="0.6" fill="none" opacity="0.35" />
-                </svg>
-                {/* Floating foam using your existing animate-foam-1 / animate-foam-2 keyframes */}
-                <span className="absolute top-3 left-5 text-base animate-foam-1 opacity-80">🫧</span>
-                <span className="absolute bottom-5 right-6 text-sm animate-foam-2 opacity-70">🫧</span>
-              </div>
-              <div
-                className="relative p-6 space-y-3 shadow-xl transition-transform hover:-translate-y-1 h-full flex flex-col justify-between"
+      <div
+        className="
+          relative
+          rounded-[3rem]
+          p-6
+          sm:p-10
+          overflow-hidden
+        "
+        style={{
+          background:
+            `linear-gradient(135deg, ${colors.waterStart}, ${colors.waterEnd})`
+        }}
+      >
+
+        {/* Wave lines */}
+
+        <svg
+          className="absolute inset-x-0 top-0 w-full h-16 sm:h-24 opacity-40"
+          viewBox="0 0 100 20"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0 10 Q 25 2 50 10 T 100 10"
+            stroke="#FFFFFF"
+            strokeWidth="0.8"
+            fill="none"
+            opacity="0.6"
+          />
+
+          <path
+            d="M0 15 Q 25 8 50 15 T 100 15"
+            stroke="#FFFFFF"
+            strokeWidth="0.6"
+            fill="none"
+            opacity="0.4"
+          />
+        </svg>
+
+
+        {/* Decorations */}
+
+        <span
+          className="absolute top-5 left-6 w-9 h-9 sm:w-11 sm:h-11"
+          style={{
+            opacity: isSkyMode ? 0.9 : 0.75
+          }}
+        >
+          <FishIcon />
+        </span>
+
+
+        <span
+          className="absolute top-8 right-8 w-8 h-8 sm:w-10 sm:h-10"
+          style={{
+            opacity: isSkyMode ? 0.8 : 0.7
+          }}
+        >
+          <SeaweedIcon />
+        </span>
+
+
+        <span
+          className="absolute bottom-8 left-10 w-8 h-8 sm:w-9 sm:h-9"
+          style={{
+            opacity: isSkyMode ? 0.8 : 0.7
+          }}
+        >
+          <SeaGlassIcon />
+        </span>
+
+
+        <span
+          className="absolute bottom-6 right-1/4 w-8 h-8 sm:w-9 sm:h-9"
+          style={{
+            opacity: isSkyMode ? 0.8 : 0.7
+          }}
+        >
+          <SandDollarIcon />
+        </span>
+
+
+        <span
+          className="absolute top-1/2 left-1/3 w-7 h-7 sm:w-8 sm:h-8"
+          style={{
+            opacity: isSkyMode ? 0.7 : 0.6
+          }}
+        >
+          <BalanceRocksIcon />
+        </span>
+
+
+        <span
+          className="absolute bottom-10 right-8 w-8 h-8 sm:w-9 sm:h-9"
+          style={{
+            opacity: isSkyMode ? 0.8 : 0.7
+          }}
+        >
+          <SeashellIcon />
+        </span>
+
+
+        {/* RESOURCE CARDS */}
+
+        <div className="relative z-10 flex flex-wrap justify-center gap-6 sm:gap-10 pt-4">
+
+          {filteredResources.map(res => {
+
+            const isCompleted =
+              completedResources.includes(res.id);
+
+            return (
+
+              <button
+                key={res.id}
+                type="button"
+                onClick={() =>
+                  setSelectedResource(res)
+                }
+                className="
+                  relative
+                  w-56
+                  h-56
+                  sm:w-72
+                  sm:h-72
+                  flex
+                  flex-col
+                  items-center
+                  justify-center
+                  text-center
+                  p-6
+                  shadow-xl
+                  transition-all
+                  hover:-translate-y-1
+                  hover:scale-[1.02]
+                "
                 style={{
-                  background: isSkyMode ? 'linear-gradient(135deg, #FDF6E2, #EAD5A0)' : 'linear-gradient(135deg, #0F3440, #061B24)',
-                  borderRadius: '58% 42% 45% 55% / 48% 55% 45% 52%',
-                  margin: '16px'
+                  borderRadius:
+                    '48% 52% 51% 49% / 52% 48% 50% 50%',
+
+                  background:
+                    `linear-gradient(135deg, ${colors.cardStart}, ${colors.cardEnd})`,
+
+                  color: colors.cardText
                 }}
               >
-                <div className="absolute -top-5 left-8 text-2xl drop-shadow-md">🌴</div>
-                <div className="absolute -top-4 -left-2 text-4xl drop-shadow-lg z-20">🌴</div>
-                <div className="absolute -top-2 left-8 text-3xl drop-shadow-lg z-20 -scale-x-100">🌴</div>
-                <div className="absolute -bottom-3 -right-3 text-4xl drop-shadow-lg z-20">🌴</div>
-                <div className="absolute bottom-4 -right-1 text-2xl drop-shadow-lg z-20 -scale-x-100">🌴</div>
-                <div className="absolute top-1/3 -right-2 text-xl drop-shadow z-20">🪨</div>
-                <div className="absolute bottom-8 -left-3 text-lg drop-shadow z-20">🪨</div>
-                <div className="space-y-3 text-center">
-                  <div className="flex items-center justify-center gap-2">
-                    <div className={`p-2 rounded-xl border ${isSkyMode ? 'bg-white/50 border-bluey-900/10' : 'bg-bluey-900/50 border-bluey-700'}`}>
-                      {getResourceIcon(res.icon)}
-                    </div>
-                    <span className={`text-[11px] font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>
-                      {res.category}
-                    </span>
-                    <span className={`text-[11px] flex items-center gap-1 font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-400'}`}>
-                      <Clock className="w-3 h-3" />
-                      {res.readTime}
-                    </span>
-                  </div>
 
-                  <h3 className={`font-display font-bold text-lg leading-snug ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
-                    {res.title}
-                  </h3>
-                  <p className={`text-xs leading-relaxed break-words overflow-wrap-anywhere max-w-[90%] mx-auto font-medium ${isSkyMode ? 'text-bluey-900/80' : 'text-bluey-200'}`}>
-                    {res.summary}
-                  </p>
+                {/* COMPLETION CHECK */}
+
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={e => {
+                    e.stopPropagation();
+                    toggleResourceCompletion(res.id);
+                  }}
+                  onKeyDown={e => {
+
+                    if (
+                      e.key === 'Enter' ||
+                      e.key === ' '
+                    ) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleResourceCompletion(res.id);
+                    }
+
+                  }}
+                  className="
+                    absolute
+                    top-4
+                    right-4
+                    z-20
+                    p-1.5
+                    rounded-full
+                    border
+                    transition-all
+                    cursor-pointer
+                  "
+                  style={{
+                    background: isCompleted
+                      ? colors.completedCheckBackground
+                      : colors.incompleteCheckBackground,
+
+                    borderColor: isCompleted
+                      ? colors.completedCheckBorder
+                      : colors.incompleteCheckBorder,
+
+                    color: isCompleted
+                      ? colors.completedCheckText
+                      : colors.incompleteCheckText
+                  }}
+                  title={
+                    isCompleted
+                      ? 'Completed'
+                      : 'Mark as Complete'
+                  }
+                  aria-label={
+                    isCompleted
+                      ? 'Mark as incomplete'
+                      : 'Mark as complete'
+                  }
+                >
+
+                  <CheckCircle className="w-4 h-4" />
+
+                </span>
+
+
+                {/* RESOURCE ICON */}
+
+                <div
+                  className="p-2 rounded-xl mb-2"
+                  style={{
+                    background:
+                      colors.iconBackground
+                  }}
+                >
+                  {getResourceIcon(res.icon)}
                 </div>
 
-                <div className={`pt-4 mt-4 border-t flex items-center justify-between ${isSkyMode ? 'border-bluey-900/15' : 'border-bluey-700'}`}>
-                  <button
-                    onClick={() => setSelectedResource(res)}
-                    className={`text-xs font-bold flex items-center gap-1 transition-colors ${isSkyMode ? 'text-bluey-700 hover:text-bluey-900' : 'text-bluey-300 hover:text-bluey-100'}`}
-                  >
-                    Read & Practice Guide →
-                  </button>
-                  <button
-                    onClick={() => toggleResourceCompletion(res.id)}
-                    className={`p-1.5 rounded-lg border transition-all ${
-                      isCompleted
-                        ? (isSkyMode ? 'bg-emerald-100 border-emerald-300 text-emerald-600' : 'bg-emerald-900/50 border-emerald-700 text-emerald-400')
-                        : (isSkyMode ? 'bg-white/60 border-bluey-900/10 text-bluey-900 hover:bg-white' : 'bg-bluey-900/50 border-bluey-700 text-bluey-100 hover:bg-bluey-800')
-                    }`}
-                    title={isCompleted ? "Completed" : "Mark as Complete"}
-                  >
-                    <CheckCircle className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-    })}
-  </div>
 
-      {/* Guide Detail Modal */}
+                {/* CATEGORY */}
+
+                <span
+                  className="
+                    text-[10px]
+                    font-bold
+                    uppercase
+                    tracking-wider
+                  "
+                  style={{
+                    color:
+                      colors.cardSecondaryText
+                  }}
+                >
+                  {res.category}
+                </span>
+
+
+                {/* TITLE */}
+
+                <h3
+                  className="
+                    font-display
+                    font-bold
+                    text-base
+                    sm:text-lg
+                    leading-snug
+                    mt-1
+                    px-2
+                  "
+                  style={{
+                    color:
+                      colors.cardText
+                  }}
+                >
+                  {res.title}
+                </h3>
+
+
+                {/* SUMMARY */}
+
+                <p
+                  className="
+                    text-[11px]
+                    leading-snug
+                    mt-1.5
+                    px-3
+                    line-clamp-3
+                  "
+                  style={{
+                    color:
+                      colors.cardSecondaryText
+                  }}
+                >
+                  {res.summary}
+                </p>
+
+
+                {/* READ TIME */}
+
+                <span
+                  className="
+                    text-[10px]
+                    font-semibold
+                    mt-2
+                    flex
+                    items-center
+                    gap-1
+                  "
+                  style={{
+                    color:
+                      colors.cardMutedText
+                  }}
+                >
+
+                  <Clock className="w-3 h-3" />
+
+                  {res.readTime}
+
+                </span>
+
+
+                {/* GUIDE LINK */}
+
+                <span
+                  className="
+                    text-[11px]
+                    font-bold
+                    mt-1.5
+                    underline
+                    underline-offset-2
+                  "
+                  style={{
+                    color:
+                      colors.cardSecondaryText
+                  }}
+                >
+                  Read & Practice Guide
+                </span>
+
+              </button>
+
+            );
+          })}
+
+        </div>
+
+      </div>
+
       {selectedResource && (
-        <div className="fixed inset-0 z-50 bg-ocean-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className={`border rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto ${isSkyMode ? 'bg-white border-bluey-200' : 'bg-bluey-900 border-bluey-700'}`}>
-            
+
+        <div
+          className="
+            fixed
+            inset-0
+            z-50
+            backdrop-blur-md
+            flex
+            items-start
+            justify-center
+            px-4
+            pb-4
+            pt-[56px]
+sm:pt-[72px]
+          "
+          style={{
+            background:
+              colors.modalOverlay
+          }}
+        >
+
+          <div
+            className="
+              border
+              rounded-3xl
+              p-5
+              sm:p-6
+              max-w-lg
+              w-full
+              space-y-4
+              shadow-2xl
+              relative
+              max-h-[calc(100vh-7rem)]
+              overflow-y-auto
+            "
+            style={{
+              background:
+                colors.modalBackground,
+
+              borderColor:
+                colors.modalBorder,
+
+              color:
+                colors.pageText
+            }}
+          >
+
+            {/* CLOSE */}
+
             <button
-              onClick={() => setSelectedResource(null)}
-              className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${isSkyMode ? 'text-bluey-400 hover:bg-bluey-50 hover:text-bluey-800' : 'text-bluey-300 hover:bg-bluey-800 hover:text-bluey-100'}`}
+              type="button"
+              aria-label="Close guide"
+              onClick={() =>
+                setSelectedResource(null)
+              }
+              className="
+                absolute
+                top-4
+                right-4
+                p-2
+                rounded-full
+                transition-colors
+              "
+              style={{
+                color:
+                  colors.mutedText,
+
+                background:
+                  'transparent'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background =
+                  isSkyMode
+                    ? '#F5E8C7'
+                    : '#24313B';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background =
+                  'transparent';
+              }}
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="space-y-2">
-              <span className={`text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-500' : 'text-seafoam-400'}`}>
-                {selectedResource.category} • {selectedResource.readTime}
+
+            {/* MODAL HEADER */}
+
+            <div className="space-y-2 pr-10">
+
+              <span
+                className="
+                  text-xs
+                  font-bold
+                  uppercase
+                  tracking-wider
+                "
+                style={{
+                  color: isSkyMode
+                    ? '#7FB8C9'
+                    : '#A4D3DE'
+                }}
+              >
+                {selectedResource.category}
+                {' • '}
+                {selectedResource.readTime}
               </span>
-              <h3 className={`font-display text-2xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
+
+
+              <h3
+                className="
+                  font-display
+                  text-2xl
+                  font-bold
+                "
+                style={{
+                  color:
+                    colors.pageText
+                }}
+              >
                 {selectedResource.title}
               </h3>
+
             </div>
 
-            <div className={`p-4 rounded-2xl border text-sm font-medium leading-relaxed ${isSkyMode ? 'bg-bluey-50 border-bluey-200 text-bluey-900' : 'bg-bluey-950 border-bluey-800 text-bluey-100'}`}>
+
+            {/* EXPLANATION */}
+
+            <div
+              className="
+                p-4
+                rounded-2xl
+                border
+                text-sm
+                font-medium
+                leading-relaxed
+              "
+              style={{
+                background:
+                  colors.contentBackground,
+
+                borderColor:
+                  colors.contentBorder,
+
+                color:
+                  colors.contentText
+              }}
+            >
               {selectedResource.content}
             </div>
 
+
+            {/* GUIDED STEPS */}
+
             <div className="space-y-3">
-              <h4 className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>
-                <Sparkles className={`w-4 h-4 ${isSkyMode ? 'text-amber-400' : 'text-seafoam-400'}`} />
+
+              <h4
+                className="
+                  text-xs
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  flex
+                  items-center
+                  gap-1.5
+                "
+                style={{
+                  color:
+                    colors.mutedText
+                }}
+              >
+
+                <Sparkles
+                  className="w-4 h-4"
+                  style={{
+                    color: isSkyMode
+                      ? '#D6BA7A'
+                      : '#EAD5A0'
+                  }}
+                />
+
                 Guided Steps & Practice:
+
               </h4>
-              <ol className={`space-y-2 text-xs sm:text-sm font-medium ${isSkyMode ? 'text-bluey-900' : 'text-slate-200'}`}>
-                {selectedResource.steps.map((step, idx) => (
-                  <li key={idx} className={`flex items-start gap-3 p-3 rounded-xl border ${isSkyMode ? 'bg-white border-bluey-100' : 'bg-bluey-800 border-bluey-700'}`}>
-                    <span className={`w-5 h-5 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isSkyMode ? 'bg-bluey-100 text-bluey-600' : 'bg-seafoam-500/20 text-seafoam-300'}`}>
-                      {idx + 1}
-                    </span>
-                    <span className="leading-relaxed">{step}</span>
-                  </li>
-                ))}
+
+
+              <ol
+                className="
+                  space-y-2
+                  text-xs
+                  sm:text-sm
+                  font-medium
+                "
+                style={{
+                  color:
+                    colors.stepText
+                }}
+              >
+
+                {selectedResource.steps.map(
+                  (step, idx) => (
+
+                    <li
+                      key={idx}
+                      className="
+                        flex
+                        items-start
+                        gap-3
+                        p-3
+                        rounded-xl
+                        border
+                      "
+                      style={{
+                        background:
+                          colors.stepBackground,
+
+                        borderColor:
+                          colors.stepBorder,
+
+                        color:
+                          colors.stepText
+                      }}
+                    >
+
+                      <span
+                        className="
+                          w-5
+                          h-5
+                          rounded-full
+                          font-bold
+                          text-xs
+                          flex
+                          items-center
+                          justify-center
+                          shrink-0
+                        "
+                        style={{
+                          background:
+                            colors.numberBackground,
+
+                          color:
+                            colors.numberText
+                        }}
+                      >
+                        {idx + 1}
+                      </span>
+
+                      <span className="leading-relaxed">
+                        {step}
+                      </span>
+
+                    </li>
+
+                  )
+                )}
+
               </ol>
+
             </div>
 
+
+            {/* COMPLETE BUTTON */}
+
             <div className="pt-4 flex justify-end">
+
               <button
+                type="button"
                 onClick={() => {
-                  toggleResourceCompletion(selectedResource.id);
+
+                  toggleResourceCompletion(
+                    selectedResource.id
+                  );
+
                   setSelectedResource(null);
+
                 }}
-                className={`px-6 py-3 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 ${
-                  isSkyMode 
-                    ? 'bg-bluey-500 text-white hover:bg-bluey-600 shadow-md shadow-bluey-200' 
-                    : 'bg-seafoam-500 text-ocean-950 hover:bg-seafoam-400 shadow-md shadow-seafoam-900/50'
-                }`}
+                className="
+                  px-6
+                  py-3
+                  rounded-2xl
+                  font-bold
+                  text-xs
+                  transition-all
+                  flex
+                  items-center
+                  gap-2
+                  shadow-md
+                  hover:-translate-y-0.5
+                "
+                style={{
+                  background:
+                    colors.primaryButton,
+
+                  color:
+                    colors.primaryButtonText
+                }}
               >
+
                 <CheckCircle className="w-4 h-4" />
-                {completedResources.includes(selectedResource.id) ? 'Completed!' : 'Mark Guide Complete'}
+
+                {completedResources.includes(
+                  selectedResource.id
+                )
+                  ? 'Completed!'
+                  : 'Mark Guide Complete'}
+
               </button>
+
             </div>
+
+            {selectedResource.id === 'res-54321' && (
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  p-5
+                  sm:p-6
+                  flex
+                  flex-col
+                  sm:flex-row
+                  items-center
+                  justify-between
+                  gap-4
+                  text-center
+                  sm:text-left
+                "
+                style={{
+                  background:
+                    `linear-gradient(135deg, ${colors.ctaStart}, ${colors.ctaEnd})`,
+
+                  borderColor:
+                    colors.ctaBorder
+                }}
+              >
+
+                <div className="space-y-1">
+
+                  <p
+                    className="
+                      font-display
+                      font-bold
+                      text-base
+                      sm:text-lg
+                    "
+                    style={{
+                      color:
+                        colors.ctaTitle
+                    }}
+                  >
+                    Want to try it out? 🌊
+                  </p>
+
+                  <p
+                    className="
+                      text-xs
+                      sm:text-sm
+                      font-medium
+                    "
+                    style={{
+                      color:
+                        colors.ctaText
+                    }}
+                  >
+                    Walk through this grounding exercise
+                    step by step with Sisu.
+                  </p>
+
+                </div>
+
+
+                <button
+                  type="button"
+                  onClick={() => {
+
+                    setActiveTab(
+                      'grounding-54321'
+                    );
+
+                    setSelectedResource(null);
+
+                  }}
+                  className="
+                    w-full
+                    sm:w-auto
+                    shrink-0
+                    px-6
+                    py-3
+                    rounded-2xl
+                    font-bold
+                    text-xs
+                    shadow-md
+                    transition-all
+                    hover:-translate-y-0.5
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                  "
+                  style={{
+                    background:
+                      colors.primaryButton,
+
+                    color:
+                      colors.primaryButtonText
+                  }}
+                >
+
+                  Start Practice
+
+                  <ArrowRight className="w-4 h-4" />
+
+                </button>
+
+              </div>
+
+            )}
+
           </div>
+
         </div>
+
       )}
+
     </div>
   );
 }
