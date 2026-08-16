@@ -3,9 +3,10 @@ import { BookOpen, CheckCircle, Clock, Search, X, Sparkles, Compass, Brain, Moon
 import { STARTER_RESOURCES } from '../services/resourcesData';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
+import { CountryCrisisLines } from './CountryCrisisLines';
 
 export function ResourceHub() {
-  const { completedResources, toggleResourceCompletion, mascotState } = useWellness();
+  const { completedResources, toggleResourceCompletion, mascotState, isSkyMode } = useWellness();
 
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,20 +32,22 @@ export function ResourceHub() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 pb-10">
       
       {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="font-display text-3xl font-bold text-slate-100 flex items-center justify-center gap-2">
-          <BookOpen className="w-7 h-7 text-seafoam-400" />
-          Smart Mental Health Resource Hub
+        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
+          <BookOpen className={`w-7 h-7 ${isSkyMode ? 'text-bluey-500' : 'text-seafoam-400'}`} />
+          Smart Mental Health Library
         </h2>
-        <p className="text-sm text-slate-400 max-w-xl mx-auto">
+        <p className={`text-xs sm:text-sm max-w-xl mx-auto font-semibold ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
           Evidence-based guides, grounding practices, and CBT tools available whenever you need guidance.
         </p>
       </div>
 
       <OtterMascot expression={mascotState.expression} speech={mascotState.speech} />
+
+      <CountryCrisisLines />
 
       {/* Filter & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
@@ -55,10 +58,10 @@ export function ResourceHub() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 activeCategory === cat
-                  ? 'bg-seafoam-500 text-ocean-950 font-bold shadow-md'
-                  : 'bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700'
+                  ? (isSkyMode ? 'bg-bluey-500 text-white shadow-md' : 'bg-bluey-600 text-white shadow-md shadow-bluey-900/50')
+                  : (isSkyMode ? 'bg-white border border-bluey-200 text-bluey-800 hover:border-bluey-400' : 'bg-bluey-900/60 border border-bluey-700 text-bluey-300 hover:border-bluey-500')
               }`}
             >
               {cat}
@@ -68,108 +71,139 @@ export function ResourceHub() {
 
         {/* Search input */}
         <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-bluey-400 absolute left-3 top-3" />
           <input
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search guides..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-100 placeholder-slate-500 text-xs focus:border-seafoam-500"
+            className={`w-full pl-9 pr-4 py-2 rounded-xl border text-sm font-medium focus:ring-2 resize-none transition-colors ${
+              isSkyMode 
+                ? 'bg-white/80 border-bluey-200 text-bluey-950 placeholder-bluey-400 focus:border-bluey-400 focus:ring-bluey-200' 
+                : 'bg-bluey-950/60 border-bluey-700 text-bluey-50 placeholder-bluey-500 focus:border-bluey-500 focus:ring-bluey-800'
+            }`}
           />
         </div>
       </div>
 
       {/* Resource Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredResources.map((res) => {
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-4">
+        {filteredResources.map((res, idx) => {
           const isCompleted = completedResources.includes(res.id);
           return (
             <div
               key={res.id}
-              className="bg-slate-800/80 border border-slate-700/80 hover:border-seafoam-500/50 rounded-3xl p-6 text-left transition-all duration-300 shadow-xl hover:shadow-seafoam-500/10 group flex flex-col justify-between backdrop-blur-md hover:-translate-y-1"
+              className="relative p-6 sm:p-8 min-h-[440px] overflow-visible"
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2.5 rounded-2xl bg-slate-900/60 border border-slate-700/60 group-hover:scale-105 transition-transform">
+              <div
+                className={`absolute inset-0 transition-colors duration-700`}
+                style={{ borderRadius: '100% 90% 55% 85% / 80% 90% 55% 100%', background: isSkyMode ? 'linear-gradient(160deg, #4DD0E1, #00897B)' : 'linear-gradient(160deg, #0F3440, #1F4E5B)' }}
+              >
+                {/* Faint concentric wave lines, echoing your header wave SVG */}
+                <svg className="absolute inset-0 w-full h-full opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <path d="M5 55 Q 50 45 95 55" stroke="white" strokeWidth="0.8" fill="none" opacity="0.5" />
+                  <path d="M8 68 Q 50 60 92 68" stroke="white" strokeWidth="0.6" fill="none" opacity="0.35" />
+                </svg>
+                {/* Floating foam using your existing animate-foam-1 / animate-foam-2 keyframes */}
+                <span className="absolute top-3 left-5 text-base animate-foam-1 opacity-80">🫧</span>
+                <span className="absolute bottom-5 right-6 text-sm animate-foam-2 opacity-70">🫧</span>
+              </div>
+              <div
+                className="relative p-6 space-y-3 shadow-xl transition-transform hover:-translate-y-1 h-full flex flex-col justify-between"
+                style={{
+                  background: isSkyMode ? 'linear-gradient(135deg, #FDF6E2, #EAD5A0)' : 'linear-gradient(135deg, #0F3440, #061B24)',
+                  borderRadius: '58% 42% 45% 55% / 48% 55% 45% 52%',
+                  margin: '16px'
+                }}
+              >
+                <div className="absolute -top-5 left-8 text-2xl drop-shadow-md">🌴</div>
+                <div className="absolute -top-4 -left-2 text-4xl drop-shadow-lg z-20">🌴</div>
+                <div className="absolute -top-2 left-8 text-3xl drop-shadow-lg z-20 -scale-x-100">🌴</div>
+                <div className="absolute -bottom-3 -right-3 text-4xl drop-shadow-lg z-20">🌴</div>
+                <div className="absolute bottom-4 -right-1 text-2xl drop-shadow-lg z-20 -scale-x-100">🌴</div>
+                <div className="absolute top-1/3 -right-2 text-xl drop-shadow z-20">🪨</div>
+                <div className="absolute bottom-8 -left-3 text-lg drop-shadow z-20">🪨</div>
+                <div className="space-y-3 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className={`p-2 rounded-xl border ${isSkyMode ? 'bg-white/50 border-bluey-900/10' : 'bg-bluey-900/50 border-bluey-700'}`}>
                       {getResourceIcon(res.icon)}
                     </div>
-                    <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-seafoam-500/10 border border-seafoam-500/20 text-seafoam-300 tracking-wide uppercase">
+                    <span className={`text-[11px] font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>
                       {res.category}
                     </span>
+                    <span className={`text-[11px] flex items-center gap-1 font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-400'}`}>
+                      <Clock className="w-3 h-3" />
+                      {res.readTime}
+                    </span>
                   </div>
-                  <span className="text-xs text-slate-400 flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    {res.readTime}
-                  </span>
+
+                  <h3 className={`font-display font-bold text-lg leading-snug ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
+                    {res.title}
+                  </h3>
+                  <p className={`text-xs leading-relaxed break-words overflow-wrap-anywhere max-w-[90%] mx-auto font-medium ${isSkyMode ? 'text-bluey-900/80' : 'text-bluey-200'}`}>
+                    {res.summary}
+                  </p>
                 </div>
 
-                <h3 className="font-display font-bold text-lg text-slate-100 group-hover:text-seafoam-300 transition-colors leading-snug">
-                  {res.title}
-                </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {res.summary}
-                </p>
-              </div>
-
-              <div className="pt-4 mt-4 border-t border-slate-700/50 flex items-center justify-between">
-                <button
-                  onClick={() => setSelectedResource(res)}
-                  className="text-xs font-semibold text-seafoam-400 hover:text-seafoam-300 flex items-center gap-1 group-hover:translate-x-1 transition-transform"
-                >
-                  Read & Practice Guide →
-                </button>
-                <button
-                  onClick={() => toggleResourceCompletion(res.id)}
-                  className={`p-2 rounded-xl border transition-all ${
-                    isCompleted
-                      ? "bg-seafoam-500/20 border-seafoam-500/40 text-seafoam-400 shadow-md shadow-seafoam-500/10"
-                      : "bg-slate-900/60 border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-500"
-                  }`}
-                  title={isCompleted ? "Completed" : "Mark as Complete"}
-                >
-                  <CheckCircle className="w-4 h-4" />
-                </button>
+                <div className={`pt-4 mt-4 border-t flex items-center justify-between ${isSkyMode ? 'border-bluey-900/15' : 'border-bluey-700'}`}>
+                  <button
+                    onClick={() => setSelectedResource(res)}
+                    className={`text-xs font-bold flex items-center gap-1 transition-colors ${isSkyMode ? 'text-bluey-700 hover:text-bluey-900' : 'text-bluey-300 hover:text-bluey-100'}`}
+                  >
+                    Read & Practice Guide →
+                  </button>
+                  <button
+                    onClick={() => toggleResourceCompletion(res.id)}
+                    className={`p-1.5 rounded-lg border transition-all ${
+                      isCompleted
+                        ? (isSkyMode ? 'bg-emerald-100 border-emerald-300 text-emerald-600' : 'bg-emerald-900/50 border-emerald-700 text-emerald-400')
+                        : (isSkyMode ? 'bg-white/60 border-bluey-900/10 text-bluey-900 hover:bg-white' : 'bg-bluey-900/50 border-bluey-700 text-bluey-100 hover:bg-bluey-800')
+                    }`}
+                    title={isCompleted ? "Completed" : "Mark as Complete"}
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           );
-        })}
-      </div>
+    })}
+  </div>
 
       {/* Guide Detail Modal */}
       {selectedResource && (
         <div className="fixed inset-0 z-50 bg-ocean-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <div className={`border rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto ${isSkyMode ? 'bg-white border-bluey-200' : 'bg-bluey-900 border-bluey-700'}`}>
             
             <button
               onClick={() => setSelectedResource(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-100 rounded-full hover:bg-slate-700"
+              className={`absolute top-4 right-4 p-2 rounded-full transition-colors ${isSkyMode ? 'text-bluey-400 hover:bg-bluey-50 hover:text-bluey-800' : 'text-bluey-300 hover:bg-bluey-800 hover:text-bluey-100'}`}
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-seafoam-400">
+              <span className={`text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-500' : 'text-seafoam-400'}`}>
                 {selectedResource.category} • {selectedResource.readTime}
               </span>
-              <h3 className="font-display text-2xl font-bold text-slate-100">
+              <h3 className={`font-display text-2xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
                 {selectedResource.title}
               </h3>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-700/60 text-xs text-slate-300 leading-relaxed">
+            <div className={`p-4 rounded-2xl border text-sm font-medium leading-relaxed ${isSkyMode ? 'bg-bluey-50 border-bluey-200 text-bluey-900' : 'bg-bluey-950 border-bluey-800 text-bluey-100'}`}>
               {selectedResource.content}
             </div>
 
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-seafoam-400" />
+              <h4 className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>
+                <Sparkles className={`w-4 h-4 ${isSkyMode ? 'text-amber-400' : 'text-seafoam-400'}`} />
                 Guided Steps & Practice:
               </h4>
-              <ol className="space-y-2 text-xs sm:text-sm text-slate-200">
+              <ol className={`space-y-2 text-xs sm:text-sm font-medium ${isSkyMode ? 'text-bluey-900' : 'text-slate-200'}`}>
                 {selectedResource.steps.map((step, idx) => (
-                  <li key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-900/40 border border-slate-800">
-                    <span className="w-5 h-5 rounded-full bg-seafoam-500/20 text-seafoam-300 font-bold text-xs flex items-center justify-center shrink-0">
+                  <li key={idx} className={`flex items-start gap-3 p-3 rounded-xl border ${isSkyMode ? 'bg-white border-bluey-100' : 'bg-bluey-800 border-bluey-700'}`}>
+                    <span className={`w-5 h-5 rounded-full font-bold text-xs flex items-center justify-center shrink-0 ${isSkyMode ? 'bg-bluey-100 text-bluey-600' : 'bg-seafoam-500/20 text-seafoam-300'}`}>
                       {idx + 1}
                     </span>
                     <span className="leading-relaxed">{step}</span>
@@ -184,7 +218,11 @@ export function ResourceHub() {
                   toggleResourceCompletion(selectedResource.id);
                   setSelectedResource(null);
                 }}
-                className="px-6 py-3 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-xs hover:bg-seafoam-400 transition-all flex items-center gap-2"
+                className={`px-6 py-3 rounded-2xl font-bold text-xs transition-all flex items-center gap-2 ${
+                  isSkyMode 
+                    ? 'bg-bluey-500 text-white hover:bg-bluey-600 shadow-md shadow-bluey-200' 
+                    : 'bg-seafoam-500 text-ocean-950 hover:bg-seafoam-400 shadow-md shadow-seafoam-900/50'
+                }`}
               >
                 <CheckCircle className="w-4 h-4" />
                 {completedResources.includes(selectedResource.id) ? 'Completed!' : 'Mark Guide Complete'}
