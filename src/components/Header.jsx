@@ -18,11 +18,11 @@ export function Header({ activeTab, setActiveTab }) {
 
   // Header background logic for minimalist look
   const headerBgClass = activeTab === 'hub' 
-    ? 'fixed w-full top-0 left-0 right-0 bg-white/60 backdrop-blur-md border-b border-white/20 text-slate-900' 
-    : (isSkyMode ? 'sticky top-0 bg-white/80 backdrop-blur-xl border-b border-slate-100 text-slate-900' : 'sticky top-0 bg-bluey-950/90 backdrop-blur-xl border-b border-bluey-800 text-slate-100');
+    ? `fixed w-full top-0 left-0 right-0 backdrop-blur-md border-b ${isSkyMode ? 'bg-white/60 border-white/20 text-slate-900' : 'bg-bluey-950/40 border-bluey-800/30 text-slate-100'}`
+    : `sticky top-0 backdrop-blur-xl border-b ${isSkyMode ? 'bg-white/80 border-slate-100 text-slate-900' : 'bg-bluey-950/90 border-bluey-800 text-slate-100'}`;
 
-  const textColor = activeTab === 'hub' || isSkyMode ? 'text-slate-800' : 'text-slate-200';
-  const textHoverColor = activeTab === 'hub' || isSkyMode ? 'hover:text-slate-500' : 'hover:text-white';
+  const textColor = isSkyMode ? 'text-slate-800' : 'text-slate-200';
+  const textHoverColor = isSkyMode ? 'hover:text-slate-500' : 'hover:text-white';
 
   return (
     <>

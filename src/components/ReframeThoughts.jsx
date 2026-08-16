@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
+import cuencoSvg from '../assets/svg/cuencomar.svg';
 
 const EMPTY_PRACTICE = {
   initialBeliefScore: 50,
@@ -62,6 +63,9 @@ export function ReframeThoughts() {
 
       {/* Title */}
       <div className="text-center space-y-2">
+        <div className="flex justify-center mb-2">
+          <img src={cuencoSvg} alt="Sea Bowl" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
           <Brain className="w-7 h-7 text-seafoam-400" />
           Reframe Thoughts

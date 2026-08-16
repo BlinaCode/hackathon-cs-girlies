@@ -1,6 +1,7 @@
 import React from 'react';
 import { TrendingUp, Flame, Heart, Brain, BookOpen, Award, Sparkles } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
+import lotoSvg from '../assets/svg/flordeloto.svg';
 
 export function GrowthDashboard() {
   const { moodLogs, beliefs, beliefPractices, completedResources, breathingStreak, isSkyMode } = useWellness();
@@ -27,6 +28,9 @@ export function GrowthDashboard() {
       
       {/* Title */}
       <div className="text-center space-y-2">
+        <div className="flex justify-center mb-2">
+          <img src={lotoSvg} alt="Lotus Flower" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
           <TrendingUp className="w-7 h-7 text-seafoam-400" />
           Growth & Analytics Dashboard
