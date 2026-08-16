@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight, Check, ChevronLeft, ChevronRight, X, Loader2, HeartHandshake } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
+import { useAuth } from '../context/AuthContext';
+import { suggestReframe } from '../services/aiSuggestions';
 import cuencoSvg from '../assets/svg/cuencomar.svg';
 import estrellaSvg from '../assets/svg/estrellademar.svg';
 import conchaSvg from '../assets/svg/concha.svg';
@@ -15,7 +17,7 @@ const EMPTY_PRACTICE = {
   finalBeliefScore: 50,
 };
 
-export function ReframeThoughts() {
+export function ReframeThoughts({ setActiveTab }) {
   const {
     beliefs,
     beliefPractices,
@@ -25,6 +27,7 @@ export function ReframeThoughts() {
     isSkyMode,
     setMascotState,
   } = useWellness();
+  const { user, fetchProfile } = useAuth();
 
   const activeBeliefs = beliefs.filter((b) => b.status === "active");
 
@@ -52,12 +55,43 @@ export function ReframeThoughts() {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
 
+  // AI-assisted suggestion (Gemini via the reframe-suggest Edge Function)
+  const [aiEnabled, setAiEnabled] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestError, setSuggestError] = useState("");
+  const [crisisDetected, setCrisisDetected] = useState(false);
+  const [aiAssisted, setAiAssisted] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setAiEnabled(false);
+      return;
+    }
+    let cancelled = false;
+    fetchProfile()
+      .then((data) => {
+        if (!cancelled) setAiEnabled(!!data?.ai_features_enabled);
+      })
+      .catch(() => {
+        if (!cancelled) setAiEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
   const selectedBelief = beliefs.find((b) => b.id === selectedBeliefId);
   const practiceHistory = beliefPractices
     .filter((p) => p.beliefId === selectedBeliefId)
     .sort((a, b) => new Date(a.practicedAt) - new Date(b.practicedAt));
 
   const setP = (field, value) => setPractice((prev) => ({ ...prev, [field]: value }));
+
+  const resetAiState = () => {
+    setSuggestError("");
+    setCrisisDetected(false);
+    setAiAssisted(false);
+  };
 
   const handleAddBelief = (e) => {
     e.preventDefault();
@@ -69,17 +103,44 @@ export function ReframeThoughts() {
     setOriginHistorical("");
     setShowNewForm(false);
     setPractice(EMPTY_PRACTICE);
+    resetAiState();
     setStep(1);
+  };
+
+  const handleSuggest = async () => {
+    if (!selectedBelief) return;
+    setSuggesting(true);
+    setSuggestError("");
+    setCrisisDetected(false);
+    try {
+      const result = await suggestReframe({
+        statement: selectedBelief.statement,
+        advantages: practice.advantages,
+        disadvantages: practice.disadvantages,
+      });
+      if (result.crisisDetected) {
+        setCrisisDetected(true);
+      } else {
+        setP("chosenAlternativeThought", result.alternativeThought);
+        setP("chosenNewAction", result.newAction);
+        setAiAssisted(true);
+      }
+    } catch (err) {
+      setSuggestError(err.message || "Could not get an AI suggestion right now.");
+    } finally {
+      setSuggesting(false);
+    }
   };
 
   const handleLogPractice = () => {
     if (!selectedBeliefId) return;
-    addBeliefPractice(selectedBeliefId, practice);
+    addBeliefPractice(selectedBeliefId, { ...practice, aiAssisted });
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
       setPractice(EMPTY_PRACTICE);
       setStep(1);
+      resetAiState();
     }, 3000);
   };
 
@@ -158,6 +219,7 @@ export function ReframeThoughts() {
                    setStep(1);
                    setShowNewForm(false);
                    setSubmitted(false);
+                   resetAiState();
                  }}
                />
             )}
@@ -350,6 +412,52 @@ export function ReframeThoughts() {
                        isSkyMode={isSkyMode}
                      />
                    )}
+
+                   {/* AI-assisted suggestion — fills both step 4 and step 5,
+                       so it's offered on either one */}
+                   {(step === 4 || step === 5) && aiEnabled && (
+                     <div className="mt-6 space-y-3 animate-fade-in">
+                       <button
+                         type="button"
+                         onClick={handleSuggest}
+                         disabled={suggesting}
+                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all text-xs font-serif italic disabled:opacity-50 ${isSkyMode ? 'border-lagoon-200 hover:bg-black/5 text-lagoon-800' : 'border-lagoon-700 hover:bg-white/5 text-lagoon-200'}`}
+                       >
+                         {suggesting ? (
+                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                         ) : (
+                           <Sparkles className="w-3.5 h-3.5" />
+                         )}
+                         {suggesting ? 'Thinking...' : 'Suggest with AI'}
+                       </button>
+
+                       {crisisDetected && (
+                         <div className="flex items-start gap-2 text-xs sm:text-sm font-serif italic opacity-80">
+                           <HeartHandshake className="w-4 h-4 mt-0.5 shrink-0 opacity-70" />
+                           <div className="space-y-1.5">
+                             <p>
+                               This sounds heavier than a quick reframe can hold. You deserve to talk this
+                               through with someone — we'd rather point you to real support than guess.
+                             </p>
+                             {setActiveTab && (
+                               <button
+                                 type="button"
+                                 onClick={() => setActiveTab('resources')}
+                                 className="font-bold underline underline-offset-2 not-italic"
+                               >
+                                 View crisis support resources
+                               </button>
+                             )}
+                           </div>
+                         </div>
+                       )}
+
+                       {suggestError && (
+                         <p className="text-xs font-serif italic opacity-70">{suggestError}</p>
+                       )}
+                     </div>
+                   )}
+
                    {step === 6 && (
                      <ScoreSlider
                        label="How strongly do you believe the original thought now?"
