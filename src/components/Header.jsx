@@ -129,11 +129,9 @@ export function Header({ activeTab, setActiveTab }) {
       </div>
 
       {/* Floating Soundscape Audio Control Drawer */}
-      {showSoundscape && (
-        <div className="absolute top-16 right-4 sm:right-8 z-50">
-          <SoundscapePlayer onClose={() => setShowSoundscape(false)} />
-        </div>
-      )}
+      <div className={`absolute top-16 right-4 sm:right-8 z-50 ${showSoundscape ? 'block' : 'hidden'}`}>
+        <SoundscapePlayer onClose={() => setShowSoundscape(false)} />
+      </div>
 
       {/* Auth Modal */}
       {showAuthModal && (
