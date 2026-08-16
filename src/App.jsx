@@ -11,7 +11,7 @@ import { ReframeThoughts } from './components/ReframeThoughts';
 import { SocialCircle } from './components/SocialCircle';
 import { ResourceHub } from './components/ResourceHub';
 import { GrowthDashboard } from './components/GrowthDashboard';
-import { Compass, Heart, Brain, Users, BookOpen, Flame, Sparkles, ArrowRight } from 'lucide-react';
+import { FiveFourThreeTwoOne } from './components/FiveFourThreeTwoOne';
 
 const BEACH_WISDOM = [
   { quote: "Notice how the ocean never rushes, yet washes away all footprints on the shore. Give yourself time to settle.", author: "Zen Shoreline Reflection" },
@@ -168,6 +168,7 @@ function MainContent({ initialTab = 'hub' }) {
         {activeTab === 'friends' && <SocialCircle />}
         {activeTab === 'resources' && <ResourceHub />}
         {activeTab === 'growth' && <GrowthDashboard />}
+        {activeTab === '54321' && <FiveFourThreeTwoOne onExit={() => setActiveTab('hub')} />}
       </main>
 
       {/* Sandy Shoreline Decor */}

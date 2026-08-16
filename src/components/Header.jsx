@@ -16,14 +16,15 @@ export function Header({ activeTab, setActiveTab }) {
     { id: 'beliefs', label: 'Reframe', icon: '🧠' },
     { id: 'friends', label: 'Circle', icon: '🫂' },
     { id: 'resources', label: 'Library', icon: '📖' },
-    { id: 'growth', label: 'Growth', icon: '🌱' }
+    { id: 'growth', label: 'Growth', icon: '🌱' },
+    { id: '54321', label: '5-4-3-2-1', icon: '🖐️' }
   ];
 
   return (
     <>
       <header className={`p-4 sticky top-0 z-50 border-b backdrop-blur-xl transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200/80 shadow-sm' : 'bg-bluey-950/90 border-bluey-800 shadow-md'}`}>
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          
+
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('hub')}>
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-bluey-400 to-bluey-600 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-bluey-400/30 transform hover:scale-105 transition-all">
@@ -113,11 +114,10 @@ export function Header({ activeTab, setActiveTab }) {
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
-                activeTab === item.id
-                  ? 'bg-bluey-500 text-white font-bold'
-                  : (isSkyMode ? 'bg-bluey-100/50 text-bluey-800 hover:bg-bluey-200' : 'bg-bluey-800/80 text-bluey-200 hover:bg-bluey-700')
-              }`}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${activeTab === item.id
+                ? 'bg-bluey-500 text-white font-bold'
+                : (isSkyMode ? 'bg-bluey-100/50 text-bluey-800 hover:bg-bluey-200' : 'bg-bluey-800/80 text-bluey-200 hover:bg-bluey-700')
+                }`}
             >
               {item.label}
             </button>
