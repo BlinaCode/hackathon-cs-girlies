@@ -145,7 +145,7 @@ function MainContent({ initialTab = 'hub' }) {
           {activeTab === 'growth' && <GrowthDashboard />}
           {activeTab === 'connect' && <ComingSoonPlaceholder title="Connect" />}
           {activeTab === 'about' && <ComingSoonPlaceholder title="About Sisu" />}
-          {activeTab === '54321' && <ComingSoonPlaceholder title="5-4-3-2-1 Grounding Technique" />}
+          {activeTab === '54321' && <FiveFourThreeTwoOne />}
         </main>
       )
       }
