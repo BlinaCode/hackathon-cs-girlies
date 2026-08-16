@@ -14,6 +14,7 @@ import { SocialCircle } from './components/SocialCircle';
 import { ResourceHub } from './components/ResourceHub';
 import { GrowthDashboard } from './components/GrowthDashboard';
 import { FiveFourThreeTwoOne } from './components/FiveFourThreeTwoOne';
+import { AccountPage } from './components/AccountPage';
 import { ArrowRight } from 'lucide-react';
 import portadaImg from './assets/portada.png';
 import portadaCelularImg from './assets/portada-celular.png';
@@ -136,7 +137,7 @@ function MainContent({ initialTab = 'hub' }) {
         </main>
       ) : (
         <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
-          {activeTab !== 'checkin' && (
+          {activeTab !== 'checkin' && activeTab !== 'account' && activeTab !== 'growth' && (
             <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
           )}
           {activeTab === 'checkin' && <MoodCheckIn />}
@@ -144,7 +145,8 @@ function MainContent({ initialTab = 'hub' }) {
           {activeTab === 'beliefs' && <ReframeThoughts />}
           {activeTab === 'friends' && <SocialCircle />}
           {activeTab === 'resources' && <ResourceHub />}
-          {activeTab === 'growth' && <GrowthDashboard />}
+          {activeTab === 'growth' && <GrowthDashboard setActiveTab={setActiveTab} />}
+          {activeTab === 'account' && <AccountPage setActiveTab={setActiveTab} />}
           {activeTab === 'connect' && <ComingSoonPlaceholder title="Connect" />}
           {activeTab === 'about' && <ComingSoonPlaceholder title="About Sisu" />}
           {activeTab === '54321' && <FiveFourThreeTwoOne />}

@@ -111,6 +111,9 @@ export function Header({ activeTab, setActiveTab }) {
                      <button onClick={() => handleNav('growth')} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">
                        🌱 Growth
                      </button>
+                     <button onClick={() => handleNav('account')} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                       <User className="w-4 h-4" /> Account
+                     </button>
                      <button onClick={logout} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
                        <LogOut className="w-4 h-4" /> Sign Out
                      </button>
@@ -173,6 +176,7 @@ export function Header({ activeTab, setActiveTab }) {
                 ) : (
                   <div className="flex items-center gap-2">
                     <button onClick={() => handleNav('growth')} className="text-sm font-bold text-slate-700">Growth</button>
+                    <button onClick={() => handleNav('account')} className="text-sm font-bold text-slate-700">Account</button>
                     <button onClick={logout} className="p-2 text-rose-500"><LogOut className="w-4 h-4" /></button>
                   </div>
                 )}
@@ -184,7 +188,10 @@ export function Header({ activeTab, setActiveTab }) {
 
       {/* Auth Modal */}
       {showAuthModal && (
-        <AuthModal onClose={() => setShowAuthModal(false)} />
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => { setShowAuthModal(false); setActiveTab('hub'); }}
+        />
       )}
     </>
   );

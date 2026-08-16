@@ -1,14 +1,6 @@
-import React, { useState, useRef } from "react";
-import {
-  Brain,
-  Plus,
-  Sparkles,
-  TrendingDown,
-  CheckCircle,
-  ArrowRight,
-  Check,
-} from "lucide-react";
-import { useWellness } from "../context/WellnessContext";
+import React, { useState, useRef, useEffect } from 'react';
+import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight, Check } from 'lucide-react';
+import { useWellness } from '../context/WellnessContext';
 
 const EMPTY_PRACTICE = {
   initialBeliefScore: 50,
@@ -450,15 +442,34 @@ export function ReframeThoughts() {
 function BeliefPicker({ beliefs, selectedId, isSkyMode, onSelect }) {
   return (
     <div className="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1">
-      {beliefs.map((b) => (
-        <BeliefButton
-          key={b.id}
-          belief={b}
-          isSelected={b.id === selectedId}
-          isSkyMode={isSkyMode}
-          onSelect={onSelect}
-        />
-      ))}
+      {beliefs.map((b) => {
+        const isSelected = b.id === selectedId;
+        return (
+          <button
+            key={b.id}
+            type="button"
+            aria-pressed={isSelected}
+            onClick={() => onSelect(b.id)}
+            className={`w-full flex items-center justify-between gap-3 rounded-2xl border-2 px-4 py-3 text-left text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${isSelected
+                ? isSkyMode
+                  ? "border-lagoon-400 bg-white shadow-md shadow-lagoon-200/60 ring-2 ring-lagoon-300/70 text-lagoon-950"
+                  : "border-lagoon-400 bg-lagoon-900/50 shadow-md shadow-black/30 ring-2 ring-lagoon-500/60 text-white"
+                : isSkyMode
+                  ? "border-lagoon-100 bg-white/60 text-lagoon-800 hover:border-lagoon-300 hover:bg-white"
+                  : "border-lagoon-800/60 bg-lagoon-950/30 text-lagoon-200 hover:border-lagoon-600 hover:bg-lagoon-900/40"
+              }`}
+          >
+            <span className="line-clamp-2">{b.statement}</span>
+            {isSelected && (
+              <span
+                className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${isSkyMode ? "bg-lagoon-400" : "bg-lagoon-500"}`}
+              >
+                <Check className="w-3.5 h-3.5 text-white" />
+              </span>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 }
