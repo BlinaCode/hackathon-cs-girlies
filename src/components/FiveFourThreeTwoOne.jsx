@@ -103,7 +103,7 @@ function OtterAvatar({ imageSrc }) {
             <img
                 src={imageSrc}
                 alt="Sisu the Otter"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-center"
             />
         </div>
     );
