@@ -188,7 +188,10 @@ export function Header({ activeTab, setActiveTab }) {
 
       {/* Auth Modal */}
       {showAuthModal && (
-        <AuthModal onClose={() => setShowAuthModal(false)} />
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => { setShowAuthModal(false); setActiveTab('hub'); }}
+        />
       )}
     </>
   );
