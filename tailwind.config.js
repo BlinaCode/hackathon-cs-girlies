@@ -21,10 +21,13 @@ export default {
           900: '#0F3440',
           950: '#061B24',
         },
-        seafoam: {
-          400: '#2ea394ff',
-          500: '#14B8A6',
-          600: '#0D9488',
+        // Warm sun-baked beach sand & cream accents
+        cream: {
+          50: '#FFFDF9',
+          100: '#FDF6E2',
+          200: '#F7E7C4',
+          300: '#EAD5A0',
+          400: '#D6BA7A',
         },
         // Pastel pink seashell palette
         seashell: {
@@ -42,7 +45,7 @@ export default {
           dark: '#4A2511',
           shadow: '#261105',
         },
-        // Legacy aliases — existing components use these names directly
+        // Legacy aliases
         ocean: { 950: '#061B24', 900: '#0F3440', 800: '#1F4E5B', 700: '#00695C' },
         seafoam: { 300: '#80DEEA', 400: '#4DD0E1', 500: '#00ACC1', 600: '#00897B' },
         sand: { 100: '#FDF6E2', 200: '#F7E7C4', 300: '#EAD5A0' },

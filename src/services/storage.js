@@ -6,7 +6,9 @@ export const STORAGE_KEYS = {
   FRIENDS: 'sisu_friends',
   COMPLETED_RESOURCES: 'sisu_completed_resources',
   BREATHING_STREAK: 'sisu_breathing_streak',
-  USER_PREFERENCES: 'sisu_user_prefs'
+  USER_PREFERENCES: 'sisu_user_prefs',
+  THEME_MODE: 'sisu_theme_mode',
+  JOURNAL_ENTRIES: 'sisu_journal_entries'
 };
 
 export const getStoredItem = (key, fallback) => {

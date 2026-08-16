@@ -1,106 +1,101 @@
 import React, { useState } from 'react';
-import { Flame, Waves, User, LogOut, Volume2, ShieldCheck } from 'lucide-react';
+import { Flame, User, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useWellness } from '../context/WellnessContext';
 import { AuthModal } from './AuthModal';
-import { SoundscapePlayer } from './SoundscapePlayer';
 
 export function Header({ activeTab, setActiveTab }) {
   const { user, isGuestMode, logout } = useAuth();
-  const { breathingStreak } = useWellness();
+  const { breathingStreak, isSkyMode, setThemeMode, isAudioPlaying, toggleAudio } = useWellness();
 
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showSoundscape, setShowSoundscape] = useState(false);
 
   const navItems = [
-    { id: 'hub', label: 'Home Hub' },
-    { id: 'checkin', label: 'Mood Check-In' },
-    { id: 'breathing', label: 'Ocean Breathing' },
-    { id: 'beliefs', label: 'Reframe Thoughts' },
-    { id: 'friends', label: 'Social Circle' },
-    { id: 'resources', label: 'Resource Library' },
-    { id: 'growth', label: 'Growth & Analytics' },
+    { id: 'hub', label: 'Zen Hub', icon: '🐚' },
+    { id: 'checkin', label: 'Check-In', icon: '🌊' },
+    { id: 'breathing', label: 'Breathing', icon: '💨' },
+    { id: 'resources', label: 'Library', icon: '📖' }
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-ocean-950/80 backdrop-blur-md border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <>
+      <header className={`p-4 sticky top-0 z-50 border-b backdrop-blur-xl transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200/80 shadow-sm' : 'bg-bluey-950/90 border-bluey-800 shadow-md'}`}>
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
           
           {/* Logo & Brand */}
-          <button
-            onClick={() => setActiveTab('hub')}
-            className="flex items-center gap-3 text-left group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-seafoam-500 to-teal-300 flex items-center justify-center text-2xl shadow-lg shadow-seafoam-500/20 group-hover:scale-105 transition-transform">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('hub')}>
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-bluey-400 to-bluey-600 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-bluey-400/30 transform hover:scale-105 transition-all">
               🦦
             </div>
             <div>
-              <span className="font-display text-xl font-bold tracking-tight text-slate-100 flex items-center gap-1.5">
-                Sisu
-                <span className="text-xs px-2 py-0.5 rounded-full bg-seafoam-500/10 text-seafoam-400 border border-seafoam-500/20 font-sans font-medium">
-                  Wellness
-                </span>
-              </span>
-              <p className="text-[10px] text-slate-400 font-sans tracking-wide">
-                Inner strength & ocean calm
-              </p>
+              <span className={`font-display font-bold text-xl block leading-tight ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>Sisu</span>
+              <span className={`text-[10px] block font-semibold tracking-wide ${isSkyMode ? 'text-bluey-600' : 'text-bluey-300'}`}>Zen Beach Companion</span>
             </div>
-          </button>
+          </div>
 
-          {/* Desktop Navigation Tabs */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map(item => (
+          {/* Navigation Tabs */}
+          <nav className="hidden md:flex items-center gap-1 sm:gap-2">
+            {navItems.map(t => (
               <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeTab === item.id
-                    ? 'bg-seafoam-500/15 text-seafoam-400 border border-seafoam-500/30'
-                    : 'text-slate-300 hover:text-slate-100 hover:bg-slate-800/60'
-                }`}
+                key={t.id}
+                onClick={() => setActiveTab(t.id)}
+                className={`px-3 py-2 rounded-xl text-xs font-bold tracking-wide transition-all flex items-center gap-1.5 ${activeTab === t.id
+                  ? 'bg-bluey-500 text-white shadow-md shadow-bluey-500/30'
+                  : (isSkyMode ? 'text-bluey-800 hover:bg-bluey-100/80' : 'text-bluey-200 hover:bg-bluey-800/60')
+                  }`}
               >
-                {item.label}
+                <span>{t.icon}</span>
+                <span className="hidden lg:inline">{t.label}</span>
               </button>
             ))}
           </nav>
 
           {/* Action Icons & User Profile */}
-          <div className="flex items-center gap-3">
-            
-            {/* Ambient Soundscape Toggle Button */}
+          <div className="flex items-center gap-2">
+            {/* Audio Soundscape Toggle */}
             <button
-              onClick={() => setShowSoundscape(prev => !prev)}
-              className="p-2 rounded-lg text-slate-300 hover:text-seafoam-400 hover:bg-slate-800 transition-colors relative"
-              title="Ambient Sea Soundscapes"
-              aria-label="Toggle ambient soundscapes"
+              onClick={toggleAudio}
+              title="Toggle Ocean Waves Sound"
+              className={`p-2 sm:px-3 sm:py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all ${isAudioPlaying
+                ? 'bg-bluey-500 border-bluey-600 text-white shadow-md'
+                : (isSkyMode ? 'bg-cream-100 border-cream-300 text-bluey-900 hover:bg-cream-200' : 'bg-bluey-900 border-bluey-700 text-bluey-100 hover:bg-bluey-800')
+                }`}
             >
-              <Volume2 className="w-5 h-5" />
+              <span>{isAudioPlaying ? '🔊 Waves' : '🌊 Sound'}</span>
+            </button>
+
+            {/* Day / Night Theme Toggle */}
+            <button
+              onClick={() => setThemeMode(isSkyMode ? 'night' : 'sky')}
+              title="Toggle Beach Day / Coastal Night Theme"
+              className={`p-2 sm:px-3 sm:py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-all ${isSkyMode ? 'bg-bluey-100 border-bluey-300 text-bluey-950 hover:bg-bluey-200' : 'bg-bluey-900 border-bluey-700 text-bluey-100 hover:bg-bluey-800'
+                }`}
+            >
+              <span>{isSkyMode ? '🌤️ Day' : '🌙 Night'}</span>
             </button>
 
             {/* Streak Counter */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold">
-              <Flame className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
-              <span>{breathingStreak.count} Day Streak</span>
+            <div className="hidden lg:flex text-xs px-3 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-bold items-center gap-1.5">
+              <span>🔥</span> {breathingStreak.count} Streak
             </div>
 
             {/* User Auth / Guest Status */}
             {isGuestMode ? (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-seafoam-500 text-ocean-950 font-medium text-xs hover:bg-seafoam-400 transition-all shadow-md shadow-seafoam-500/20"
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-bold text-xs transition-all shadow-md ${isSkyMode ? 'bg-bluey-500 text-white shadow-bluey-500/20 hover:bg-bluey-400' : 'bg-bluey-600 text-white shadow-bluey-700/20 hover:bg-bluey-500'}`}
               >
                 <User className="w-3.5 h-3.5" />
                 Sign In
               </button>
             ) : (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-300 hidden sm:inline font-medium">
+                <span className={`text-[10px] hidden sm:inline font-bold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
                   {user?.email?.split('@')[0]}
                 </span>
                 <button
                   onClick={logout}
-                  className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors ${isSkyMode ? 'text-bluey-500 hover:text-rose-500 hover:bg-rose-50' : 'text-bluey-400 hover:text-rose-400 hover:bg-bluey-800'}`}
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -111,34 +106,27 @@ export function Header({ activeTab, setActiveTab }) {
         </div>
 
         {/* Mobile Navigation Dropdown */}
-        <div className="md:hidden flex overflow-x-auto py-2 gap-1 border-t border-slate-800/60 no-scrollbar">
+        <div className="md:hidden flex overflow-x-auto mt-2 py-2 gap-1 border-t border-bluey-200/40 no-scrollbar">
           {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
                 activeTab === item.id
-                  ? 'bg-seafoam-500 text-ocean-950 font-semibold'
-                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-bluey-500 text-white font-bold'
+                  : (isSkyMode ? 'bg-bluey-100/50 text-bluey-800 hover:bg-bluey-200' : 'bg-bluey-800/80 text-bluey-200 hover:bg-bluey-700')
               }`}
             >
               {item.label}
             </button>
           ))}
         </div>
-      </div>
-
-      {/* Floating Soundscape Audio Control Drawer */}
-      {showSoundscape && (
-        <div className="absolute top-16 right-4 sm:right-8 z-50">
-          <SoundscapePlayer onClose={() => setShowSoundscape(false)} />
-        </div>
-      )}
+      </header>
 
       {/* Auth Modal */}
       {showAuthModal && (
         <AuthModal onClose={() => setShowAuthModal(false)} />
       )}
-    </header>
+    </>
   );
 }

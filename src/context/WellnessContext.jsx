@@ -1,8 +1,85 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { STORAGE_KEYS } from '../services/storage';
 
 const WellnessContext = createContext();
+
+// --- WEB AUDIO API OCEAN WAVES SOUND SYNTHESIZER ---
+const useOceanSoundLogic = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioCtxRef = useRef(null);
+  const noiseSourceRef = useRef(null);
+
+  const toggleSound = () => {
+    if (isPlaying) {
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close();
+        audioCtxRef.current = null;
+      }
+      setIsPlaying(false);
+    } else {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        audioCtxRef.current = ctx;
+
+        // Generate 4 seconds of brown noise for deep ocean waves
+        const bufferSize = ctx.sampleRate * 4;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          data[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = data[i];
+          data[i] *= 3.2;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+
+        // Lowpass filter for smooth ocean water sound
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 320;
+
+        // Gain node for main volume
+        const gain = ctx.createGain();
+        gain.gain.value = 0.12;
+
+        // Low Frequency Oscillator for swelling wave rhythm
+        const lfo = ctx.createOscillator();
+        lfo.frequency.value = 0.11; // ~9 second ocean tide cycle
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.value = 0.08;
+
+        lfo.connect(lfoGain);
+        lfoGain.connect(gain.gain);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        noise.start();
+        lfo.start();
+        noiseSourceRef.current = noise;
+        setIsPlaying(true);
+      } catch (e) {
+        console.error('Audio synthesis not supported', e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close();
+      }
+    };
+  }, []);
+
+  return { isPlaying, toggleSound };
+};
 
 export function WellnessProvider({ children }) {
   const [moodLogs, setMoodLogs] = useLocalStorage(STORAGE_KEYS.MOOD_LOGS, []);
@@ -20,6 +97,17 @@ export function WellnessProvider({ children }) {
     expression: 'caring', // joyful, breathing, caring, thoughtful, celebrating
     speech: 'Welcome back! Take a deep breath and explore at your own pace.'
   });
+
+  // Global Theme & Audio State
+  const [themeMode, setThemeMode] = useLocalStorage(STORAGE_KEYS.THEME_MODE, 'sky');
+  const isSkyMode = themeMode === 'sky';
+  const { isPlaying: isAudioPlaying, toggleSound: toggleAudio } = useOceanSoundLogic();
+
+  useEffect(() => {
+    document.body.className = isSkyMode
+      ? 'bg-gradient-to-b from-cream-50 via-bluey-50 to-bluey-100 text-bluey-950 min-h-screen font-body antialiased selection:bg-bluey-300 selection:text-bluey-950'
+      : 'bg-gradient-to-b from-[#061B24] via-[#0E3442] to-[#061B24] text-bluey-50 min-h-screen font-body antialiased selection:bg-bluey-500 selection:text-white';
+  }, [isSkyMode]);
 
   // Log a new mood check-in
   const logMood = (mood, energyLevel, tags, reflection) => {
@@ -248,7 +336,12 @@ export function WellnessProvider({ children }) {
         mergeBreathingStreakFromCloud,
         toggleResourceCompletion,
         mergeCompletedResourcesFromCloud,
-        clearAllLocalData
+        clearAllLocalData,
+        themeMode,
+        setThemeMode,
+        isSkyMode,
+        isAudioPlaying,
+        toggleAudio
       }}
     >
       {children}
