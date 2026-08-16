@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { OtterMascot } from './OtterMascot';
+import { useWellness } from '../context/WellnessContext';
 
 const QUESTIONS = [
   {
@@ -38,6 +39,7 @@ const QUESTIONS = [
 ];
 
 export function WelcomeQuestionnaire({ onComplete }) {
+  const { isSkyMode } = useWellness();
   const [started, setStarted] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -97,7 +99,7 @@ export function WelcomeQuestionnaire({ onComplete }) {
   };
 
   return (
-    <div className="min-h-screen bg-ocean-900 text-slate-100 flex items-center justify-center px-4 py-8">
+    <div className={`min-h-screen flex items-center justify-center px-4 py-8 transition-all ${isSkyMode ? 'bg-gradient-to-b from-cream-50 via-bluey-50 to-bluey-100 text-bluey-950' : 'bg-ocean-900 text-slate-100'}`}>
       <div className="w-full max-w-2xl">
 
         {!started ? (
@@ -108,17 +110,17 @@ export function WelcomeQuestionnaire({ onComplete }) {
               speech="Hey! Welcome to Sisu. Let's take a quick moment to check in with yourself."
             />
 
-            <div className="mt-8 bg-slate-800/80 border border-slate-700/80 rounded-3xl p-8 sm:p-10 shadow-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-seafoam-500/15 border border-seafoam-500/30 text-seafoam-300 text-xs font-semibold">
+            <div className={`mt-8 rounded-3xl p-8 sm:p-10 shadow-2xl border transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200' : 'bg-slate-800/80 border-slate-700/80'}`}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-seafoam-500/15 border border-seafoam-500/30 text-seafoam-600 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 A little check-in
               </div>
 
-              <h1 className="mt-5 font-display text-3xl sm:text-4xl font-bold text-slate-100">
+              <h1 className={`mt-5 font-display text-3xl sm:text-4xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
                 How are you doing today?
               </h1>
 
-              <p className="mt-3 text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg mx-auto">
+              <p className={`mt-3 text-sm sm:text-base leading-relaxed max-w-lg mx-auto ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
                 Answer three quick questions and we'll help you find the right
                 place to start.
               </p>
@@ -134,7 +136,7 @@ export function WelcomeQuestionnaire({ onComplete }) {
               <div>
                 <button
                   onClick={handleSkip}
-                  className="mt-5 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                  className={`mt-5 text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-slate-400 hover:text-slate-200'}`}
                 >
                   Skip for now
                 </button>
@@ -149,13 +151,13 @@ export function WelcomeQuestionnaire({ onComplete }) {
               speech="Let's take a quick moment to check in with yourself."
             />
 
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl">
+            <div className={`rounded-3xl p-6 sm:p-8 shadow-2xl border transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200' : 'bg-slate-800/80 border-slate-700/80'}`}>
               <div className="mb-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-seafoam-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-seafoam-600">
                   Question {currentQuestion + 1} of {QUESTIONS.length}
                 </p>
 
-                <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-slate-100">
+                <h1 className={`mt-2 font-display text-2xl sm:text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
                   {question.question}
                 </h1>
               </div>
@@ -169,18 +171,18 @@ export function WelcomeQuestionnaire({ onComplete }) {
     <button
       key={label}
       onClick={() => handleAnswer(label)}
-      className="w-full text-left px-5 py-4 rounded-2xl bg-slate-900/60 border border-slate-700 hover:border-seafoam-500/60 hover:bg-slate-700/50 transition-all text-sm text-slate-200 flex items-center gap-4"
+      className={`w-full text-left px-5 py-4 rounded-2xl border hover:border-seafoam-500/60 transition-all text-sm flex items-center gap-4 ${isSkyMode ? 'bg-bluey-50 border-bluey-200 text-bluey-900 hover:bg-white' : 'bg-slate-900/60 border-slate-700 text-slate-200 hover:bg-slate-700/50'}`}
     >
       {emoji && <span className="text-3xl">{emoji}</span>}
       <span>{label}</span>
     </button>
   );
-})} 
+})}
               </div>
 
               <button
                 onClick={handleSkip}
-                className="mt-6 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                className={`mt-6 text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-slate-400 hover:text-slate-200'}`}
               >
                 Skip for now
               </button>
