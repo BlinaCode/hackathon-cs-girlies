@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { WellnessProvider, useWellness } from './context/WellnessContext';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
@@ -76,9 +76,37 @@ function ComingSoonPlaceholder({ title }) {
 }
 
 function MainContent({ initialTab = 'hub' }) {
-  const [activeTab, setActiveTab] = useLocalStorage(STORAGE_KEYS.ACTIVE_TAB, initialTab);
+  const [activeTab, setActiveTabState] = useLocalStorage(STORAGE_KEYS.ACTIVE_TAB, initialTab);
   const { isSkyMode, mascotState } = useWellness();
   useSupabaseSync();
+
+  // There's no router in this app, so the browser has no URL/history entries
+  // to move between on Back/Forward. Every tab switch below also pushes a
+  // hash entry; popstate (fired by Back/Forward) reads the hash back into
+  // state without re-pushing, so the two directions stay in sync.
+  const setActiveTab = (tab) => {
+    setActiveTabState(tab);
+    if (window.location.hash !== `#${tab}`) {
+      window.history.pushState({ tab }, '', `#${tab}`);
+    }
+  };
+
+  useEffect(() => {
+    const hashTab = window.location.hash.slice(1);
+    if (hashTab && hashTab !== activeTab) {
+      setActiveTabState(hashTab);
+    } else {
+      window.history.replaceState({ tab: activeTab }, '', `#${activeTab}`);
+    }
+
+    const handlePopState = (event) => {
+      const tab = event.state?.tab || window.location.hash.slice(1);
+      if (tab) setActiveTabState(tab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={`min-h-screen flex flex-col relative text-slate-100 font-body ${isSkyMode ? 'bg-cream-50' : 'bg-bluey-950'}`}>
