@@ -1,86 +1,207 @@
-import React, { useState, useRef } from 'react';
-import { Heart, CheckCircle2, Tag } from 'lucide-react';
+import React, { useState, useRef, useMemo } from 'react';
+import { CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
+import { useAuth } from '../context/AuthContext';
 import { OtterMascot } from './OtterMascot';
 import journalSvg from '../assets/svg/diariodegratitudmarina.svg';
+import conchaSvg from '../assets/svg/concha.svg';
+import estrellaSvg from '../assets/svg/estrellademar.svg';
+import algasSvg from '../assets/svg/algas.svg';
 
 const MOOD_META = [
-  {
-    name: 'Calm', emoji: '🌊', desc: 'Peaceful & grounded',
-    medallion: 'bg-lagoon-200/70',
-    reaction: { expression: 'caring', speech: "Mmm... peaceful. I feel that too." },
-  },
-  {
-    name: 'Happy', emoji: '☀️', desc: 'Joyful & energized',
-    medallion: 'bg-dune-200/80',
-    reaction: { expression: 'joyful', speech: 'Yay! Your joy is contagious!' },
-  },
-  {
-    name: 'Hopeful', emoji: '🌱', desc: 'Optimistic & focused',
-    medallion: 'bg-foliage-300/50',
-    reaction: { expression: 'joyful', speech: "I love that hopeful spark in you." },
-  },
-  {
-    name: 'Anxious', emoji: '🌀', desc: 'Restless or uneasy',
-    medallion: 'bg-lagoon-300/60',
-    reaction: { expression: 'caring', speech: "I'm right here with you. Let's breathe together." },
-  },
-  {
-    name: 'Overwhelmed', emoji: '🌧️', desc: 'Too much to carry',
-    medallion: 'bg-blush-300/70',
-    reaction: { expression: 'caring', speech: "That's a lot to hold. You don't have to carry it alone." },
-  },
-  {
-    name: 'Exhausted', emoji: '🌙', desc: 'Low energy & tired',
-    medallion: 'bg-otterfur-200/60',
-    reaction: { expression: 'caring', speech: 'Rest is productive too. Be gentle with yourself.' },
-  },
+  { name: 'Calm', desc: 'Peaceful & grounded' },
+  { name: 'Happy', desc: 'Joyful & energized' },
+  { name: 'Hopeful', desc: 'Optimistic & focused' },
+  { name: 'Anxious', desc: 'Restless or uneasy' },
+  { name: 'Overwhelmed', desc: 'Too much to carry' },
+  { name: 'Exhausted', desc: 'Low energy & tired' },
 ];
 
 const COMMON_TAGS = ['Work', 'Relationships', 'Health', 'Sleep', 'Growth', 'Family', 'Self-Care'];
 
-function MoodButton({ item, isSelected, isSkyMode, onSelect }) {
-  const [justPicked, setJustPicked] = useState(false);
+// --- PAST ENTRIES JOURNAL COMPONENT ---
+function PastEntriesJournal({ logs, isSkyMode }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const hasLogs = logs && logs.length > 0;
+  const selectedLog = hasLogs ? logs[currentIndex] : null;
+
+  const [calendarDate, setCalendarDate] = useState(new Date());
+
+  const year = calendarDate.getFullYear();
+  const month = calendarDate.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+  const handlePrevMonth = () => setCalendarDate(new Date(year, month - 1, 1));
+  const handleNextMonth = () => setCalendarDate(new Date(year, month + 1, 1));
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const handlePrevEntry = () => {
+    if (currentIndex < logs.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      const newDate = new Date(logs[currentIndex + 1].timestamp);
+      setCalendarDate(newDate);
+    }
+  };
+
+  const handleNextEntry = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+      const newDate = new Date(logs[currentIndex - 1].timestamp);
+      setCalendarDate(newDate);
+    }
+  };
+
+  const logIndexByDay = useMemo(() => {
+    const map = {};
+    logs.forEach((log, idx) => {
+      const date = new Date(log.timestamp);
+      if (date.getFullYear() === year && date.getMonth() === month) {
+        if (map[date.getDate()] === undefined) {
+          map[date.getDate()] = idx; 
+        }
+      }
+    });
+    return map;
+  }, [logs, year, month]);
 
   return (
-    <button
-      type="button"
-      aria-pressed={isSelected}
-      onClick={() => { onSelect(item.name); setJustPicked(true); }}
-      onAnimationEnd={() => setJustPicked(false)}
-      className={`group relative flex flex-col items-center gap-1.5 sm:gap-2 rounded-2xl sm:rounded-3xl border-2 p-3 sm:p-4 text-center transition-all duration-300 ease-out
-        active:scale-95 hover:-translate-y-0.5
-        ${justPicked ? 'animate-select-pop' : ''}
-        ${isSelected
-          ? (isSkyMode
-              ? 'border-lagoon-400 bg-white shadow-lg shadow-lagoon-200/60 ring-2 ring-lagoon-300/70 scale-[1.03]'
-              : 'border-lagoon-400 bg-lagoon-900/50 shadow-lg shadow-black/30 ring-2 ring-lagoon-500/60 scale-[1.03]')
-          : (isSkyMode
-              ? 'border-lagoon-100 bg-white/60 hover:border-lagoon-300 hover:bg-white hover:shadow-md'
-              : 'border-lagoon-800/60 bg-lagoon-950/30 hover:border-lagoon-600 hover:bg-lagoon-900/40')
-        }`}
-    >
-      {/* Ripple ring echoing the otter's water rings, only on fresh selection */}
-      {justPicked && (
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-lagoon-300 animate-pick-ripple"
-        />
-      )}
+    <div className="flex flex-col h-full relative z-10 space-y-6">
+      {/* Mini Calendar Header */}
+      <div className={`flex flex-col border-b pb-4 ${isSkyMode ? 'border-[#E5E5E5]' : 'border-[#2A3432]'}`}>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-display text-lg tracking-wide">{monthNames[month]} {year}</h3>
+          <div className="flex gap-2">
+            <button onClick={handlePrevMonth} className="hover:opacity-60 transition-opacity p-1" aria-label="Previous Month">
+              <ChevronLeft strokeWidth={1} size={16} />
+            </button>
+            <button onClick={handleNextMonth} className="hover:opacity-60 transition-opacity p-1" aria-label="Next Month">
+              <ChevronRight strokeWidth={1} size={16} />
+            </button>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-7 gap-y-2 text-center font-serif text-xs sm:text-sm italic opacity-80 mb-2">
+          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => <div key={i} className="font-semibold">{d}</div>)}
+        </div>
+        
+        <div className="grid grid-cols-7 gap-y-2 text-center font-display text-sm sm:text-base">
+          {Array.from({ length: firstDayOfMonth }).map((_, i) => <div key={`empty-${i}`} />)}
+          {Array.from({ length: daysInMonth }).map((_, i) => {
+            const day = i + 1;
+            const logIdx = logIndexByDay[day];
+            const hasLog = logIdx !== undefined;
+            const isSelected = hasLog && logIdx === currentIndex;
+            
+            return (
+              <button
+                key={day}
+                onClick={() => {
+                  if (hasLog) {
+                    setCurrentIndex(logIdx);
+                  }
+                }}
+                disabled={!hasLog}
+                className={`relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 mx-auto rounded-full transition-all duration-300
+                  ${hasLog ? 'cursor-pointer hover:scale-110' : 'opacity-40 cursor-default'}
+                  ${isSelected ? (isSkyMode ? 'text-lagoon-950 font-bold' : 'text-white font-bold') : ''}
+                `}
+              >
+                {isSelected && (
+                  <img src={estrellaSvg} alt="" className="absolute inset-0 w-full h-full opacity-30 transform rotate-12" aria-hidden="true" />
+                )}
+                <span className="z-10">{day}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-      <span
-        className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0 transition-transform duration-300 ${item.medallion} ${isSelected ? 'scale-110' : 'group-hover:scale-105'}`}
+      {/* Mascot Footer */}
+      <div className="flex justify-center -my-2 relative z-20">
+         <div className="transform scale-[0.85] origin-center">
+           <OtterMascot expression={selectedLog ? 'caring' : 'default'} speech={selectedLog ? "The ocean remembers." : "I'm listening."} compact />
+         </div>
+      </div>
+
+      {/* Main Journal Entry View */}
+      <div className="flex-1 flex flex-col justify-start pt-2">
+        {selectedLog ? (
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4 opacity-50">
+              <span className="font-serif italic text-sm">{new Date(selectedLog.timestamp).toLocaleDateString()}</span>
+              <span className="font-serif italic text-sm text-right">Page {logs.length - currentIndex} of {logs.length}</span>
+            </div>
+            
+            <div className="flex items-center justify-between gap-2 sm:gap-4">
+               <button onClick={handlePrevEntry} disabled={currentIndex === logs.length - 1} className={`p-1 sm:p-2 rounded-full transition-colors ${currentIndex === logs.length - 1 ? 'opacity-20 cursor-default' : 'hover:bg-black/5 dark:hover:bg-white/5'}`}>
+                 <ChevronLeft strokeWidth={1} />
+               </button>
+               
+               <div className="flex-1 space-y-4 min-h-[160px]">
+                 <div className="flex justify-between items-end">
+                   <h4 className="font-display text-2xl sm:text-3xl">{selectedLog.mood}</h4>
+                   <span className="font-serif italic opacity-70 text-sm">Energy: {selectedLog.energyLevel}/5</span>
+                 </div>
+                 <p className="font-serif italic leading-relaxed opacity-90 text-sm sm:text-base line-clamp-4">
+                   "{selectedLog.reflection || 'No reflection recorded.'}"
+                 </p>
+                 {selectedLog.tags?.length > 0 && (
+                   <div className="flex flex-wrap gap-2 opacity-60 text-[10px] sm:text-xs font-medium uppercase tracking-widest pt-2">
+                     {selectedLog.tags.join(' • ')}
+                   </div>
+                 )}
+               </div>
+               
+               <button onClick={handleNextEntry} disabled={currentIndex === 0} className={`p-1 sm:p-2 rounded-full transition-colors ${currentIndex === 0 ? 'opacity-20 cursor-default' : 'hover:bg-black/5 dark:hover:bg-white/5'}`}>
+                 <ChevronRight strokeWidth={1} />
+               </button>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center opacity-50 space-y-2">
+            <p className="font-serif italic">No past entries found.</p>
+            <p className="text-xs">Your journal is waiting.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+// --- END PAST ENTRIES JOURNAL ---
+
+function MoodTextOption({ item, isSelected, isSkyMode, onSelect }) {
+  return (
+    <div className="relative">
+      <input
+        type="radio"
+        name="mood"
+        id={`mood-${item.name}`}
+        value={item.name}
+        checked={isSelected}
+        onChange={() => onSelect(item.name)}
+        className="peer sr-only"
+        aria-label={item.name}
+      />
+      <label
+        htmlFor={`mood-${item.name}`}
+        className={`block cursor-pointer py-2 border-b transition-all duration-300
+          peer-focus-visible:ring-2 peer-focus-visible:ring-lagoon-400 peer-focus-visible:outline-none
+          ${isSelected 
+            ? (isSkyMode ? 'border-lagoon-800' : 'border-lagoon-200')
+            : (isSkyMode ? 'border-transparent hover:border-lagoon-300' : 'border-transparent hover:border-lagoon-600')
+          }`}
       >
-        <span className="text-[clamp(1.15rem,4.5vw,1.6rem)] leading-none" role="img" aria-hidden="true">{item.emoji}</span>
-      </span>
-
-      <span className={`font-bold text-xs sm:text-sm ${isSelected ? (isSkyMode ? 'text-lagoon-900' : 'text-white') : (isSkyMode ? 'text-lagoon-950' : 'text-lagoon-100')}`}>
-        {item.name}
-      </span>
-      <span className={`text-[10px] sm:text-xs leading-snug ${isSelected ? (isSkyMode ? 'text-lagoon-700' : 'text-lagoon-200') : (isSkyMode ? 'text-lagoon-700/70' : 'text-lagoon-400')}`}>
-        {item.desc}
-      </span>
-    </button>
+        <div className={`font-display text-lg sm:text-xl transition-colors duration-300 ${isSelected ? (isSkyMode ? 'text-lagoon-950 font-semibold' : 'text-white font-semibold') : (isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300')}`}>
+          {item.name}
+        </div>
+        <div className={`text-xs sm:text-sm italic transition-colors duration-300 ${isSelected ? (isSkyMode ? 'text-lagoon-800' : 'text-lagoon-100') : (isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400')}`}>
+          {item.desc}
+        </div>
+      </label>
+    </div>
   );
 }
 
@@ -88,8 +209,8 @@ const EnergyDragSlider = ({ value, onChange, isSkyMode }) => {
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef(null);
 
-  // Shared by click-to-jump and drag: turns any pointer X position into a 1-5 value.
   const commitFromClientX = (clientX) => {
+    if (!sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
     let x = clientX - rect.left;
     x = Math.max(0, Math.min(x, rect.width));
@@ -127,12 +248,12 @@ const EnergyDragSlider = ({ value, onChange, isSkyMode }) => {
   };
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <div className="flex justify-between items-center text-xs">
-        <label className={`font-bold uppercase tracking-wider ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-          2. Energy Level (1 to 5)
+    <div className="space-y-2">
+      <div className="flex justify-between items-end mb-1">
+        <label className={`font-display text-lg ${isSkyMode ? 'text-lagoon-900' : 'text-lagoon-100'}`} id="energy-label">
+          Energy Level
         </label>
-        <span className={`font-bold text-sm ${isSkyMode ? 'text-lagoon-600' : 'text-lagoon-400'}`}>
+        <span className={`font-serif text-sm italic ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
           {value} / 5
         </span>
       </div>
@@ -140,14 +261,13 @@ const EnergyDragSlider = ({ value, onChange, isSkyMode }) => {
       <div
         ref={sliderRef}
         role="slider"
-        aria-label="Energy level, 1 to 5"
+        aria-labelledby="energy-label"
         aria-valuemin={1}
         aria-valuemax={5}
         aria-valuenow={value}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        className={`relative w-full h-9 sm:h-11 rounded-full cursor-pointer select-none transition-all touch-none ${isSkyMode ? 'bg-dune-100 border border-dune-300 shadow-inner' : 'bg-lagoon-950 border border-lagoon-800 shadow-inner'
-          }`}
+        className="relative w-full h-12 flex items-center cursor-pointer touch-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-400 rounded-lg"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMove}
         onMouseUp={() => setIsDragging(false)}
@@ -156,61 +276,38 @@ const EnergyDragSlider = ({ value, onChange, isSkyMode }) => {
         onTouchMove={handleTouchMove}
         onTouchEnd={() => setIsDragging(false)}
       >
-        <div
-          className="absolute top-0 left-0 h-full rounded-full transition-all duration-150 bg-gradient-to-r from-dune-300 to-lagoon-400"
-          style={{ width: `${((value - 1) / 4) * 100}%` }}
-        />
-        <div
-          className={`absolute top-1/2 -mt-4 sm:-mt-5 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs shadow-lg transition-all duration-150 ${isDragging ? 'scale-110 shadow-lagoon-400/60' : ''
-            } ${isSkyMode
-              ? 'bg-white border-2 border-lagoon-400 text-lagoon-600'
-              : 'bg-lagoon-100 border-2 border-lagoon-400 text-lagoon-900'
-            }`}
-          style={{ left: `calc(${((value - 1) / 4) * 100}% - 16px)` }}
-        >
-          {value}
+        {/* Track */}
+        <div className={`w-full h-[6px] rounded-full relative ${isSkyMode ? 'bg-lagoon-200' : 'bg-lagoon-800'}`}>
+          {/* Fill */}
+          <div
+            className="absolute top-0 left-0 h-full rounded-full transition-all duration-300 ease-out bg-current opacity-60"
+            style={{ width: `${((value - 1) / 4) * 100}%` }}
+          />
+          {/* Thumb */}
+          <div
+            className={`absolute top-1/2 -mt-[10px] w-5 h-5 rounded-full shadow-md transition-all duration-200 ${isDragging ? 'scale-[1.3]' : 'hover:scale-[1.15]'} ${isSkyMode ? 'bg-lagoon-900' : 'bg-lagoon-100'}`}
+            style={{ left: `calc(${((value - 1) / 4) * 100}% - 10px)` }}
+          />
         </div>
       </div>
-      <div className={`flex justify-between text-[10px] font-bold uppercase tracking-wider ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-400'}`}>
-        <span>1 - Empty</span>
-        <span>3 - Balanced</span>
-        <span>5 - Vibrant</span>
+      <div className={`flex justify-between text-xs italic font-serif pt-1 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`}>
+        <span>Empty</span>
+        <span>Balanced</span>
+        <span>Vibrant</span>
       </div>
     </div>
   );
 };
 
-function SeaweedFlourish({ className }) {
-  return (
-    <svg viewBox="0 0 40 60" className={className} aria-hidden="true">
-      <path d="M20 58 C20 40, 8 40, 10 22 C12 8, 20 8, 20 2" stroke="#7E7B51" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5" />
-      <path d="M20 50 C20 34, 30 34, 28 18" stroke="#A89B6E" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.4" />
-    </svg>
-  );
-}
-
-function ShellFlourish({ className }) {
-  return (
-    <svg viewBox="0 0 40 32" className={className} aria-hidden="true">
-      <path d="M4 26 C2 16, 30 16, 28 26 C30 30, 2 30, 4 26 Z" fill="#C99C8B" opacity="0.5" />
-      <path d="M16 28 L10 16" stroke="#FEF8F7" strokeWidth="1" strokeLinecap="round" opacity="0.7" />
-      <path d="M16 28 L16 14" stroke="#FEF8F7" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <path d="M16 28 L22 16" stroke="#FEF8F7" strokeWidth="1" strokeLinecap="round" opacity="0.7" />
-    </svg>
-  );
-}
-
 export function MoodCheckIn() {
-  const { logMood, mascotState, isSkyMode } = useWellness();
+  const { logMood, isSkyMode, moodLogs } = useWellness();
+  const { user } = useAuth();
 
   const [selectedMood, setSelectedMood] = useState('Calm');
   const [energyLevel, setEnergyLevel] = useState(3);
   const [selectedTags, setSelectedTags] = useState([]);
   const [reflection, setReflection] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
-  const liveReaction = MOOD_META.find(m => m.name === selectedMood)?.reaction
-    ?? { expression: 'caring', speech: 'Pick whichever feeling fits best right now.' };
 
   const toggleTag = (tag) => {
     setSelectedTags(prev =>
@@ -222,75 +319,89 @@ export function MoodCheckIn() {
     e.preventDefault();
     logMood(selectedMood, energyLevel, selectedTags, reflection);
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    setTimeout(() => {
+      setSubmitted(false);
+      setReflection('');
+      setSelectedTags([]);
+    }, 4000);
   };
 
   return (
-    <div className="relative max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-10">
-
-      {/* Ambient watercolor blobs, purely decorative */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-6 h-64 overflow-hidden -z-10">
-        <div className={`absolute left-0 top-0 w-72 h-72 rounded-full blur-3xl ${isSkyMode ? 'bg-lagoon-200/50' : 'bg-lagoon-700/20'}`} />
-        <div className={`absolute right-0 top-6 w-80 h-80 rounded-full blur-3xl ${isSkyMode ? 'bg-blush-200/50' : 'bg-otterfur-500/10'}`} />
+    <section aria-label="Sisu Gratitude Diary" className="relative w-full max-w-[1200px] mx-auto pb-16 px-4 sm:px-6">
+      
+      {/* Background blurs */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className={`absolute top-0 left-1/4 w-[40vw] h-[40vw] rounded-full blur-[100px] mix-blend-multiply opacity-30 ${isSkyMode ? 'bg-sand-200' : 'bg-lagoon-900'}`} />
+        <div className={`absolute bottom-0 right-1/4 w-[30vw] h-[30vw] rounded-full blur-[80px] mix-blend-multiply opacity-20 ${isSkyMode ? 'bg-lagoon-100' : 'bg-otterfur-900'}`} />
       </div>
 
-      <div className="text-center space-y-4">
-        <div className="flex justify-center mb-2">
-          <img src={journalSvg} alt="Marine Gratitude Journal" className="w-28 h-28 object-contain drop-shadow-lg" />
+      {/* Two-page book layout */}
+      <div className="flex flex-col lg:flex-row gap-0 w-full perspective-[2000px]">
+        
+        {/* LEFT PAGE (Calendar) */}
+        <div className={`flex-1 lg:w-1/2 rounded-t-[1.5rem] lg:rounded-tr-none lg:rounded-l-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-r-0 lg:origin-right animate-book-page-left relative overflow-hidden
+          ${isSkyMode
+            ? 'bg-[#FAFAFA] border-[#E5E5E5] text-lagoon-950'
+            : 'bg-[#1C2321] border-[#2A3432] text-lagoon-50'}`}
+        >
+          {/* Decorative SVGs */}
+          <div className="absolute top-0 left-0 opacity-15 pointer-events-none w-24 sm:w-32 -translate-x-4 -translate-y-4">
+            <img src={estrellaSvg} alt="" className="w-full h-auto transform -rotate-12" aria-hidden="true" />
+          </div>
+          <div className="absolute top-0 right-0 opacity-40 pointer-events-none w-48 sm:w-64 -translate-y-4 translate-x-4">
+            <img src={journalSvg} alt="" className="w-full h-auto" aria-hidden="true" />
+          </div>
+          
+          <div className="p-8 sm:p-12 h-full flex flex-col relative min-h-[70vh] z-10">
+            <PastEntriesJournal logs={moodLogs} isSkyMode={isSkyMode} />
+          </div>
         </div>
-        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
-          <Heart className={`w-7 h-7 ${isSkyMode ? 'text-blush-300 fill-blush-200' : 'text-blush-300 fill-blush-300/20'}`} />
-          Shoreline Check-In
-        </h2>
-        <p className={`text-xs sm:text-sm max-w-xl mx-auto font-semibold ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
-          Honoring how you feel right now is the first step toward inner resilience.
-        </p>
-      </div>
 
-      <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-2xl transition-all border
-        ${isSkyMode
-          ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-          : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'}`}
-      >
-        <SeaweedFlourish className="hidden sm:block absolute -bottom-2 left-4 w-8 h-14 opacity-70" />
-        <ShellFlourish className="hidden sm:block absolute bottom-4 right-6 w-10 h-8 opacity-70" />
-
-        {submitted ? (
-          <div className="relative py-10 sm:py-14 text-center space-y-5">
-            <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-              <span className={`absolute inset-0 rounded-full border-2 animate-ripple ${isSkyMode ? 'border-lagoon-300/70' : 'border-lagoon-500/50'}`} />
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-md ${isSkyMode ? 'bg-white border border-lagoon-200' : 'bg-lagoon-800 border border-lagoon-600'}`}>
-                ✨
+        {/* RIGHT PAGE (Form) */}
+        <div className={`flex-1 lg:w-1/2 rounded-b-[1.5rem] lg:rounded-bl-none lg:rounded-r-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-l-0 lg:origin-left animate-book-page-right relative overflow-hidden
+          ${isSkyMode
+            ? 'bg-[#FDFDFD] border-[#E5E5E5] text-lagoon-950'
+            : 'bg-[#202725] border-[#2A3432] text-lagoon-50'}`}
+        >
+          {/* Decorative SVGs */}
+          <div className="absolute bottom-0 right-0 opacity-[0.15] pointer-events-none w-48 sm:w-64 translate-x-4 translate-y-4">
+            <img src={algasSvg} alt="" className="w-full h-auto" aria-hidden="true" />
+          </div>
+          <div className="absolute top-0 right-0 opacity-[0.15] pointer-events-none w-48 sm:w-56 translate-x-8 -translate-y-4">
+            <img src={conchaSvg} alt="" className="w-full h-auto transform rotate-12" aria-hidden="true" />
+          </div>
+          {submitted ? (
+            <div className="relative p-8 sm:p-12 text-center space-y-6 h-full flex flex-col items-center justify-center z-10">
+              <h3 className="font-display text-3xl sm:text-4xl font-normal tracking-tight">
+                Entry Saved
+              </h3>
+              <p className="text-sm sm:text-base max-w-sm mx-auto font-serif italic opacity-70">
+                Your reflection has been safely logged. The ocean holds all your feelings without judgment.
+              </p>
+              <div className="pt-6">
+                <OtterMascot expression="caring" speech="Thank you for sharing your thoughts." compact />
               </div>
             </div>
-            <h3 className={`font-display text-2xl font-bold ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
-              Check-In Saved!
-            </h3>
-            <p className={`text-sm max-w-md mx-auto font-semibold ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
-              Your reflection has been safely logged. The ocean holds all your feelings without judgment.
-            </p>
-            <div className="pt-2">
-              <OtterMascot expression={mascotState.expression} speech={mascotState.speech} compact />
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="relative space-y-7 sm:space-y-8">
-
-            {/* Otter reacting live to whichever mood is currently selected */}
-            <div className={`rounded-2xl sm:rounded-3xl p-1 -mx-1 -mt-1 mb-1 transition-colors duration-500`}>
-              <OtterMascot expression={liveReaction.expression} speech={liveReaction.speech} compact />
-            </div>
-
-            {/* Two-column layout on wide screens so the form actually uses the space */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-10">
-
+          ) : (
+            <form onSubmit={handleSubmit} className="p-8 sm:p-12 h-full flex flex-col justify-between space-y-10 min-h-[70vh] relative z-10">
+              
               <div className="space-y-4">
-                <label className={`block text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-                  1. How are you feeling right now?
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-2.5 sm:gap-3">
+                <h2 className="font-display text-4xl sm:text-5xl font-normal tracking-tight leading-tight">
+                  Shoreline <br className="hidden sm:block" />
+                  <span className="italic opacity-60">Check-In</span>
+                </h2>
+                <p className="text-sm sm:text-base max-w-sm font-serif italic opacity-70 leading-relaxed">
+                  Honoring how you feel right now is the first step toward inner resilience.
+                </p>
+              </div>
+
+              <fieldset className="space-y-4">
+                <legend className="font-display text-xl mb-4">
+                  How are you feeling right now?
+                </legend>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2">
                   {MOOD_META.map(item => (
-                    <MoodButton
+                    <MoodTextOption
                       key={item.name}
                       item={item}
                       isSelected={selectedMood === item.name}
@@ -299,68 +410,74 @@ export function MoodCheckIn() {
                     />
                   ))}
                 </div>
-              </div>
+              </fieldset>
 
-              <div className="space-y-7 sm:space-y-8">
-                <EnergyDragSlider value={energyLevel} onChange={setEnergyLevel} isSkyMode={isSkyMode} />
+              <EnergyDragSlider value={energyLevel} onChange={setEnergyLevel} isSkyMode={isSkyMode} />
 
-                <div className="space-y-3">
-                  <label className={`block text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-                    <Tag className="w-3.5 h-3.5" />
-                    3. What area is influencing your state?
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {COMMON_TAGS.map(tag => (
+              <fieldset className="space-y-3">
+                <legend className="font-display text-lg mb-2">
+                  What is influencing your state?
+                </legend>
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                  {COMMON_TAGS.map(tag => {
+                    const isSelected = selectedTags.includes(tag);
+                    return (
                       <button
                         key={tag}
                         type="button"
-                        aria-pressed={selectedTags.includes(tag)}
+                        aria-pressed={isSelected}
                         onClick={() => toggleTag(tag)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 active:scale-95 hover:-translate-y-0.5 ${
-                          selectedTags.includes(tag)
-                            ? (isSkyMode ? 'bg-lagoon-500 text-white shadow-md shadow-lagoon-300/50 border border-lagoon-600' : 'bg-lagoon-500 text-white shadow-md shadow-black/30')
-                            : (isSkyMode ? 'bg-white border border-lagoon-200 text-lagoon-800 hover:border-lagoon-400' : 'bg-lagoon-900/60 border border-lagoon-700 text-lagoon-300 hover:border-lagoon-500')
+                        className={`text-sm font-serif italic transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-lagoon-400 border-b border-transparent ${
+                          isSelected
+                            ? (isSkyMode ? 'text-lagoon-950 font-semibold border-lagoon-950' : 'text-white font-semibold border-white')
+                            : (isSkyMode ? 'text-lagoon-600 hover:text-lagoon-900' : 'text-lagoon-400 hover:text-lagoon-200')
                         }`}
                       >
                         {tag}
                       </button>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
+              </fieldset>
 
-                <div className="space-y-2">
-                  <label className={`block text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-                    4. Private Reflection (Optional)
-                  </label>
-                  <textarea
-                    value={reflection}
-                    onChange={e => setReflection(e.target.value)}
-                    placeholder="Express your thoughts freely here like writing in the sand..."
-                    rows={4}
-                    className={`w-full px-4 py-3 rounded-2xl sm:rounded-3xl border text-sm font-medium focus:ring-2 resize-none transition-colors ${
-                      isSkyMode
-                        ? 'bg-white/70 border-lagoon-200 text-lagoon-950 placeholder-lagoon-400 focus:border-lagoon-400 focus:ring-lagoon-200'
-                        : 'bg-lagoon-950/50 border-lagoon-700 text-lagoon-50 placeholder-lagoon-500 focus:border-lagoon-500 focus:ring-lagoon-800'
-                    }`}
-                  />
-                </div>
+              <div className="space-y-2">
+                <label htmlFor="reflection" className="block font-display text-lg">
+                  Private Reflection
+                </label>
+                <textarea
+                  id="reflection"
+                  value={reflection}
+                  onChange={e => setReflection(e.target.value)}
+                  placeholder="Start writing..."
+                  rows={3}
+                  className={`w-full py-2 bg-transparent text-base font-serif italic transition-all duration-300 resize-none focus:outline-none border-b focus:border-current opacity-80 focus:opacity-100 ${
+                    isSkyMode
+                      ? 'border-[#E5E5E5] placeholder-lagoon-400'
+                      : 'border-[#2A3432] placeholder-lagoon-600'
+                  }`}
+                />
               </div>
-            </div>
 
-            <button
-              type="submit"
-              className={`w-full py-3.5 sm:py-4 rounded-2xl sm:rounded-3xl font-bold text-sm tracking-wide transition-all duration-300 shadow-xl flex items-center justify-center gap-2 active:scale-[0.98] hover:-translate-y-0.5 ${
-                isSkyMode
-                  ? 'bg-gradient-to-r from-lagoon-500 to-lagoon-400 text-white shadow-lagoon-400/30 hover:shadow-lagoon-400/50'
-                  : 'bg-gradient-to-r from-lagoon-600 to-lagoon-500 text-white shadow-black/40 hover:shadow-lagoon-900/60'
-              }`}
-            >
-              <CheckCircle2 className="w-5 h-5" />
-              Save Check-In
-            </button>
-          </form>
-        )}
+              <div className="pt-6 mt-auto">
+                <button
+                  type="submit"
+                  disabled={!user}
+                  className={`w-full py-3 border-b-2 font-display text-lg transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current ${
+                    !user 
+                      ? 'opacity-40 cursor-not-allowed border-transparent bg-black/5'
+                      : (isSkyMode
+                        ? 'border-lagoon-900 hover:border-lagoon-600 hover:text-lagoon-700'
+                        : 'border-lagoon-200 hover:border-lagoon-400 hover:text-lagoon-300')
+                  }`}
+                >
+                  {user ? 'Close Entry' : 'Sign in to save entry'}
+                </button>
+              </div>
+
+            </form>
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
