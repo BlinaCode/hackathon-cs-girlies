@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Users, Plus, X, UserPlus } from 'lucide-react';
+import { Users, Plus, X, UserPlus, ChevronLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
-import nutriaCompasion from '../assets/svg/nutriacompasion.svg';
-import otterCheckin from '../assets/images/otter-checkin.png';
+import estrellaSvg from '../assets/svg/estrellademar.svg';
+import conchaSvg from '../assets/svg/concha.svg';
+import algasSvg from '../assets/svg/algas.svg';
 
 // Q1 — How often are you in touch? (stored value 1..5, scored by points)
 const Q1_OPTIONS = [
@@ -37,7 +38,13 @@ const Q4_OPTIONS = [
   { value: 4, label: 'No, they wouldn’t know', points: 1 }
 ];
 
-// Derive the tier from the four answers. Sum points (4..16).
+const QUESTIONS = [
+  { key: 'q1', title: 'How often are you in touch?', options: Q1_OPTIONS },
+  { key: 'q2', title: 'What do you usually talk about?', options: Q2_OPTIONS },
+  { key: 'q3', title: 'Would you call them if something went really wrong?', options: Q3_OPTIONS },
+  { key: 'q4', title: 'Do they know about the hard stuff going on in your life right now?', options: Q4_OPTIONS },
+];
+
 function deriveTier(q1Value, q2Value, q3Value, q4Value) {
   const q1 = Q1_OPTIONS.find(o => o.value === q1Value)?.points ?? 0;
   const q2 = Q2_OPTIONS.find(o => o.value === q2Value)?.points ?? 0;
@@ -50,21 +57,18 @@ function deriveTier(q1Value, q2Value, q3Value, q4Value) {
 }
 
 const TIERS = [
-  { key: 'close_friend', label: 'Close Friends', hint: 'Your inner circle', radius: 110, innerRadius: 0, bandColor: 'stroke-lagoon-500/60', labelColor: 'fill-lagoon-50', bubble: 'bg-lagoon-500 text-white border-lagoon-300' },
-  { key: 'friend', label: 'Friends', hint: 'Warm and regular', radius: 170, innerRadius: 110, bandColor: 'stroke-dune-300/80', labelColor: 'fill-lagoon-950', bubble: 'bg-dune-300 text-lagoon-950 border-dune-100' },
-  { key: 'acquaintance', label: 'Acquaintances', hint: 'The outer ring', radius: 230, innerRadius: 170, bandColor: 'stroke-blush-300/80', labelColor: 'fill-lagoon-950', bubble: 'bg-blush-300 text-lagoon-950 border-blush-200' }
+  { key: 'close_friend', label: 'Close Friends', hint: 'Your inner circle', radius: 110, innerRadius: 0, bandColor: 'stroke-dune-200/70', labelColor: 'fill-slate-500 dark:fill-slate-100', bubble: 'bg-dune-200 text-lagoon-950 border-dune-300' },
+  { key: 'friend', label: 'Friends', hint: 'Warm and regular', radius: 170, innerRadius: 110, bandColor: 'stroke-cream-200/80', labelColor: 'fill-slate-500 dark:fill-slate-100', bubble: 'bg-cream-200 text-lagoon-950 border-cream-300' },
+  { key: 'acquaintance', label: 'Acquaintances', hint: 'The outer ring', radius: 230, innerRadius: 170, bandColor: 'stroke-blush-200/80', labelColor: 'fill-slate-500 dark:fill-slate-100', bubble: 'bg-blush-200 text-lagoon-950 border-blush-300' }
 ];
 
 const DIAGRAM_CENTER = 240;
 const DIAGRAM_SIZE = 480;
 const YOU_RADIUS = 55;
-const BUBBLE_RADIUS = 16; // px, in the 480 viewBox coordinate space
-const LABEL_ARC_SPAN = 140; // degrees the curved ring label sweeps, centered on top
-const LABEL_GAP_DEG = LABEL_ARC_SPAN + 10; // bubble-exclusion arc, a touch wider than the label itself
+const BUBBLE_RADIUS = 16;
+const LABEL_ARC_SPAN = 140;
+const LABEL_GAP_DEG = LABEL_ARC_SPAN + 10;
 
-// An SVG arc `d` string for a circle of radius r centered at (cx, cy), running
-// clockwise from startDeg to endDeg (0deg = right/east, -90deg = top, matches
-// the y-down convention used everywhere else in this file).
 function arcPath(cx, cy, r, startDeg, endDeg) {
   const toRad = (deg) => (deg * Math.PI) / 180;
   const start = { x: cx + r * Math.cos(toRad(startDeg)), y: cy + r * Math.sin(toRad(startDeg)) };
@@ -73,9 +77,6 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
 }
 
-// A little sea-creature variety for each bubble, picked deterministically per
-// friend (stable across re-renders/sessions) rather than by ring — so two
-// people in the same ring still look distinct and a little playful.
 const ANIMALS = ['🐙', '🦀', '🐬', '🐢', '🦭', '🐠', '🐡', '🦈', '🦞', '🦦'];
 
 function getAnimal(id) {
@@ -86,10 +87,6 @@ function getAnimal(id) {
   return ANIMALS[hash % ANIMALS.length];
 }
 
-// Evenly spaces members around their ring's band (skipping the arc where the
-// label sits), with a small deterministic radius jitter per index so bubbles
-// don't all land on one perfect circle. Deterministic = stable across
-// re-renders, unlike Math.random().
 function bubblePosition(tier, index, total) {
   const bandInner = tier.innerRadius === 0 ? YOU_RADIUS : tier.innerRadius;
   const bandOuter = tier.radius;
@@ -111,10 +108,6 @@ function bubblePosition(tier, index, total) {
   return { leftPct: (cx / DIAGRAM_SIZE) * 100, topPct: (cy / DIAGRAM_SIZE) * 100 };
 }
 
-// Which tier's band a point (in the 480-unit diagram space) falls in, measured
-// from the diagram center. Points inside the "You" circle match nothing —
-// dropping on yourself is a no-op. Points beyond the outermost ring still
-// count as Acquaintances, so an imprecise drop still lands somewhere sensible.
 function tierForDistance(distance) {
   if (distance <= YOU_RADIUS) return null;
   const sorted = [...TIERS].sort((a, b) => a.radius - b.radius);
@@ -124,9 +117,6 @@ function tierForDistance(distance) {
   return sorted[sorted.length - 1].key;
 }
 
-// Converts a pointer event's client coordinates into the diagram's 480-unit
-// coordinate space, using the container's actual rendered size (so it stays
-// correct at any responsive scale).
 function pointToDiagramSpace(clientX, clientY, containerEl) {
   const rect = containerEl.getBoundingClientRect();
   const scale = DIAGRAM_SIZE / rect.width;
@@ -136,47 +126,16 @@ function pointToDiagramSpace(clientX, clientY, containerEl) {
   };
 }
 
-const DRAG_THRESHOLD = 6; // px of pointer movement before a press counts as a drag, not a click
+const DRAG_THRESHOLD = 6;
 
-function SeaweedFlourish({ className }) {
-  return (
-    <svg viewBox="0 0 40 60" className={className} aria-hidden="true">
-      <path d="M20 58 C20 40, 8 40, 10 22 C12 8, 20 8, 20 2" stroke="#7E7B51" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5" />
-      <path d="M20 50 C20 34, 30 34, 28 18" stroke="#A89B6E" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.4" />
-    </svg>
-  );
-}
-
-function ShellFlourish({ className }) {
-  return (
-    <svg viewBox="0 0 40 32" className={className} aria-hidden="true">
-      <path d="M4 26 C2 16, 30 16, 28 26 C30 30, 2 30, 4 26 Z" fill="#C99C8B" opacity="0.5" />
-      <path d="M16 28 L10 16" stroke="#FEF8F7" strokeWidth="1" strokeLinecap="round" opacity="0.7" />
-      <path d="M16 28 L16 14" stroke="#FEF8F7" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <path d="M16 28 L22 16" stroke="#FEF8F7" strokeWidth="1" strokeLinecap="round" opacity="0.7" />
-    </svg>
-  );
-}
-
-// The nested-ring visual. Rings are drawn in SVG; individual members are
-// overlaid as HTML avatar-bubble buttons positioned by percentage, so both
-// layers scale together responsively without pixel-syncing.
-//
-// Moving someone between rings works two ways, kept in sync on purpose:
-// 1. Drag a bubble and drop it in a different ring (pointer/touch users).
-// 2. Open a bubble's popover and use the "Move to" swatches (keyboard and
-//    screen-reader users, or anyone who'd rather tap than drag).
 function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
   const [activeFriendId, setActiveFriendId] = useState(null);
-  const [drag, setDrag] = useState(null); // { friendId, pointerId, startX, startY, x, y, moved }
+  const [drag, setDrag] = useState(null);
   const containerRef = useRef(null);
   const suppressClickRef = useRef(false);
 
   const activeFriend = friends.find(f => f.id === activeFriendId) || null;
 
-  // Which ring the dragged bubble is currently hovering over, for the
-  // drop-target highlight. Recomputed each render from drag state — cheap
-  // enough at this scale, no need for its own state slice.
   let hoverTierKey = null;
   if (drag && drag.moved && containerRef.current) {
     const p = pointToDiagramSpace(drag.x, drag.y, containerRef.current);
@@ -229,29 +188,21 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
   };
 
   return (
-    <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 shadow-2xl transition-all border
-      ${isSkyMode
-        ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-        : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'}`}
-    >
-      <SeaweedFlourish className="hidden sm:block absolute -bottom-2 left-4 w-8 h-14 opacity-70" />
-      <ShellFlourish className="hidden sm:block absolute bottom-4 right-6 w-10 h-8 opacity-70" />
-
-      <div ref={containerRef} className="relative w-full max-w-md mx-auto aspect-square select-none">
+    <div className="flex flex-col h-full relative z-10 w-full max-w-lg mx-auto">
+      <div ref={containerRef} className="relative w-full aspect-square select-none">
         <svg
           viewBox={`0 0 ${DIAGRAM_SIZE} ${DIAGRAM_SIZE}`}
           role="img"
-          aria-label="A concentric circle diagram: You at the center, surrounded by rings for Closed Friends, Friends, and Acquaintances, from innermost to outermost."
+          aria-label="A concentric circle diagram: You at the center, surrounded by rings for Closed Friends, Friends, and Acquaintances."
           className="absolute inset-0 w-full h-full"
         >
-          {/* Soft ambient ripples, purely decorative — a slow "calm water" pulse
-              behind the rings. */}
+          {/* Ambient ripples */}
           <circle
             cx={DIAGRAM_CENTER}
             cy={DIAGRAM_CENTER}
             r={YOU_RADIUS + 10}
             fill="none"
-            className="stroke-lagoon-400/50 animate-ripple"
+            className="stroke-lagoon-300/30 animate-ripple"
             strokeWidth="2"
             style={{ transformOrigin: `${DIAGRAM_CENTER}px ${DIAGRAM_CENTER}px` }}
           />
@@ -260,13 +211,11 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
             cy={DIAGRAM_CENTER}
             r={YOU_RADIUS + 10}
             fill="none"
-            className="stroke-lagoon-400/40"
+            className="stroke-lagoon-300/20"
             strokeWidth="2"
             style={{ transformOrigin: `${DIAGRAM_CENTER}px ${DIAGRAM_CENTER}px`, animation: 'ripplePulse 3s cubic-bezier(0, 0.2, 0.8, 1) infinite 1.5s' }}
           />
 
-          {/* Each ring is drawn as an annulus (a wide stroke, not a filled disc) so
-              its color doesn't blend with the rings inside it. */}
           {[...TIERS].reverse().map(tier => {
             const bandInner = tier.innerRadius === 0 ? YOU_RADIUS : tier.innerRadius;
             const bandOuter = tier.radius;
@@ -287,7 +236,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
             cx={DIAGRAM_CENTER}
             cy={DIAGRAM_CENTER}
             r={YOU_RADIUS}
-            className={isSkyMode ? 'fill-white stroke-lagoon-400/80' : 'fill-lagoon-950 stroke-lagoon-500/60'}
+            className={`fill-transparent border-2 ${isSkyMode ? 'stroke-lagoon-900' : 'stroke-lagoon-200'}`}
             strokeWidth="2"
           />
 
@@ -302,7 +251,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
                   d={arcPath(DIAGRAM_CENTER, DIAGRAM_CENTER, labelRadius, startDeg, endDeg)}
                   fill="none"
                 />
-                <text className={`${tier.labelColor} font-body font-bold uppercase tracking-wide text-[13px]`}>
+                <text className={`${isSkyMode ? 'fill-lagoon-800' : 'fill-lagoon-200'} font-body font-bold uppercase tracking-wide text-[13px] opacity-80`}>
                   <textPath href={`#social-circle-arc-${tier.key}`} startOffset="50%" textAnchor="middle">
                     {tier.label}
                   </textPath>
@@ -315,40 +264,33 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
             x={DIAGRAM_CENTER}
             y={DIAGRAM_CENTER + 7}
             textAnchor="middle"
-            className={`font-display font-bold text-xl ${isSkyMode ? 'fill-lagoon-600' : 'fill-lagoon-300'}`}
+            className={`${isSkyMode ? 'fill-lagoon-950' : 'fill-lagoon-50'} font-display font-normal text-xl`}
           >
-            YOU
+            You
           </text>
 
-          {/* Drop-target highlight while a bubble is being dragged over a ring */}
+          {/* Hover target highlight */}
           {hoverTierKey && (
             <circle
               cx={DIAGRAM_CENTER}
               cy={DIAGRAM_CENTER}
               r={TIERS.find(t => t.key === hoverTierKey).radius}
               fill="none"
-              className={isSkyMode ? 'stroke-lagoon-800' : 'stroke-lagoon-100'}
-              strokeWidth="3"
+              className="stroke-lagoon-500 opacity-50"
+              strokeWidth="2"
               strokeDasharray="6 4"
             />
           )}
         </svg>
 
-        {/* Sisu the Otter, slowly swimming a lap around the circle — purely
-            decorative. Counter-rotating inner wrapper keeps the otter itself
-            upright while the outer wrapper sweeps it around. */}
-        <div className="absolute inset-0 animate-orbit-swim pointer-events-none hover:[animation-play-state:paused]">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orbit-swim-reverse hover:[animation-play-state:paused]">
-            <img
-              src={otterCheckin}
-              alt="Sisu the otter"
-              title="You're safe here 🌊"
-              className="w-8 h-8 sm:w-10 sm:h-10 object-contain drop-shadow-lg animate-otter-float pointer-events-auto cursor-help hover:[animation-play-state:paused]"
-            />
+        {/* Orbiting otter */}
+        <div className="absolute inset-0 animate-orbit-swim pointer-events-none" aria-hidden="true">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orbit-swim-reverse">
+            <span className="block text-xl drop-shadow-sm animate-otter-float opacity-70">🦦</span>
           </div>
         </div>
 
-        {/* Avatar bubbles, one per member, overlaid on their ring */}
+        {/* Avatars */}
         {TIERS.map(tier => {
           const members = friends.filter(f => f.tier === tier.key);
           return members.map((f, i) => {
@@ -370,7 +312,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
                 onPointerCancel={() => setDrag(null)}
                 aria-label={`${f.name}, ${tier.label}. Show details, or drag to move to another ring.`}
                 style={{ left: `${pos.leftPct}%`, top: `${pos.topPct}%`, touchAction: 'none' }}
-                className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 flex items-center justify-center text-base leading-none shadow-lg transition-transform ${isDragging ? 'scale-125 cursor-grabbing z-20' : 'cursor-grab hover:scale-110 focus-visible:scale-110 focus-visible:ring-2 focus-visible:ring-lagoon-300'} ${tier.bubble}`}
+                className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 flex items-center justify-center text-base leading-none shadow-sm transition-transform ${isDragging ? 'scale-125 cursor-grabbing z-20' : 'cursor-grab hover:scale-110 focus-visible:scale-110'} ${tier.bubble}`}
               >
                 <span aria-hidden="true">{getAnimal(f.id)}</span>
               </button>
@@ -378,7 +320,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
           });
         })}
 
-        {/* Name + remove + "Move to" popover for the selected bubble */}
+        {/* Popover */}
         {activeFriend && (
           <div
             style={(() => {
@@ -388,30 +330,30 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
               const { leftPct, topPct } = bubblePosition(tier, index, members.length);
               return { left: `${leftPct}%`, top: `${topPct}%` };
             })()}
-            className="absolute z-30 -translate-x-1/2 -translate-y-[calc(100%+14px)] bg-lagoon-950 border border-lagoon-700 rounded-xl px-3 py-2.5 shadow-2xl whitespace-nowrap"
+            className={`absolute z-30 -translate-x-1/2 -translate-y-[calc(100%+14px)] rounded-xl px-3 py-2.5 shadow-xl whitespace-nowrap border ${isSkyMode ? 'bg-white border-lagoon-200 text-lagoon-900' : 'bg-midnight-900 border-midnight-800 text-midnight-text'}`}
           >
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-lagoon-50">{activeFriend.name}</span>
+              <span className="text-xs font-semibold">{activeFriend.name}</span>
               <button
                 type="button"
                 onClick={() => { removeFriend(activeFriend.id); setActiveFriendId(null); }}
                 aria-label={`Remove ${activeFriend.name}`}
-                className="text-lagoon-400 hover:text-blush-300 transition-colors"
+                className="opacity-50 hover:opacity-100 transition-opacity"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-lagoon-700/60">
-              <span className="text-[10px] uppercase tracking-wide text-lagoon-500 mr-0.5">Move to</span>
+            <div className={`flex items-center gap-1.5 mt-2 pt-2 border-t ${isSkyMode ? 'border-lagoon-100' : 'border-lagoon-800'}`}>
+              <span className="text-[10px] uppercase tracking-wide opacity-50 mr-0.5">Move to</span>
               {TIERS.map(tier => (
                 <button
                   key={tier.key}
                   type="button"
                   disabled={tier.key === activeFriend.tier}
                   onClick={() => { setFriendTier(activeFriend.id, tier.key); setActiveFriendId(null); }}
-                  aria-label={`Move ${activeFriend.name} to ${tier.label}`}
+                  aria-label={`Move to ${tier.label}`}
                   title={tier.label}
-                  className={`w-5 h-5 rounded-full border-2 transition-transform ${tier.bubble} ${tier.key === activeFriend.tier ? 'opacity-40 cursor-default' : 'hover:scale-125 cursor-pointer'}`}
+                  className={`w-5 h-5 rounded-full border-2 transition-transform ${tier.bubble} ${tier.key === activeFriend.tier ? 'opacity-30 cursor-default' : 'hover:scale-125 cursor-pointer'}`}
                 />
               ))}
             </div>
@@ -419,15 +361,14 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
         )}
       </div>
 
-      {/* Compact legend — counts only, names live on the bubbles above */}
-      <div className={`flex flex-wrap justify-center gap-4 mt-6 pt-6 border-t ${isSkyMode ? 'border-lagoon-200/60' : 'border-lagoon-700/60'}`}>
+      <div className={`flex flex-wrap justify-center gap-4 mt-auto pt-6 border-t ${isSkyMode ? 'border-[#E5E5E5]' : 'border-midnight-800'}`}>
         {TIERS.map(tier => {
           const count = friends.filter(f => f.tier === tier.key).length;
           return (
-            <div key={tier.key} className={`flex items-center gap-2 text-xs ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-400'}`}>
+            <div key={tier.key} className={`flex items-center gap-2 text-xs font-serif italic opacity-70`}>
               <span className={`w-2.5 h-2.5 rounded-full border ${tier.bubble}`} />
-              <span className={`font-semibold ${isSkyMode ? 'text-lagoon-950' : 'text-lagoon-100'}`}>{tier.label}</span>
-              <span>· {tier.hint} · {count}</span>
+              <span className="font-semibold">{tier.label}</span>
+              <span>· {count}</span>
             </div>
           );
         })}
@@ -439,165 +380,194 @@ function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
 export function SocialCircle() {
   const { friends, addFriend, removeFriend, setFriendTier, isSkyMode } = useWellness();
 
+  // Wizard state:
+  // 0: Start (Name)
+  // 1-4: Q1-Q4
+  // 5: Success
+  const [step, setStep] = useState(0);
+  
   const [name, setName] = useState('');
-  const [q1, setQ1] = useState(1);
-  const [q2, setQ2] = useState(1);
-  const [q3, setQ3] = useState(1);
-  const [q4, setQ4] = useState(1);
+  const [answers, setAnswers] = useState({ q1: null, q2: null, q3: null, q4: null });
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (!name.trim()) return;
-    const tier = deriveTier(q1, q2, q3, q4);
-    addFriend({
-      name: name.trim(),
-      contactFrequency: q1,
-      conversationDepth: q2,
-      emotionalReliability: q3,
-      vulnerabilityDepth: q4,
-      tier
-    });
+  const resetForm = () => {
+    setStep(0);
     setName('');
-    setQ1(1);
-    setQ2(1);
-    setQ3(1);
-    setQ4(1);
+    setAnswers({ q1: null, q2: null, q3: null, q4: null });
   };
 
-  const fieldClass = `w-full px-4 py-3 rounded-2xl border text-sm font-medium focus:ring-2 transition-colors ${
-    isSkyMode
-      ? 'bg-white/70 border-lagoon-200 text-lagoon-950 placeholder-lagoon-400 focus:border-lagoon-400 focus:ring-lagoon-200'
-      : 'bg-lagoon-950/50 border-lagoon-700 text-lagoon-50 placeholder-lagoon-500 focus:border-lagoon-500 focus:ring-lagoon-800'
-  }`;
+  const handleNameSubmit = (e) => {
+    e.preventDefault();
+    if (name.trim()) setStep(1);
+  };
+
+  const handleOptionSelect = (qKey, val) => {
+    setAnswers(prev => ({ ...prev, [qKey]: val }));
+    setTimeout(() => {
+      if (step < 4) {
+        setStep(step + 1);
+      } else {
+        // Submit
+        const tier = deriveTier(answers.q1 || 1, answers.q2 || 1, answers.q3 || 1, val);
+        addFriend({
+          name: name.trim(),
+          contactFrequency: answers.q1 || 1,
+          conversationDepth: answers.q2 || 1,
+          emotionalReliability: answers.q3 || 1,
+          vulnerabilityDepth: val,
+          tier
+        });
+        setStep(5);
+        setTimeout(() => resetForm(), 3000);
+      }
+    }, 300); // short delay for visual feedback
+  };
+
+  const currentQuestion = step >= 1 && step <= 4 ? QUESTIONS[step - 1] : null;
 
   return (
-    <div className="relative max-w-4xl mx-auto space-y-6 sm:space-y-8 pb-10">
-
-      {/* Ambient watercolor blobs, purely decorative */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-6 h-64 overflow-hidden -z-10">
-        <div className={`absolute left-0 top-0 w-72 h-72 rounded-full blur-3xl ${isSkyMode ? 'bg-lagoon-200/50' : 'bg-lagoon-700/20'}`} />
-        <div className={`absolute right-0 top-6 w-80 h-80 rounded-full blur-3xl ${isSkyMode ? 'bg-blush-200/50' : 'bg-otterfur-500/10'}`} />
+    <section aria-label="Social Circle" className="relative w-full max-w-[1200px] mx-auto pb-16 px-4 sm:px-6">
+      
+      {/* Background blurs */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className={`absolute top-0 left-1/4 w-[40vw] h-[40vw] rounded-full blur-[100px] mix-blend-multiply opacity-30 ${isSkyMode ? 'bg-sand-200' : 'bg-lagoon-900'}`} />
+        <div className={`absolute bottom-0 right-1/4 w-[30vw] h-[30vw] rounded-full blur-[80px] mix-blend-multiply opacity-20 ${isSkyMode ? 'bg-lagoon-100' : 'bg-otterfur-900'}`} />
       </div>
 
-      {/* Title */}
-      <div className="text-center space-y-2">
-        <div className="flex justify-center mb-2">
-          <img src={nutriaCompasion} alt="Otter showing compassion" className="w-24 h-24 object-contain drop-shadow-lg" />
+      <div className="flex flex-col lg:flex-row gap-0 w-full perspective-[2000px]">
+        
+        {/* LEFT PAGE (Wizard Form) */}
+        <div className={`flex-1 lg:w-1/2 rounded-t-[1.5rem] lg:rounded-tr-none lg:rounded-l-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-r-0 lg:origin-right animate-book-page-left relative overflow-hidden
+          ${isSkyMode
+            ? 'bg-[#FDFDFD] border-[#E5E5E5] text-lagoon-950'
+            : 'bg-midnight-900 border-midnight-800 text-midnight-text'}`}
+        >
+          {/* Decorative SVGs */}
+          <div className="absolute top-0 left-0 opacity-15 pointer-events-none w-24 sm:w-32 -translate-x-4 -translate-y-4">
+            <img src={conchaSvg} alt="" className="w-full h-auto transform -rotate-12" aria-hidden="true" />
+          </div>
+          <div className="absolute bottom-0 right-0 opacity-[0.15] pointer-events-none w-48 sm:w-64 translate-x-4 translate-y-4">
+            <img src={algasSvg} alt="" className="w-full h-auto" aria-hidden="true" />
+          </div>
+
+          <div className="p-8 sm:p-12 h-full flex flex-col justify-center relative min-h-[70vh] z-10">
+            
+            {step === 0 && (
+              <div className="space-y-8 max-w-sm w-full mx-auto animate-fade-in">
+                <div className="space-y-4">
+                  <h2 className="font-display text-4xl sm:text-5xl font-normal tracking-tight leading-tight">
+                    Social <br className="hidden sm:block" />
+                    <span className="italic opacity-60">Circle</span>
+                  </h2>
+                  <p className="font-serif italic opacity-70 leading-relaxed text-sm">
+                    Reflect on your relationships. Add someone to your circle to visualize your support system.
+                  </p>
+                </div>
+
+                <form onSubmit={handleNameSubmit} className="space-y-4 pt-6">
+                  <label htmlFor="friendName" className="block font-display text-xl mb-2">
+                    Who would you like to add?
+                  </label>
+                  <input
+                    id="friendName"
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Their name..."
+                    className={`w-full py-2 bg-transparent text-lg font-serif italic transition-all duration-300 focus:outline-none border-b focus:border-current opacity-80 focus:opacity-100 ${
+                      isSkyMode
+                        ? 'border-[#E5E5E5] placeholder-lagoon-400'
+                        : 'border-midnight-800 placeholder-midnight-muted'
+                    }`}
+                    autoFocus
+                  />
+                  <div className="pt-4">
+                    <button
+                      type="submit"
+                      disabled={!name.trim()}
+                      className={`flex items-center gap-2 font-display text-lg px-4 py-2 rounded-full border transition-all ${
+                        !name.trim() 
+                          ? 'opacity-30 cursor-not-allowed border-transparent'
+                          : isSkyMode ? 'border-lagoon-900 hover:bg-lagoon-50' : 'border-lagoon-200 hover:bg-white/5'
+                      }`}
+                    >
+                      Continue <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {step >= 1 && step <= 4 && currentQuestion && (
+              <div key={step} className="space-y-8 max-w-sm w-full mx-auto animate-fade-in">
+                
+                <div className="flex items-center gap-4 text-xs font-serif uppercase tracking-widest opacity-50 mb-6">
+                  <button onClick={() => setStep(step - 1)} className="hover:opacity-100 transition-opacity p-1">
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span>Question {step} of 4</span>
+                </div>
+
+                <h3 className="font-display text-2xl sm:text-3xl leading-snug">
+                  {currentQuestion.title}
+                </h3>
+                <p className="font-serif italic opacity-60 text-sm">
+                  About <span className="font-bold">{name}</span>
+                </p>
+
+                <div className="space-y-3 pt-4">
+                  {currentQuestion.options.map((opt) => {
+                    const isSelected = answers[currentQuestion.key] === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => handleOptionSelect(currentQuestion.key, opt.value)}
+                        className={`w-full text-left py-3 px-4 rounded-xl border transition-all duration-300 font-serif italic ${
+                          isSelected
+                            ? (isSkyMode ? 'border-lagoon-900 bg-lagoon-50 text-lagoon-950 font-bold' : 'border-lagoon-200 bg-white/10 text-white font-bold')
+                            : (isSkyMode ? 'border-transparent hover:border-[#E5E5E5] text-lagoon-800' : 'border-transparent hover:border-midnight-800 text-midnight-text')
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {step === 5 && (
+              <div className="text-center space-y-6 animate-fade-in max-w-sm mx-auto">
+                <CheckCircle2 className="w-16 h-16 mx-auto opacity-50" strokeWidth={1} />
+                <h3 className="font-display text-3xl font-normal tracking-tight">
+                  Added to Circle
+                </h3>
+                <p className="font-serif italic opacity-70 text-sm">
+                  {name} has been placed in your social circle.
+                </p>
+              </div>
+            )}
+            
+          </div>
         </div>
-        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
-          <Users className={`w-7 h-7 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
-          Social Circle
-        </h2>
-        <p className={`text-xs sm:text-sm max-w-xl mx-auto font-semibold ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
-          Answer a few gentle questions about each person, and we’ll place them in your circle. Not quite right? Drag anyone to a different ring, or tap them for more options — no labels to assign yourself.
-        </p>
+
+        {/* RIGHT PAGE (Diagram) */}
+        <div className={`flex-1 lg:w-1/2 rounded-b-[1.5rem] lg:rounded-bl-none lg:rounded-r-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-l-0 lg:origin-left animate-book-page-right relative overflow-hidden
+          ${isSkyMode
+            ? 'bg-[#FAFAFA] border-[#E5E5E5] text-lagoon-950'
+            : 'bg-midnight-950 border-midnight-800 text-midnight-text'}`}
+        >
+          {/* Decorative SVGs */}
+          <div className="absolute top-0 right-0 opacity-15 pointer-events-none w-32 -translate-y-4 translate-x-4">
+            <img src={estrellaSvg} alt="" className="w-full h-auto transform rotate-12" aria-hidden="true" />
+          </div>
+
+          <div className="p-8 sm:p-12 h-full flex flex-col relative min-h-[70vh] z-10">
+             <CircleDiagram friends={friends} removeFriend={removeFriend} setFriendTier={setFriendTier} isSkyMode={isSkyMode} />
+          </div>
+        </div>
+
       </div>
-
-      {/* Add-friend form */}
-      <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-6 transition-all border
-        ${isSkyMode
-          ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-          : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'}`}
-      >
-        <SeaweedFlourish className="hidden sm:block absolute -bottom-2 left-4 w-8 h-14 opacity-70" />
-        <ShellFlourish className="hidden sm:block absolute bottom-4 right-6 w-10 h-8 opacity-70" />
-
-        <h3 className={`relative font-display text-xl font-bold flex items-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
-          <UserPlus className={`w-5 h-5 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
-          Add someone to your circle
-        </h3>
-
-        <form onSubmit={handleAdd} className="relative space-y-5">
-          <div>
-            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-              Their name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="e.g. Alex"
-              className={fieldClass}
-              required
-            />
-          </div>
-
-          <div>
-            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-              How often are you in touch?
-            </label>
-            <select
-              value={q1}
-              onChange={e => setQ1(Number(e.target.value))}
-              className={fieldClass}
-            >
-              {Q1_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-              What do you usually talk about?
-            </label>
-            <select
-              value={q2}
-              onChange={e => setQ2(Number(e.target.value))}
-              className={fieldClass}
-            >
-              {Q2_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-              Would you call them if something went really wrong?
-            </label>
-            <select
-              value={q3}
-              onChange={e => setQ3(Number(e.target.value))}
-              className={fieldClass}
-            >
-              {Q3_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-lagoon-800' : 'text-lagoon-300'}`}>
-              Do they know about the hard stuff going on in your life right now?
-            </label>
-            <select
-              value={q4}
-              onChange={e => setQ4(Number(e.target.value))}
-              className={fieldClass}
-            >
-              {Q4_OPTIONS.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            className={`w-full py-3.5 sm:py-4 rounded-2xl sm:rounded-3xl font-bold text-sm tracking-wide transition-all duration-300 shadow-xl flex items-center justify-center gap-2 active:scale-[0.98] hover:-translate-y-0.5 ${
-              isSkyMode
-                ? 'bg-gradient-to-r from-lagoon-500 to-lagoon-400 text-white shadow-lagoon-400/30 hover:shadow-lagoon-400/50'
-                : 'bg-gradient-to-r from-lagoon-600 to-lagoon-500 text-white shadow-black/40 hover:shadow-lagoon-900/60'
-            }`}
-          >
-            <Plus className="w-5 h-5" />
-            Place in my circle
-          </button>
-        </form>
-      </div>
-
-      {/* The circle diagram — drag a bubble to another ring, or tap it for name / remove / move options */}
-      <CircleDiagram friends={friends} removeFriend={removeFriend} setFriendTier={setFriendTier} isSkyMode={isSkyMode} />
-    </div>
+    </section>
   );
 }

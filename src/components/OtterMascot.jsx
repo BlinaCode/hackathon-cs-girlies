@@ -44,7 +44,7 @@ export function OtterMascot({ expression = 'caring', speech, compact = false }) 
 
       {speech && (
         <div className={`flex-1 text-sm sm:text-base font-serif italic transition-all
-          ${isSkyMode ? 'text-lagoon-900/80' : 'text-lagoon-100/70'}`}
+          ${isSkyMode ? 'text-lagoon-900/80' : 'text-midnight-text/70'}`}
         >
           <p className="leading-relaxed">"{speech}"</p>
         </div>

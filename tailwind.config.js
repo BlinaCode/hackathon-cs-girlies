@@ -71,6 +71,16 @@ export default {
         dune: { 100: '#FBEAD3', 200: '#F0C896', 300: '#E7BE8D', 400: '#D9A76A', 500: '#C7B699' },
         otterfur: { 100: '#F0D2B4', 200: '#D9AE86', 300: '#B3896E', 400: '#AF6C4E', 500: '#8B5A3C' },
         foliage: { 300: '#C6BE95', 400: '#A89B6E', 500: '#7E7B51', 600: '#5E6139' },
+
+        // Unified Dark Mode Palette
+        midnight: {
+          950: '#080C11', // Global background
+          900: '#121822', // Card background
+          800: '#1D2636', // Borders / secondary background
+          700: '#2A374A', // Hover states
+          text: '#E8F1F8', // High-contrast text
+          muted: '#A9C2D8', // Muted text
+        },
       },
       fontFamily: {
         display: ['Playfair Display', 'serif'],
