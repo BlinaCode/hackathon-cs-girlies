@@ -7,7 +7,8 @@ import {
   Volume2,
   VolumeX,
   Menu,
-  X
+  X,
+  User
 } from 'lucide-react';
 
 import { useAuth } from '../context/AuthContext';
@@ -265,6 +266,14 @@ export function Header({ activeTab, setActiveTab }) {
                     </button>
 
                     <button
+                      onClick={() => handleNav('account')}
+                      className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                    >
+                      <User className="w-4 h-4" />
+                      Account
+                    </button>
+
+                    <button
                       onClick={logout}
                       className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors"
                     >
@@ -438,6 +447,13 @@ export function Header({ activeTab, setActiveTab }) {
                     </button>
 
                     <button
+                      onClick={() => handleNav('account')}
+                      className="text-sm font-bold text-slate-700"
+                    >
+                      Account
+                    </button>
+
+                    <button
                       onClick={logout}
                       className="p-2 text-rose-500"
                     >
@@ -466,7 +482,10 @@ export function Header({ activeTab, setActiveTab }) {
 
       {/* Auth Modal */}
       {showAuthModal && (
-        <AuthModal onClose={() => setShowAuthModal(false)} />
+        <AuthModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => { setShowAuthModal(false); setActiveTab('hub'); }}
+        />
       )}
     </>
   );

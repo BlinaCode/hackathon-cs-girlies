@@ -112,6 +112,7 @@ export function useSupabaseSync() {
     clearAllLocalData
   } = useWellness();
 
+  const knownBeliefIdsRef = useRef(new Set());
   const knownFriendIdsRef = useRef(new Set());
   const knownCompletedResourceIdsRef = useRef(new Set());
   // 'PENDING' until the identity-check effect below runs at least once this
@@ -222,22 +223,37 @@ export function useSupabaseSync() {
   }, [user]);
 
   // Push beliefs then practices (in that order — belief_practices.belief_id
-  // has a foreign key to beliefs.id, so the parent must land first).
+  // has a foreign key to beliefs.id, so the parent must land first). Beliefs
+  // can now be permanently deleted locally (unlike practices, which only
+  // accumulate), so diff against the last-known id set to also delete rows
+  // in Supabase that disappeared from local state — mirrors the friends sync
+  // below. Deleting a belief there cascades to its belief_practices via FK
+  // ON DELETE CASCADE, so no separate practice-delete call is needed.
   useEffect(() => {
     if (!user || !supabase) return;
-    if (beliefs.length === 0 && beliefPractices.length === 0) return;
 
     const syncBeliefWork = async () => {
       if (identityRef.current !== 'OK') return;
+
+      const currentIds = new Set(beliefs.map(b => b.id));
+      const removedIds = [...knownBeliefIdsRef.current].filter(id => !currentIds.has(id));
+
+      if (removedIds.length > 0) {
+        const { error } = await supabase.from('beliefs').delete().in('id', removedIds);
+        if (error) console.warn('Supabase belief delete warning:', error.message);
+      }
 
       if (beliefs.length > 0) {
         const beliefRows = beliefs.map(b => toBeliefRow(b, user.id));
         const { error } = await supabase.from('beliefs').upsert(beliefRows, { onConflict: 'id' });
         if (error) {
           console.warn('Supabase belief sync warning:', error.message);
+          knownBeliefIdsRef.current = currentIds;
           return;
         }
       }
+
+      knownBeliefIdsRef.current = currentIds;
 
       if (beliefPractices.length > 0) {
         const practiceRows = beliefPractices.map(p => toPracticeRow(p, user.id));
