@@ -1,24 +1,34 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
-import otterCheckin from '../assets/images/otter-checkin.png';
-import otterBreathe from '../assets/images/otter-breathe.png';
-import otterReframe from '../assets/images/otter-reframe.png';
-import otterGrow from '../assets/images/otter-grow.png';
+import otterJoyful from '../assets/svg/nutriaalegria.svg';
+import otterPureJoy from '../assets/svg/nutriaalegriapura.svg';
+import otterCaring from '../assets/svg/nutriacompasion.svg';
+import otterFocused from '../assets/svg/nutriaconcentracion.svg';
+import otterComforting from '../assets/svg/nutriaconsuelo.svg';
+import otterCurious from '../assets/svg/nutriacuriosidad.svg';
+import otterEnthusiastic from '../assets/svg/nutriaentusiasmo.svg';
+import otterMeditating from '../assets/svg/nutriameditacionprofunda.svg';
+import otterReflecting from '../assets/svg/nutriareflexion.svg';
+import otterSurprise from '../assets/svg/nutriasorpresa.svg';
 
-// Illustrated otter portraits (hand-picked from the reference sticker set) per
-// mascot expression, instead of a redrawn vector face.
+// Illustrated otter portraits per mascot expression
 const OTTER_PORTRAITS = {
-  breathing: otterBreathe,
-  joyful: otterCheckin,
-  celebrating: otterGrow,
-  caring: otterReframe,
-  thoughtful: otterReframe,
+  breathing: otterMeditating,
+  joyful: otterJoyful,
+  celebrating: otterPureJoy,
+  caring: otterCaring,
+  thoughtful: otterReflecting,
+  focused: otterFocused,
+  comforting: otterComforting,
+  curious: otterCurious,
+  enthusiastic: otterEnthusiastic,
+  surprise: otterSurprise,
 };
 
 export function OtterMascot({ expression = 'caring', speech, compact = false }) {
   const { isSkyMode } = useWellness();
-  const portrait = OTTER_PORTRAITS[expression] || otterReframe;
+  const portrait = OTTER_PORTRAITS[expression] || otterJoyful;
 
   return (
     <div className={`flex items-start gap-4 ${compact ? 'max-w-md' : 'max-w-xl'} mx-auto my-4`}>

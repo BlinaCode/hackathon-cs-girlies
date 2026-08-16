@@ -3,6 +3,7 @@ import { BookOpen, CheckCircle, Clock, Search, X, Sparkles, Compass, Brain, Moon
 import { STARTER_RESOURCES } from '../services/resourcesData';
 import { useWellness } from '../context/WellnessContext';
 import { CountryCrisisLines } from './CountryCrisisLines';
+import frascoSvg from '../assets/svg/frascoalgas.svg';
 
 function FishIcon() {
   return (
@@ -393,7 +394,9 @@ export function ResourceHub({ setActiveTab }) {
     >
 
       <div className="text-center space-y-2">
-
+        <div className="flex justify-center mb-2">
+          <img src={frascoSvg} alt="Marine Jar" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2
           className="font-display text-3xl font-bold flex items-center justify-center gap-2"
           style={{
@@ -409,7 +412,6 @@ export function ResourceHub({ setActiveTab }) {
                 : '#A4D3DE'
             }}
           />
-
           Smart Mental Health Library
 
         </h2>

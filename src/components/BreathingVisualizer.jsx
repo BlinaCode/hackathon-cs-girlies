@@ -14,6 +14,7 @@ import {
 } from "../hooks/useBreathingTimer";
 import { useBreathingPresence } from "../hooks/useBreathingPresence";
 import { useWellness } from "../context/WellnessContext";
+import mantaSvg from "../assets/svg/mantadeyogaplaya.svg";
 
 function CoastalElementIcon() {
   return (
@@ -114,7 +115,10 @@ export function BreathingVisualizer() {
   return (
     <div className="max-w-2xl mx-auto space-y-6 pb-10 px-2 sm:px-0">
       {/* Title */}
-      <div className="text-center space-y-1.5">
+      <div className="text-center space-y-3">
+        <div className="flex justify-center mb-1">
+          <img src={mantaSvg} alt="Beach Yoga Mat" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <span
           className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm"
           style={
