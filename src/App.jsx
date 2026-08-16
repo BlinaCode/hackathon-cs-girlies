@@ -8,7 +8,7 @@ import { WelcomeQuestionnaire } from './components/WelcomeQuestionnaire';
 import { MoodCheckIn } from './components/MoodCheckIn';
 import { BreathingVisualizer } from './components/BreathingVisualizer';
 import { ReframeThoughts } from './components/ReframeThoughts';
-import { FriendCircle } from './components/FriendCircle';
+import { SocialCircle } from './components/SocialCircle';
 import { ResourceHub } from './components/ResourceHub';
 import { GrowthDashboard } from './components/GrowthDashboard';
 import { Compass, Heart, Brain, Users, BookOpen, Flame, Sparkles, ArrowRight } from 'lucide-react';
@@ -40,7 +40,7 @@ function HomeHub({ setActiveTab }) {
     },
     {
       id: 'friends',
-      title: 'Friend Circle',
+      title: 'Social Circle',
       desc: 'Two quick questions place each person in your circle.',
       icon: <Users className="w-6 h-6 text-seafoam-400" />,
       badge: 'Connection'
@@ -157,7 +157,7 @@ function MainContent({ initialTab = 'hub' }) {
         {activeTab === 'checkin' && <MoodCheckIn />}
         {activeTab === 'breathing' && <BreathingVisualizer />}
         {activeTab === 'beliefs' && <ReframeThoughts />}
-        {activeTab === 'friends' && <FriendCircle />}
+        {activeTab === 'friends' && <SocialCircle />}
         {activeTab === 'resources' && <ResourceHub />}
         {activeTab === 'growth' && <GrowthDashboard />}
       </main>

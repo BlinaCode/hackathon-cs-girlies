@@ -126,7 +126,10 @@ export function WellnessProvider({ children }) {
       name: friend.name,
       contactFrequency: friend.contactFrequency, // Q1, 1..5
       conversationDepth: friend.conversationDepth, // Q2, 1..4
+      emotionalReliability: friend.emotionalReliability, // Q3, 1..4
+      vulnerabilityDepth: friend.vulnerabilityDepth, // Q4, 1..4
       tier: friend.tier, // close_friend | friend | acquaintance
+      tierSource: 'auto', // auto (from questionnaire) | manual (dragged to a ring)
       createdAt: new Date().toISOString()
     };
     setFriends(prev => [newFriend, ...prev]);
@@ -141,6 +144,13 @@ export function WellnessProvider({ children }) {
 
   const removeFriend = (friendId) => {
     setFriends(prev => prev.filter(f => f.id !== friendId));
+  };
+
+  // Manually move a friend into a different ring (e.g. via drag-and-drop).
+  // This is now the source of truth for their tier — the questionnaire
+  // score is kept on the record for reference but never overwrites it again.
+  const setFriendTier = (friendId, tier) => {
+    setFriends(prev => prev.map(f => f.id === friendId ? { ...f, tier, tierSource: 'manual' } : f));
   };
 
   // Merge friend rows pulled from Supabase into local state, keyed by id
@@ -232,6 +242,7 @@ export function WellnessProvider({ children }) {
         mergeBeliefPracticesFromCloud,
         addFriend,
         removeFriend,
+        setFriendTier,
         mergeFriendsFromCloud,
         completeBreathingSession,
         mergeBreathingStreakFromCloud,
