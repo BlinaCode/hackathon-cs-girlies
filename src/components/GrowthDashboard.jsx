@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TrendingUp, Flame, Heart, Brain, BookOpen, Award, X, CheckCircle2, Trash2, ArrowRight } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
+import lotoSvg from '../assets/svg/flordeloto.svg';
 import { OtterMascot } from './OtterMascot';
 import otterCheckin from '../assets/images/otter-checkin.png';
 import otterBreathe from '../assets/images/otter-breathe.png';
@@ -111,6 +112,9 @@ export function GrowthDashboard({ setActiveTab }) {
       </div>
 
       <div className="text-center space-y-2">
+        <div className="flex justify-center mb-2">
+          <img src={lotoSvg} alt="Lotus Flower" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
           <TrendingUp className={`w-7 h-7 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
           Growth & Analytics Dashboard

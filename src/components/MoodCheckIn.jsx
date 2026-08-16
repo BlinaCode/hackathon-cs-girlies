@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Heart, CheckCircle2, Tag } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
+import journalSvg from '../assets/svg/diariodegratitudmarina.svg';
 
 const MOOD_META = [
   {
@@ -233,7 +234,10 @@ export function MoodCheckIn() {
         <div className={`absolute right-0 top-6 w-80 h-80 rounded-full blur-3xl ${isSkyMode ? 'bg-blush-200/50' : 'bg-otterfur-500/10'}`} />
       </div>
 
-      <div className="text-center space-y-2">
+      <div className="text-center space-y-4">
+        <div className="flex justify-center mb-2">
+          <img src={journalSvg} alt="Marine Gratitude Journal" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
           <Heart className={`w-7 h-7 ${isSkyMode ? 'text-blush-300 fill-blush-200' : 'text-blush-300 fill-blush-300/20'}`} />
           Shoreline Check-In

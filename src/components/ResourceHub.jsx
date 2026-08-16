@@ -4,6 +4,7 @@ import { STARTER_RESOURCES } from '../services/resourcesData';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
 import { CountryCrisisLines } from './CountryCrisisLines';
+import frascoSvg from '../assets/svg/frascoalgas.svg';
 
 export function ResourceHub() {
   const { completedResources, toggleResourceCompletion, mascotState, isSkyMode } = useWellness();
@@ -36,6 +37,9 @@ export function ResourceHub() {
       
       {/* Title */}
       <div className="text-center space-y-2">
+        <div className="flex justify-center mb-2">
+          <img src={frascoSvg} alt="Marine Jar" className="w-28 h-28 object-contain drop-shadow-lg" />
+        </div>
         <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
           <BookOpen className={`w-7 h-7 ${isSkyMode ? 'text-bluey-500' : 'text-seafoam-400'}`} />
           Smart Mental Health Library
