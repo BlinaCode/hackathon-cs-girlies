@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, LogIn, UserPlus, ShieldCheck, AlertCircle, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-export function AuthModal({ onClose }) {
+export function AuthModal({ onClose, onSuccess }) {
   const { loginWithEmail, signUpWithEmail, isSupabaseConfigured } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -24,7 +24,7 @@ export function AuthModal({ onClose }) {
       } else {
         await loginWithEmail(email, password);
       }
-      onClose();
+      (onSuccess || onClose)();
     } catch (err) {
       setErrorMsg(err.message || 'Authentication failed.');
     } finally {

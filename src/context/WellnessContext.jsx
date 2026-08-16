@@ -98,6 +98,11 @@ export function WellnessProvider({ children }) {
     speech: 'Welcome back! Take a deep breath and explore at your own pace.'
   });
 
+  // Transient (not persisted) hand-off: set when navigating to Reframe
+  // Thoughts from elsewhere (e.g. Growth Dashboard's "Reframe" action) so it
+  // opens pre-selected on that thought instead of defaulting to the first one.
+  const [pendingReframeBeliefId, setPendingReframeBeliefId] = useState(null);
+
   // Global Theme & Audio State
   const [themeMode, setThemeMode] = useLocalStorage(STORAGE_KEYS.THEME_MODE, 'sky');
   const isSkyMode = themeMode === 'sky';
@@ -187,6 +192,14 @@ export function WellnessProvider({ children }) {
   // Update a belief's status (active | resolved | archived)
   const updateBeliefStatus = (beliefId, status) => {
     setBeliefs(prev => prev.map(b => b.id === beliefId ? { ...b, status } : b));
+  };
+
+  // Permanently remove a belief and its practice history. Local-only —
+  // useSupabaseSync diffs against beliefs to also delete the row in Supabase,
+  // which cascades to belief_practices there via FK ON DELETE CASCADE.
+  const deleteBelief = (beliefId) => {
+    setBeliefs(prev => prev.filter(b => b.id !== beliefId));
+    setBeliefPractices(prev => prev.filter(p => p.beliefId !== beliefId));
   };
 
   // Merge belief rows pulled from Supabase into local state, keyed by id
@@ -326,6 +339,9 @@ export function WellnessProvider({ children }) {
         addBelief,
         addBeliefPractice,
         updateBeliefStatus,
+        deleteBelief,
+        pendingReframeBeliefId,
+        setPendingReframeBeliefId,
         mergeBeliefsFromCloud,
         mergeBeliefPracticesFromCloud,
         addFriend,
