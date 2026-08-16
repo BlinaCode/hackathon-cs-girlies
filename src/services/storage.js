@@ -8,7 +8,8 @@ export const STORAGE_KEYS = {
   BREATHING_STREAK: 'sisu_breathing_streak',
   USER_PREFERENCES: 'sisu_user_prefs',
   THEME_MODE: 'sisu_theme_mode',
-  JOURNAL_ENTRIES: 'sisu_journal_entries'
+  JOURNAL_ENTRIES: 'sisu_journal_entries',
+  ACTIVE_TAB: 'sisu_active_tab'
 };
 
 export const getStoredItem = (key, fallback) => {
