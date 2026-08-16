@@ -76,6 +76,20 @@ export default {
         display: ['Playfair Display', 'serif'],
         body: ['Manrope', 'sans-serif'],
         sans: ['Inter', 'sans-serif'],
+      },
+      keyframes: {
+        bookPageLeft: {
+          '0%': { transform: 'perspective(1500px) rotateY(90deg)', opacity: '0' },
+          '100%': { transform: 'perspective(1500px) rotateY(0deg)', opacity: '1' },
+        },
+        bookPageRight: {
+          '0%': { transform: 'perspective(1500px) rotateY(-90deg)', opacity: '0' },
+          '100%': { transform: 'perspective(1500px) rotateY(0deg)', opacity: '1' },
+        },
+      },
+      animation: {
+        'book-page-left': 'bookPageLeft 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+        'book-page-right': 'bookPageRight 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
       }
     },
   },
