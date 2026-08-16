@@ -11,10 +11,12 @@ export function Header({ activeTab, setActiveTab }) {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const navItems = [
-    { id: 'hub', label: 'Zen Hub', icon: '🐚' },
     { id: 'checkin', label: 'Check-In', icon: '🌊' },
     { id: 'breathing', label: 'Breathing', icon: '💨' },
-    { id: 'resources', label: 'Library', icon: '📖' }
+    { id: 'beliefs', label: 'Reframe', icon: '🧠' },
+    { id: 'friends', label: 'Circle', icon: '🫂' },
+    { id: 'resources', label: 'Library', icon: '📖' },
+    { id: 'growth', label: 'Growth', icon: '🌱' }
   ];
 
   return (

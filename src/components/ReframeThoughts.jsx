@@ -13,7 +13,7 @@ const EMPTY_PRACTICE = {
 };
 
 export function ReframeThoughts() {
-  const { beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus, mascotState } = useWellness();
+  const { beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus, mascotState, isSkyMode } = useWellness();
 
   const activeBeliefs = beliefs.filter(b => b.status === 'active');
 
@@ -62,11 +62,11 @@ export function ReframeThoughts() {
 
       {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="font-display text-3xl font-bold text-slate-100 flex items-center justify-center gap-2">
+        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
           <Brain className="w-7 h-7 text-seafoam-400" />
           Reframe Thoughts
         </h2>
-        <p className="text-sm text-slate-400 max-w-xl mx-auto">
+        <p className={`text-sm max-w-xl mx-auto ${isSkyMode ? 'text-bluey-800' : 'text-slate-400'}`}>
           Gently examine a thought that is bothering you, find a kinder alternative, and watch your belief in it soften over time.
         </p>
       </div>
@@ -74,9 +74,9 @@ export function ReframeThoughts() {
       <OtterMascot expression={mascotState.expression} speech={mascotState.speech} />
 
       {/* Choose or add a belief */}
-      <div className="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-5">
+      <div className={`rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
         <div className="flex items-center justify-between gap-3">
-          <h3 className="font-display text-xl font-bold text-slate-100">
+          <h3 className={`font-display text-xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
             {showNewForm ? 'Name a thought to reframe' : 'Which thought are you working on?'}
           </h3>
           {!showNewForm && (
@@ -93,7 +93,7 @@ export function ReframeThoughts() {
         {showNewForm ? (
           <form onSubmit={handleAddBelief} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
                 What is one thought that is bothering you?
               </label>
               <input
@@ -101,13 +101,13 @@ export function ReframeThoughts() {
                 value={statement}
                 onChange={e => setStatement(e.target.value)}
                 placeholder="e.g. I feel that I am not good enough."
-                className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:border-seafoam-500"
+                className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
                 required
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
                   What does that mean to you?
                 </label>
                 <input
@@ -115,11 +115,11 @@ export function ReframeThoughts() {
                   value={meaningToMe}
                   onChange={e => setMeaningToMe(e.target.value)}
                   placeholder="e.g. That I will be rejected."
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:border-seafoam-500"
+                  className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
                   Where did it originate?
                 </label>
                 <input
@@ -127,7 +127,7 @@ export function ReframeThoughts() {
                   value={originHistorical}
                   onChange={e => setOriginHistorical(e.target.value)}
                   placeholder="e.g. Childhood, an old comparison."
-                  className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:border-seafoam-500"
+                  className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
                 />
               </div>
             </div>
@@ -142,7 +142,7 @@ export function ReframeThoughts() {
                 <button
                   type="button"
                   onClick={() => setShowNewForm(false)}
-                  className="px-5 py-3.5 rounded-2xl border border-slate-700 text-slate-300 font-semibold text-sm hover:bg-slate-800 transition-all"
+                  className={`px-5 py-3.5 rounded-2xl border font-semibold text-sm transition-all ${isSkyMode ? 'border-bluey-300 text-bluey-800 hover:bg-white' : 'border-slate-700 text-slate-300 hover:bg-slate-800'}`}
                 >
                   Cancel
                 </button>
@@ -153,7 +153,7 @@ export function ReframeThoughts() {
           <select
             value={selectedBeliefId}
             onChange={e => { setSelectedBeliefId(e.target.value); setPractice(EMPTY_PRACTICE); }}
-            className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 focus:border-seafoam-500 text-sm"
+            className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
           >
             {activeBeliefs.map(b => (
               <option key={b.id} value={b.id}>{b.statement}</option>
@@ -164,7 +164,7 @@ export function ReframeThoughts() {
 
       {/* Practice worksheet */}
       {!showNewForm && selectedBelief && (
-        <div className="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+        <div className={`rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
           {submitted ? (
             <div className="p-6 rounded-2xl bg-seafoam-500/10 border border-seafoam-500/30 text-center space-y-2">
               <CheckCircle className="w-8 h-8 text-seafoam-400 mx-auto" />
@@ -183,6 +183,7 @@ export function ReframeThoughts() {
                 label="How strongly do you believe it right now?"
                 value={practice.initialBeliefScore}
                 onChange={v => setP('initialBeliefScore', v)}
+                isSkyMode={isSkyMode}
               />
 
               {/* Advantages / disadvantages */}
@@ -192,12 +193,14 @@ export function ReframeThoughts() {
                   value={practice.advantages}
                   onChange={v => setP('advantages', v)}
                   placeholder="e.g. It keeps me cautious."
+                  isSkyMode={isSkyMode}
                 />
                 <TextArea
                   label="Disadvantages of thinking this way"
                   value={practice.disadvantages}
                   onChange={v => setP('disadvantages', v)}
                   placeholder="e.g. It stops me from trying."
+                  isSkyMode={isSkyMode}
                 />
               </div>
 
@@ -208,6 +211,7 @@ export function ReframeThoughts() {
                 value={practice.chosenAlternativeThought}
                 onChange={v => setP('chosenAlternativeThought', v)}
                 placeholder="A kinder, more balanced way to see this..."
+                isSkyMode={isSkyMode}
               />
 
               {/* New action */}
@@ -216,6 +220,7 @@ export function ReframeThoughts() {
                 value={practice.chosenNewAction}
                 onChange={v => setP('chosenNewAction', v)}
                 placeholder="One small step that honors the new thought..."
+                isSkyMode={isSkyMode}
               />
 
               {/* Final belief score */}
@@ -223,6 +228,7 @@ export function ReframeThoughts() {
                 label="How strongly do you believe the original thought now?"
                 value={practice.finalBeliefScore}
                 onChange={v => setP('finalBeliefScore', v)}
+                isSkyMode={isSkyMode}
               />
 
               <button
@@ -237,7 +243,7 @@ export function ReframeThoughts() {
           {/* Progress over time */}
           {practiceHistory.length > 0 && (
             <div className="pt-6 border-t border-slate-700/60 space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <h4 className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
                 <TrendingDown className="w-3.5 h-3.5 text-seafoam-400" />
                 Your belief over time ({practiceHistory.length})
               </h4>
@@ -258,7 +264,7 @@ export function ReframeThoughts() {
               <button
                 type="button"
                 onClick={() => { updateBeliefStatus(selectedBeliefId, 'resolved'); setSelectedBeliefId(''); }}
-                className="text-xs text-slate-400 hover:text-seafoam-300 transition-colors underline underline-offset-2"
+                className={`text-xs hover:text-seafoam-500 transition-colors underline underline-offset-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}
               >
                 This thought no longer bothers me — mark as resolved
               </button>
@@ -270,11 +276,11 @@ export function ReframeThoughts() {
   );
 }
 
-function ScoreSlider({ label, value, onChange }) {
+function ScoreSlider({ label, value, onChange, isSkyMode }) {
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center text-xs">
-        <label className="font-bold uppercase tracking-wider text-slate-400">{label}</label>
+        <label className={`font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>{label}</label>
         <span className="font-semibold text-seafoam-400 text-sm">{value} / 100</span>
       </div>
       <input
@@ -283,9 +289,9 @@ function ScoreSlider({ label, value, onChange }) {
         max="100"
         value={value}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-seafoam-500"
+        className={`w-full h-2 rounded-lg appearance-none cursor-pointer accent-seafoam-500 ${isSkyMode ? 'bg-bluey-100' : 'bg-slate-900'}`}
       />
-      <div className="flex justify-between text-[11px] text-slate-500 font-medium px-1">
+      <div className={`flex justify-between text-[11px] font-medium px-1 ${isSkyMode ? 'text-bluey-600' : 'text-slate-500'}`}>
         <span>Not at all</span>
         <span>Completely</span>
       </div>
@@ -293,10 +299,10 @@ function ScoreSlider({ label, value, onChange }) {
   );
 }
 
-function TextArea({ label, icon, value, onChange, placeholder }) {
+function TextArea({ label, icon, value, onChange, placeholder, isSkyMode }) {
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+      <label className={`block text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
         {icon}{label}
       </label>
       <textarea
@@ -304,7 +310,7 @@ function TextArea({ label, icon, value, onChange, placeholder }) {
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         rows={2}
-        className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700/80 text-slate-100 placeholder-slate-500 focus:border-seafoam-500 focus:ring-1 focus:ring-seafoam-500 text-sm resize-none"
+        className={`w-full px-4 py-3 rounded-2xl text-sm resize-none ${isSkyMode ? 'input-day' : 'input-night'}`}
       />
     </div>
   );

@@ -58,7 +58,19 @@ const DIAGRAM_CENTER = 240;
 const DIAGRAM_SIZE = 480;
 const YOU_RADIUS = 55;
 const BUBBLE_RADIUS = 16; // px, in the 480 viewBox coordinate space
-const LABEL_GAP_DEG = 40; // arc reserved at the top of each ring for its label
+const LABEL_ARC_SPAN = 140; // degrees the curved ring label sweeps, centered on top
+const LABEL_GAP_DEG = LABEL_ARC_SPAN + 10; // bubble-exclusion arc, a touch wider than the label itself
+
+// An SVG arc `d` string for a circle of radius r centered at (cx, cy), running
+// clockwise from startDeg to endDeg (0deg = right/east, -90deg = top, matches
+// the y-down convention used everywhere else in this file).
+function arcPath(cx, cy, r, startDeg, endDeg) {
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const start = { x: cx + r * Math.cos(toRad(startDeg)), y: cy + r * Math.sin(toRad(startDeg)) };
+  const end = { x: cx + r * Math.cos(toRad(endDeg)), y: cy + r * Math.sin(toRad(endDeg)) };
+  const largeArcFlag = Math.abs(endDeg - startDeg) > 180 ? 1 : 0;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`;
+}
 
 // A little sea-creature variety for each bubble, picked deterministically per
 // friend (stable across re-renders/sessions) rather than by ring — so two
@@ -133,7 +145,7 @@ const DRAG_THRESHOLD = 6; // px of pointer movement before a press counts as a d
 // 1. Drag a bubble and drop it in a different ring (pointer/touch users).
 // 2. Open a bubble's popover and use the "Move to" swatches (keyboard and
 //    screen-reader users, or anyone who'd rather tap than drag).
-function CircleDiagram({ friends, removeFriend, setFriendTier }) {
+function CircleDiagram({ friends, removeFriend, setFriendTier, isSkyMode }) {
   const [activeFriendId, setActiveFriendId] = useState(null);
   const [drag, setDrag] = useState(null); // { friendId, pointerId, startX, startY, x, y, moved }
   const containerRef = useRef(null);
@@ -196,7 +208,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
   };
 
   return (
-    <div className="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-md">
+    <div className={`rounded-3xl p-6 sm:p-10 shadow-2xl transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
       <div ref={containerRef} className="relative w-full max-w-md mx-auto aspect-square select-none">
         <svg
           viewBox={`0 0 ${DIAGRAM_SIZE} ${DIAGRAM_SIZE}`}
@@ -204,6 +216,27 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
           aria-label="A concentric circle diagram: You at the center, surrounded by rings for Closed Friends, Friends, and Acquaintances, from innermost to outermost."
           className="absolute inset-0 w-full h-full"
         >
+          {/* Soft ambient ripples, purely decorative — a slow "calm water" pulse
+              behind the rings. */}
+          <circle
+            cx={DIAGRAM_CENTER}
+            cy={DIAGRAM_CENTER}
+            r={YOU_RADIUS + 10}
+            fill="none"
+            className="stroke-[#5EEAD4]/50 animate-ripple"
+            strokeWidth="2"
+            style={{ transformOrigin: `${DIAGRAM_CENTER}px ${DIAGRAM_CENTER}px` }}
+          />
+          <circle
+            cx={DIAGRAM_CENTER}
+            cy={DIAGRAM_CENTER}
+            r={YOU_RADIUS + 10}
+            fill="none"
+            className="stroke-[#5EEAD4]/40"
+            strokeWidth="2"
+            style={{ transformOrigin: `${DIAGRAM_CENTER}px ${DIAGRAM_CENTER}px`, animation: 'ripplePulse 3s cubic-bezier(0, 0.2, 0.8, 1) infinite 1.5s' }}
+          />
+
           {/* Each ring is drawn as an annulus (a wide stroke, not a filled disc) so
               its color doesn't blend with the rings inside it. */}
           {[...TIERS].reverse().map(tier => {
@@ -230,17 +263,25 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
             strokeWidth="2"
           />
 
-          {TIERS.map(tier => (
-            <text
-              key={tier.key}
-              x={DIAGRAM_CENTER}
-              y={DIAGRAM_CENTER - tier.radius + 26}
-              textAnchor="middle"
-              className={`${tier.labelColor} font-body font-bold uppercase tracking-wide text-[13px]`}
-            >
-              {tier.label}
-            </text>
-          ))}
+          {TIERS.map(tier => {
+            const labelRadius = tier.radius - 22;
+            const startDeg = -90 - LABEL_ARC_SPAN / 2;
+            const endDeg = -90 + LABEL_ARC_SPAN / 2;
+            return (
+              <React.Fragment key={tier.key}>
+                <path
+                  id={`social-circle-arc-${tier.key}`}
+                  d={arcPath(DIAGRAM_CENTER, DIAGRAM_CENTER, labelRadius, startDeg, endDeg)}
+                  fill="none"
+                />
+                <text className={`${tier.labelColor} font-body font-bold uppercase tracking-wide text-[13px]`}>
+                  <textPath href={`#social-circle-arc-${tier.key}`} startOffset="50%" textAnchor="middle">
+                    {tier.label}
+                  </textPath>
+                </text>
+              </React.Fragment>
+            );
+          })}
 
           <text
             x={DIAGRAM_CENTER}
@@ -264,6 +305,15 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
             />
           )}
         </svg>
+
+        {/* Sisu the Otter, slowly swimming a lap around the circle — purely
+            decorative. Counter-rotating inner wrapper keeps the otter itself
+            upright while the outer wrapper sweeps it around. */}
+        <div className="absolute inset-0 animate-orbit-swim pointer-events-none" aria-hidden="true">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orbit-swim-reverse">
+            <span className="block text-2xl sm:text-3xl drop-shadow-lg animate-otter-float">🦦</span>
+          </div>
+        </div>
 
         {/* Avatar bubbles, one per member, overlaid on their ring */}
         {TIERS.map(tier => {
@@ -337,13 +387,13 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
       </div>
 
       {/* Compact legend — counts only, names live on the bubbles above */}
-      <div className="flex flex-wrap justify-center gap-4 mt-6 pt-6 border-t border-slate-700/60">
+      <div className={`flex flex-wrap justify-center gap-4 mt-6 pt-6 border-t ${isSkyMode ? 'border-bluey-200/60' : 'border-slate-700/60'}`}>
         {TIERS.map(tier => {
           const count = friends.filter(f => f.tier === tier.key).length;
           return (
-            <div key={tier.key} className="flex items-center gap-2 text-xs text-slate-400">
+            <div key={tier.key} className={`flex items-center gap-2 text-xs ${isSkyMode ? 'text-bluey-800' : 'text-slate-400'}`}>
               <span className={`w-2.5 h-2.5 rounded-full border ${tier.bubble}`} />
-              <span className="font-semibold text-slate-200">{tier.label}</span>
+              <span className={`font-semibold ${isSkyMode ? 'text-bluey-950' : 'text-slate-200'}`}>{tier.label}</span>
               <span>· {tier.hint} · {count}</span>
             </div>
           );
@@ -354,7 +404,7 @@ function CircleDiagram({ friends, removeFriend, setFriendTier }) {
 }
 
 export function SocialCircle() {
-  const { friends, addFriend, removeFriend, setFriendTier, mascotState } = useWellness();
+  const { friends, addFriend, removeFriend, setFriendTier, mascotState, isSkyMode } = useWellness();
 
   const [name, setName] = useState('');
   const [q1, setQ1] = useState(1);
@@ -386,11 +436,11 @@ export function SocialCircle() {
 
       {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="font-display text-3xl font-bold text-slate-100 flex items-center justify-center gap-2">
+        <h2 className={`font-display text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
           <Users className="w-7 h-7 text-seafoam-400" />
           Social Circle
         </h2>
-        <p className="text-sm text-slate-400 max-w-xl mx-auto">
+        <p className={`text-sm max-w-xl mx-auto ${isSkyMode ? 'text-bluey-800' : 'text-slate-400'}`}>
           Answer a few gentle questions about each person, and we’ll place them in your circle. Not quite right? Drag anyone to a different ring, or tap them for more options — no labels to assign yourself.
         </p>
       </div>
@@ -398,15 +448,15 @@ export function SocialCircle() {
       <OtterMascot expression={mascotState.expression} speech={mascotState.speech} />
 
       {/* Add-friend form */}
-      <div className="bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
-        <h3 className="font-display text-xl font-bold text-slate-100 flex items-center gap-2">
+      <div className={`rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
+        <h3 className={`font-display text-xl font-bold flex items-center gap-2 ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
           <UserPlus className="w-5 h-5 text-seafoam-400" />
           Add someone to your circle
         </h3>
 
         <form onSubmit={handleAdd} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
               Their name
             </label>
             <input
@@ -414,19 +464,19 @@ export function SocialCircle() {
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="e.g. Alex"
-              className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:border-seafoam-500"
+              className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
               How often are you in touch?
             </label>
             <select
               value={q1}
               onChange={e => setQ1(Number(e.target.value))}
-              className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 focus:border-seafoam-500 text-sm"
+              className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
             >
               {Q1_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -435,13 +485,13 @@ export function SocialCircle() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
               What do you usually talk about?
             </label>
             <select
               value={q2}
               onChange={e => setQ2(Number(e.target.value))}
-              className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 focus:border-seafoam-500 text-sm"
+              className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
             >
               {Q2_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -450,13 +500,13 @@ export function SocialCircle() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
               Would you call them if something went really wrong?
             </label>
             <select
               value={q3}
               onChange={e => setQ3(Number(e.target.value))}
-              className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 focus:border-seafoam-500 text-sm"
+              className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
             >
               {Q3_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -465,13 +515,13 @@ export function SocialCircle() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
               Do they know about the hard stuff going on in your life right now?
             </label>
             <select
               value={q4}
               onChange={e => setQ4(Number(e.target.value))}
-              className="w-full px-4 py-3 rounded-2xl bg-slate-900/60 border border-slate-700 text-slate-100 focus:border-seafoam-500 text-sm"
+              className={`w-full px-4 py-3 rounded-2xl text-sm ${isSkyMode ? 'input-day' : 'input-night'}`}
             >
               {Q4_OPTIONS.map(o => (
                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -490,7 +540,7 @@ export function SocialCircle() {
       </div>
 
       {/* The circle diagram — drag a bubble to another ring, or tap it for name / remove / move options */}
-      <CircleDiagram friends={friends} removeFriend={removeFriend} setFriendTier={setFriendTier} />
+      <CircleDiagram friends={friends} removeFriend={removeFriend} setFriendTier={setFriendTier} isSkyMode={isSkyMode} />
     </div>
   );
 }

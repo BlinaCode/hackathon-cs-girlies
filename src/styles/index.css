@@ -49,6 +49,23 @@
   box-shadow: 0 12px 36px -8px rgba(6, 27, 36, 0.8), 0 0 20px -4px rgba(0, 172, 193, 0.15);
 }
 
+/* Theme-aware form field styling, matching glass-card's day/night pairing */
+.input-day {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #B2EBF2;
+  color: #0F3440;
+}
+.input-day::placeholder { color: #4DD0E1; }
+.input-day:focus { outline: none; border-color: #4DD0E1; box-shadow: 0 0 0 2px rgba(178, 235, 242, 0.6); }
+
+.input-night {
+  background: rgba(6, 27, 36, 0.6);
+  border: 1px solid #00695C;
+  color: #F0FAFA;
+}
+.input-night::placeholder { color: #00897B; }
+.input-night:focus { outline: none; border-color: #00ACC1; box-shadow: 0 0 0 2px rgba(0, 105, 92, 0.6); }
+
 *:focus-visible {
   outline: 2px solid #00abc13f;
   outline-offset: 3px;
