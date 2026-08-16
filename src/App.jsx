@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { WellnessProvider, useWellness } from './context/WellnessContext';
 import { useSupabaseSync } from './hooks/useSupabaseSync';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { STORAGE_KEYS } from './services/storage';
 import { Header } from './components/Header';
 import { OtterMascot } from './components/OtterMascot';
 import { WelcomeQuestionnaire } from './components/WelcomeQuestionnaire';
@@ -73,7 +75,7 @@ function ComingSoonPlaceholder({ title }) {
 }
 
 function MainContent({ initialTab = 'hub' }) {
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const [activeTab, setActiveTab] = useLocalStorage(STORAGE_KEYS.ACTIVE_TAB, initialTab);
   const { isSkyMode, mascotState } = useWellness();
   useSupabaseSync();
 
