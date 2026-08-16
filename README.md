@@ -3,52 +3,53 @@
 
 ## What is Sisu?
 
-Sisu is an interactive mental health and wellness web application immersing users in a welcoming ocean-themed environment with a caring sea otter ("Sisu the Otter") that helps guide the user through daily emotional check-ins, soothing breathing exercises, core value tracking, and curated mental health resources. It creates a judgement free space for users to reflect on emotions, negative thoughts, their personal goals and build healthy mental health habits.
+Sisu is an interactive mental health and wellness web application immersing users in a welcoming ocean-themed environment with a caring sea otter ("Sisu the Otter") that helps guide the user through daily emotional check-ins, soothing breathing exercises, core value tracking, and curated mental health resources. It creates a judgment-free space for users to reflect on emotions, negative thoughts, their personal goals and build healthy mental health habits.
 
 ---
 
 ## 🌊 User Experience
 
 1. **Questionnaire Onboarding**
-   - New users are greeted with a gentle health check-in (how they feel, how they physically feel, and what has been on their mind) this personalizes where they will be redirected to in the app. These questions can also be skipped.
+   - New users are greeted with a gentle health check-in (how they feel, how they physically feel, and what has been on their mind); this personalizes where they will be redirected to in the app. These questions can also be skipped.
 
 2. **Sisu the Otter Mascot**
-   - Cute and expressive otter that appears in the app at the top of the page, it will react to the user's activity and offer words of encouragement and guidance. 
+   - Cute and expressive otter that appears in the app at the top of the page; it will react to the user's activity and offer words of encouragement and guidance. 
 
 3. **Day/Night Modes**
-   - The user can choose whether or not to have a light or dark mode ("sky") while on the application.
+   - The user can choose whether or not to have a light or dark mode ("sky") while in the application.
    
 ## 🌊 Features
 
 1. **Mood Check-in**
-   - Quick and easy emotional check-in with mood selection, energy level toggle, and optional reflecting journaling
+   - Quick and easy emotional check-in with mood selection, energy level toggle, and optional reflective journaling
    - Sisu is responsive to what is shared and will offer guidance and encouragement
 
 2. **Interactive Ocean Wave Breathing Visualizer**
-   - Animated ocean bubble breathing exercise supporting these techniques matching the bubble animation:
+   - Animated ocean bubble breathing exercise supporting these techniques, matching the bubble animation:
      - **Box Breathing (4-4-4-4)** – Focus & stress relief
      - **4-7-8 Relaxing Breath** – Deep relaxation & sleep prep
      - **Ocean Calm Breath** – Soothing rhythm 
 
 3. **Connect**
    - Users can join a live server where other users are participating in breathing exercises in real time. 
-   - Includes other user's otters
+   - Includes other users' otters
 
 4. **Reframe Thoughts**
    - A CBT-style tool that guides users to challenge and reframe negative thoughts into more positive and helpful ones.
 
 5. **Core Values**
-   - Users can define and check-in with their relationship connectiedness through answering a few questions regarding contact frequency, conversations, trust, closeness, understanding and support.
+   - Users can define and check-in with their relationship connectedness through answering a few questions regarding contact frequency, conversations, trust, closeness, understanding,       and support.
    - Encourages users to think about how strong that connection is.
 
 6. **5-4-3-2-1 Grounding Exercis**
    - Classic sensory grounding technique for anxiety:
      - sight, smell, touch, hearing, taste*
 7. **Resource Hub**
-   - A curated list of mental health resources including grounding techniques, CBT resources, emergency hotlines (country specific), and sleep solutions.
+   - A curated list of mental health resources including grounding techniques, CBT resources, emergency hotlines (country-specific), and sleep solutions.
 
 8. **Ambient Sea Soundscapes**
-   - Built-in soothing ambient audio player of Ocean Waves.
+   - Built-in soothing ambient audio player of Ocean Waves, Rain, Stream with volume control
+   - Plays in the background for calm ambience
 
 9. **Growth Dashboard**
    - Tracks a user's check-ins, streaks, and progress over time.
