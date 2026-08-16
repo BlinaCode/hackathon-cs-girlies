@@ -74,6 +74,49 @@ export function AuthProvider({ children }) {
     setIsGuestMode(true);
   };
 
+  // Fetch the editable profile row (display_name, ai_features_enabled) — the
+  // live source of truth, distinct from the signup-time snapshot in
+  // user.user_metadata which never updates after account creation.
+  const fetchProfile = async () => {
+    if (!supabase || !user) return null;
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('display_name, email, ai_features_enabled')
+      .eq('id', user.id)
+      .single();
+    if (error) throw error;
+    return data;
+  };
+
+  const updateProfile = async ({ displayName, aiFeaturesEnabled }) => {
+    if (!supabase || !user) throw new Error('Not signed in.');
+    const { error } = await supabase
+      .from('profiles')
+      .update({ display_name: displayName, ai_features_enabled: aiFeaturesEnabled })
+      .eq('id', user.id);
+    if (error) throw error;
+  };
+
+  const deleteAccount = async () => {
+    if (!supabase || !user) throw new Error('Not signed in.');
+    const { error } = await supabase.functions.invoke('smart-action');
+    if (error) {
+      let message = error.message || 'Could not delete your account.';
+      try {
+        const body = await error.context?.json();
+        if (body?.error) message = body.error;
+      } catch {
+        // fall back to error.message above
+      }
+      throw new Error(message);
+    }
+    lastAuthActionRef.current = 'logout';
+    await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
+    setIsGuestMode(true);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -85,6 +128,9 @@ export function AuthProvider({ children }) {
         loginWithEmail,
         signUpWithEmail,
         logout,
+        fetchProfile,
+        updateProfile,
+        deleteAccount,
         lastAuthActionRef
       }}
     >
