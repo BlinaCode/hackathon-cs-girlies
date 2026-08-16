@@ -55,7 +55,10 @@ const toFriendRow = (f, userId) => ({
   name: f.name,
   contact_frequency: f.contactFrequency,
   conversation_depth: f.conversationDepth,
+  emotional_reliability: f.emotionalReliability,
+  vulnerability_depth: f.vulnerabilityDepth,
   tier: f.tier,
+  tier_source: f.tierSource,
   created_at: f.createdAt
 });
 
@@ -64,7 +67,10 @@ const fromFriendRow = (row) => ({
   name: row.name,
   contactFrequency: row.contact_frequency,
   conversationDepth: row.conversation_depth,
+  emotionalReliability: row.emotional_reliability,
+  vulnerabilityDepth: row.vulnerability_depth,
   tier: row.tier,
+  tierSource: row.tier_source,
   createdAt: row.created_at
 });
 

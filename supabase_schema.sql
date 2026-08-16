@@ -75,9 +75,12 @@ CREATE TABLE IF NOT EXISTS public.friends (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   name VARCHAR(200) NOT NULL,
-  contact_frequency SMALLINT CHECK (contact_frequency BETWEEN 1 AND 5),   -- Q1
-  conversation_depth SMALLINT CHECK (conversation_depth BETWEEN 1 AND 4), -- Q2
+  contact_frequency SMALLINT CHECK (contact_frequency BETWEEN 1 AND 5),     -- Q1
+  conversation_depth SMALLINT CHECK (conversation_depth BETWEEN 1 AND 4),   -- Q2
+  emotional_reliability SMALLINT CHECK (emotional_reliability BETWEEN 1 AND 4), -- Q3
+  vulnerability_depth SMALLINT CHECK (vulnerability_depth BETWEEN 1 AND 4),     -- Q4
   tier TEXT,  -- close_friend | friend | acquaintance
+  tier_source TEXT DEFAULT 'auto' CHECK (tier_source IN ('auto', 'manual')), -- auto (questionnaire) | manual (dragged)
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

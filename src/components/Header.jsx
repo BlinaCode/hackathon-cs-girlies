@@ -17,7 +17,7 @@ export function Header({ activeTab, setActiveTab }) {
     { id: 'checkin', label: 'Mood Check-In' },
     { id: 'breathing', label: 'Ocean Breathing' },
     { id: 'beliefs', label: 'Reframe Thoughts' },
-    { id: 'friends', label: 'Friend Circle' },
+    { id: 'friends', label: 'Social Circle' },
     { id: 'resources', label: 'Resource Library' },
     { id: 'growth', label: 'Growth & Analytics' },
   ];
