@@ -476,7 +476,14 @@ export function Header({ activeTab, setActiveTab }) {
       {showAuthModal && (
         <AuthModal
           onClose={() => setShowAuthModal(false)}
-          onSuccess={() => { setShowAuthModal(false); setActiveTab('hub'); }}
+          onSuccess={(result) => { 
+            setShowAuthModal(false); 
+            if (result?.redirect) {
+              setActiveTab(result.redirect);
+            } else {
+              setActiveTab('hub'); 
+            }
+          }}
         />
       )}
     </>

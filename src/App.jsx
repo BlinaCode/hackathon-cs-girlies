@@ -229,30 +229,10 @@ function MainContent({ initialTab = 'hub' }) {
 }
 
 export default function App() {
-  const [showQuestionnaire, setShowQuestionnaire] = useState(() => {
-    return localStorage.getItem('sisu_questionnaire_completed') !== 'true';
-  });
-
-  const [initialTab, setInitialTab] = useState('hub');
-
-  const handleQuestionnaireComplete = (result) => {
-    localStorage.setItem('sisu_questionnaire_completed', 'true');
-
-    if (result?.redirect) {
-      setInitialTab(result.redirect);
-    }
-
-    setShowQuestionnaire(false);
-  };
-
   return (
     <AuthProvider>
       <WellnessProvider>
-        {showQuestionnaire ? (
-          <WelcomeQuestionnaire onComplete={handleQuestionnaireComplete} />
-        ) : (
-          <MainContent initialTab={initialTab} />
-        )}
+        <MainContent initialTab="hub" />
       </WellnessProvider>
     </AuthProvider>
   );
