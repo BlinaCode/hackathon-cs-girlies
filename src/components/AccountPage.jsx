@@ -47,7 +47,7 @@ function ToggleSwitch({ checked, onChange, isSkyMode, label }) {
       aria-label={label}
       onClick={() => onChange(!checked)}
       className={`relative w-12 h-7 rounded-full shrink-0 transition-colors duration-300 ${
-        checked ? 'bg-lagoon-500' : (isSkyMode ? 'bg-dune-200' : 'bg-lagoon-900')
+        checked ? 'bg-lagoon-500' : (isSkyMode ? 'bg-dune-200' : 'bg-midnight-900')
       }`}
     >
       <span
@@ -156,7 +156,7 @@ export function AccountPage({ setActiveTab }) {
         <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-8 sm:p-10 text-center shadow-2xl border
           ${isSkyMode
             ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-            : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'}`}
+            : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'}`}
         >
           <p className={`text-sm font-semibold ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
             You're browsing as a guest, so there's no account here yet — sign in to see your details.
@@ -168,7 +168,7 @@ export function AccountPage({ setActiveTab }) {
           <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 lg:p-10 shadow-2xl transition-all border
             ${isSkyMode
               ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-              : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'}`}
+              : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'}`}
           >
             <SeaweedFlourish className="hidden sm:block absolute -bottom-2 left-4 w-8 h-14 opacity-70" />
             <ShellFlourish className="hidden sm:block absolute bottom-4 right-6 w-10 h-8 opacity-70" />
@@ -202,7 +202,7 @@ export function AccountPage({ setActiveTab }) {
                     className={`w-full px-4 py-3 rounded-2xl border text-sm font-medium focus:ring-2 transition-colors ${
                       isSkyMode
                         ? 'bg-white/70 border-lagoon-200 text-lagoon-950 placeholder-lagoon-400 focus:border-lagoon-400 focus:ring-lagoon-200'
-                        : 'bg-lagoon-950/50 border-lagoon-700 text-lagoon-50 placeholder-lagoon-500 focus:border-lagoon-500 focus:ring-lagoon-800'
+                        : 'bg-midnight-900/50 border-midnight-800 text-midnight-text placeholder-midnight-muted focus:border-lagoon-500 focus:ring-midnight-700'
                     }`}
                   />
                 </div>
@@ -213,14 +213,14 @@ export function AccountPage({ setActiveTab }) {
                     Email
                   </label>
                   <div className={`w-full px-4 py-3 rounded-2xl border text-sm font-medium ${
-                    isSkyMode ? 'bg-dune-100/60 border-dune-300 text-lagoon-800' : 'bg-lagoon-900/40 border-lagoon-800 text-lagoon-300'
+                    isSkyMode ? 'bg-dune-100/60 border-dune-300 text-lagoon-800' : 'bg-midnight-900/40 border-midnight-800 text-midnight-muted'
                   }`}>
                     {user.email}
                   </div>
                 </div>
 
                 <div className={`flex items-center justify-between gap-4 p-4 rounded-2xl border ${
-                  isSkyMode ? 'bg-white/60 border-lagoon-100' : 'bg-lagoon-900/30 border-lagoon-800'
+                  isSkyMode ? 'bg-white/60 border-lagoon-100' : 'bg-midnight-900/30 border-midnight-800'
                 }`}>
                   <div className="flex items-start gap-2.5">
                     <Sparkles className={`w-4 h-4 mt-0.5 shrink-0 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
@@ -284,7 +284,7 @@ export function AccountPage({ setActiveTab }) {
               className={`mt-5 px-5 py-3 rounded-2xl font-bold text-xs flex items-center gap-2 transition-all active:scale-95 ${
                 isSkyMode
                   ? 'bg-white border border-blush-300 text-otterfur-500 hover:bg-blush-100 hover:shadow-md'
-                  : 'bg-lagoon-950/40 border border-blush-300/30 text-blush-300 hover:bg-lagoon-950/60'
+                  : 'bg-midnight-950/40 border border-blush-300/30 text-blush-300 hover:bg-midnight-950/60'
               }`}
             >
               <Trash2 className="w-4 h-4" />
@@ -298,7 +298,7 @@ export function AccountPage({ setActiveTab }) {
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 bg-lagoon-950/70 backdrop-blur-md flex items-center justify-center p-4">
           <div className={`relative border rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-5 shadow-2xl ${
-            isSkyMode ? 'bg-white border-lagoon-200' : 'bg-lagoon-900 border-lagoon-700'
+            isSkyMode ? 'bg-white border-lagoon-200' : 'bg-midnight-900 border-midnight-800'
           }`}>
             {!deleting && (
               <button
@@ -353,7 +353,7 @@ export function AccountPage({ setActiveTab }) {
                 onClick={() => { setShowDeleteConfirm(false); setDeleteError(''); }}
                 disabled={deleting}
                 className={`flex-1 py-3 rounded-2xl font-bold text-xs transition-all disabled:opacity-60 ${
-                  isSkyMode ? 'bg-lagoon-50 border border-lagoon-200 text-lagoon-800 hover:bg-lagoon-100' : 'bg-lagoon-800 border border-lagoon-700 text-lagoon-200 hover:bg-lagoon-700'
+                  isSkyMode ? 'bg-lagoon-50 border border-lagoon-200 text-lagoon-800 hover:bg-lagoon-100' : 'bg-midnight-800 border border-midnight-700 text-midnight-text hover:bg-midnight-700'
                 }`}
               >
                 Keep My Account
