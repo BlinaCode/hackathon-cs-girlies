@@ -1,10 +1,10 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
-import otterCheckin from '../assets/otter/otter-checkin.png';
-import otterBreathe from '../assets/otter/otter-breathe.png';
-import otterReframe from '../assets/otter/otter-reframe.png';
-import otterGrow from '../assets/otter/otter-grow.png';
+import otterCheckin from '../assets/images/otter-checkin.png';
+import otterBreathe from '../assets/images/otter-breathe.png';
+import otterReframe from '../assets/images/otter-reframe.png';
+import otterGrow from '../assets/images/otter-grow.png';
 
 // Illustrated otter portraits (hand-picked from the reference sticker set) per
 // mascot expression, instead of a redrawn vector face.
