@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { OtterMascot } from './OtterMascot';
 import { useWellness } from '../context/WellnessContext';
 
 const QUESTIONS = [
@@ -99,35 +98,33 @@ export function WelcomeQuestionnaire({ onComplete }) {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center px-4 py-8 transition-all ${isSkyMode ? 'bg-gradient-to-b from-cream-50 via-bluey-50 to-bluey-100 text-bluey-950' : 'bg-ocean-900 text-slate-100'}`}>
-      <div className="w-full max-w-2xl">
+    <div className={`min-h-full flex flex-col items-center justify-center p-6 sm:p-10 transition-all ${isSkyMode ? 'text-bluey-950' : 'text-midnight-text'}`}>
+      <div className="w-full max-w-lg">
 
         {!started ? (
-          /* Welcome screen */
-          <div className="text-center">
-            <OtterMascot
-              expression="joyful"
-              speech="Hey! Welcome to Sisu. Let's take a quick moment to check in with yourself."
-            />
+          <div className="text-center flex flex-col items-center">
+            <div className="w-16 h-16 rounded-full bg-seafoam-500/20 text-seafoam-500 flex items-center justify-center text-3xl mb-4">
+              🦦
+            </div>
 
-            <div className={`mt-8 rounded-3xl p-8 sm:p-10 shadow-2xl border transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200' : 'bg-slate-800/80 border-slate-700/80'}`}>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-seafoam-500/15 border border-seafoam-500/30 text-seafoam-600 text-xs font-semibold">
+            <div className={`p-4 sm:p-6 transition-all`}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-seafoam-500/15 text-seafoam-600 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 A little check-in
               </div>
 
-              <h1 className={`mt-5 font-display text-3xl sm:text-4xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
+              <h1 className="mt-6 font-display text-3xl sm:text-4xl font-bold">
                 How are you doing today?
               </h1>
 
-              <p className={`mt-3 text-sm sm:text-base leading-relaxed max-w-lg mx-auto ${isSkyMode ? 'text-bluey-700' : 'text-slate-400'}`}>
+              <p className={`mt-4 text-sm sm:text-base leading-relaxed max-w-md mx-auto ${isSkyMode ? 'text-bluey-700' : 'text-midnight-muted'}`}>
                 Answer three quick questions and we'll help you find the right
                 place to start.
               </p>
 
               <button
                 onClick={() => setStarted(true)}
-                className="mt-8 px-6 py-3.5 rounded-2xl bg-seafoam-500 text-ocean-950 font-bold text-sm hover:bg-seafoam-400 transition-all shadow-xl shadow-seafoam-500/20 inline-flex items-center gap-2"
+                className="mt-8 px-6 py-3.5 rounded-full bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 inline-flex items-center gap-2 hover:scale-105"
               >
                 Let's get started
                 <ArrowRight className="w-4 h-4" />
@@ -136,7 +133,7 @@ export function WelcomeQuestionnaire({ onComplete }) {
               <div>
                 <button
                   onClick={handleSkip}
-                  className={`mt-5 text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-slate-400 hover:text-slate-200'}`}
+                  className={`mt-6 text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-midnight-muted hover:text-midnight-text'}`}
                 >
                   Skip for now
                 </button>
@@ -145,19 +142,19 @@ export function WelcomeQuestionnaire({ onComplete }) {
           </div>
         ) : (
           /* Questions */
-          <>
-            <OtterMascot
-              expression="caring"
-              speech="Let's take a quick moment to check in with yourself."
-            />
+          <div className="flex flex-col items-center">
+            
+            <div className="w-12 h-12 rounded-full bg-seafoam-500/20 text-seafoam-500 flex items-center justify-center text-2xl mb-2">
+              🦦
+            </div>
 
-            <div className={`rounded-3xl p-6 sm:p-8 shadow-2xl border transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200' : 'bg-slate-800/80 border-slate-700/80'}`}>
-              <div className="mb-6">
+            <div className={`p-4 sm:p-6 w-full transition-all`}>
+              <div className="mb-6 text-center">
                 <p className="text-xs font-semibold uppercase tracking-wider text-seafoam-600">
                   Question {currentQuestion + 1} of {QUESTIONS.length}
                 </p>
 
-                <h1 className={`mt-2 font-display text-2xl sm:text-3xl font-bold ${isSkyMode ? 'text-bluey-950' : 'text-slate-100'}`}>
+                <h1 className="mt-3 font-display text-2xl sm:text-3xl font-bold">
                   {question.question}
                 </h1>
               </div>
@@ -171,23 +168,25 @@ export function WelcomeQuestionnaire({ onComplete }) {
     <button
       key={label}
       onClick={() => handleAnswer(label)}
-      className={`w-full text-left px-5 py-4 rounded-2xl border hover:border-seafoam-500/60 transition-all text-sm flex items-center gap-4 ${isSkyMode ? 'bg-bluey-50 border-bluey-200 text-bluey-900 hover:bg-white' : 'bg-slate-900/60 border-slate-700 text-slate-200 hover:bg-slate-700/50'}`}
+      className={`w-full text-left px-5 py-4 rounded-2xl border-none transition-all text-sm flex items-center gap-4 ${isSkyMode ? 'bg-cream-100 text-bluey-900 hover:bg-cream-200' : 'bg-midnight-800 text-midnight-text hover:bg-midnight-700'} hover:scale-[1.02]`}
     >
       {emoji && <span className="text-3xl">{emoji}</span>}
-      <span>{label}</span>
+      <span className="font-semibold">{label}</span>
     </button>
   );
 })}
               </div>
 
-              <button
-                onClick={handleSkip}
-                className={`mt-6 text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-slate-400 hover:text-slate-200'}`}
-              >
-                Skip for now
-              </button>
+              <div className="text-center mt-6">
+                <button
+                  onClick={handleSkip}
+                  className={`text-sm transition-colors ${isSkyMode ? 'text-bluey-600 hover:text-bluey-900' : 'text-midnight-muted hover:text-midnight-text'}`}
+                >
+                  Skip for now
+                </button>
+              </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
