@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight, Check } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 
@@ -12,12 +12,28 @@ const EMPTY_PRACTICE = {
 };
 
 export function ReframeThoughts() {
-  const { beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus, mascotState, isSkyMode } = useWellness();
+  const {
+    beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus,
+    mascotState, isSkyMode, pendingReframeBeliefId, setPendingReframeBeliefId
+  } = useWellness();
 
   const activeBeliefs = beliefs.filter(b => b.status === 'active');
 
-  const [selectedBeliefId, setSelectedBeliefId] = useState(activeBeliefs[0]?.id || '');
-  const [showNewForm, setShowNewForm] = useState(activeBeliefs.length === 0);
+  const [selectedBeliefId, setSelectedBeliefId] = useState(pendingReframeBeliefId || activeBeliefs[0]?.id || '');
+  const [showNewForm, setShowNewForm] = useState(!pendingReframeBeliefId && activeBeliefs.length === 0);
+
+  // Consume a pending selection handed off from elsewhere (e.g. Growth
+  // Dashboard's "Reframe" action) so this opens on that specific thought
+  // instead of whatever was already selected — only on mount, since this
+  // page's own selector should take over after that.
+  useEffect(() => {
+    if (pendingReframeBeliefId) {
+      setSelectedBeliefId(pendingReframeBeliefId);
+      setShowNewForm(false);
+      setPendingReframeBeliefId(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // New-belief form
   const [statement, setStatement] = useState('');
@@ -343,15 +359,14 @@ function BeliefPicker({ beliefs, selectedId, isSkyMode, onSelect }) {
             type="button"
             aria-pressed={isSelected}
             onClick={() => onSelect(b.id)}
-            className={`w-full flex items-center justify-between gap-3 rounded-2xl border-2 px-4 py-3 text-left text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
-              isSelected
+            className={`w-full flex items-center justify-between gap-3 rounded-2xl border-2 px-4 py-3 text-left text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${isSelected
                 ? isSkyMode
                   ? "border-lagoon-400 bg-white shadow-md shadow-lagoon-200/60 ring-2 ring-lagoon-300/70 text-lagoon-950"
                   : "border-lagoon-400 bg-lagoon-900/50 shadow-md shadow-black/30 ring-2 ring-lagoon-500/60 text-white"
                 : isSkyMode
                   ? "border-lagoon-100 bg-white/60 text-lagoon-800 hover:border-lagoon-300 hover:bg-white"
                   : "border-lagoon-800/60 bg-lagoon-950/30 text-lagoon-200 hover:border-lagoon-600 hover:bg-lagoon-900/40"
-            }`}
+              }`}
           >
             <span className="line-clamp-2">{b.statement}</span>
             {isSelected && (
