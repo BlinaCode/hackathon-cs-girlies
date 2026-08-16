@@ -3,6 +3,7 @@ import { BookOpen, CheckCircle, Clock, Search, X, Sparkles, Compass, Brain, Moon
 import { STARTER_RESOURCES } from '../services/resourcesData';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
+import { CountryCrisisLines } from './CountryCrisisLines';
 
 export function ResourceHub() {
   const { completedResources, toggleResourceCompletion, mascotState, isSkyMode } = useWellness();
@@ -45,6 +46,8 @@ export function ResourceHub() {
       </div>
 
       <OtterMascot expression={mascotState.expression} speech={mascotState.speech} />
+
+      <CountryCrisisLines />
 
       {/* Filter & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">

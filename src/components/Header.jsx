@@ -16,19 +16,9 @@ export function Header({ activeTab, setActiveTab }) {
     setMobileMenuOpen(false);
   };
 
-  const navItems = [
-    { id: 'checkin', label: 'Check-In', icon: '🌊' },
-    { id: 'breathing', label: 'Breathing', icon: '💨' },
-    { id: 'beliefs', label: 'Reframe', icon: '🧠' },
-    { id: 'friends', label: 'Circle', icon: '🫂' },
-    { id: 'resources', label: 'Library', icon: '📖' },
-    { id: 'growth', label: 'Growth', icon: '🌱' },
-    { id: '54321', label: '5-4-3-2-1', icon: '🖐️' }
-  ];
-
   // Header background logic for minimalist look
-  const headerBgClass = activeTab === 'hub'
-    ? 'fixed w-full top-0 left-0 right-0 bg-white/60 backdrop-blur-md border-b border-white/20 text-slate-900'
+  const headerBgClass = activeTab === 'hub' 
+    ? 'fixed w-full top-0 left-0 right-0 bg-white/60 backdrop-blur-md border-b border-white/20 text-slate-900' 
     : (isSkyMode ? 'sticky top-0 bg-white/80 backdrop-blur-xl border-b border-slate-100 text-slate-900' : 'sticky top-0 bg-bluey-950/90 backdrop-blur-xl border-b border-bluey-800 text-slate-100');
 
   const textColor = activeTab === 'hub' || isSkyMode ? 'text-slate-800' : 'text-slate-200';
@@ -36,98 +26,106 @@ export function Header({ activeTab, setActiveTab }) {
 
   return (
     <>
-      <header className={headerBgClass}>
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between relative" />
-
-        {/* Logo & Brand */}
-        <div className="flex items-center gap-2 cursor-pointer group justify-self-start" onClick={() => handleNav('hub')}>
-          <span className={`font-display font-bold text-xl tracking-tight transition-all ${textColor}`}>
-            Sisu
-          </span>
-        </div>
-
-        {/* Desktop Navigation (Center) */}
-        <nav className="hidden md:flex items-center gap-8 justify-self-center">
-          <button onClick={() => handleNav('hub')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
-            Home
-          </button>
-
-          {/* Practice Dropdown */}
-          <div className="relative group">
-            <button className={`flex items-center gap-1 text-sm font-bold transition-colors py-2 ${textColor} ${textHoverColor}`}>
-              Practice <ChevronDown className="w-3 h-3 opacity-70" />
-            </button>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
-              <div className="py-2 flex flex-col">
-                <button onClick={() => handleNav('checkin')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Check in</button>
-                <button onClick={() => handleNav('beliefs')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Reframe</button>
-                <button onClick={() => handleNav('friends')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Social Circle</button>
-              </div>
-            </div>
+      <header className={`z-50 transition-all py-4 ${headerBgClass}`}>
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-3 items-center">
+          
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-2 cursor-pointer group justify-self-start" onClick={() => handleNav('hub')}>
+            <span className={`font-display font-bold text-xl tracking-tight transition-all ${textColor}`}>
+              Sisu
+            </span>
           </div>
 
-          <button onClick={() => handleNav('connect')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
-            Connect
-          </button>
-
-          {/* Feeling down? Dropdown */}
-          <div className="relative group">
-            <button className={`flex items-center gap-1 text-sm font-bold transition-colors py-2 whitespace-nowrap ${textColor} ${textHoverColor}`}>
-              Feeling down? <ChevronDown className="w-3 h-3 opacity-70" />
+          {/* Desktop Navigation (Center) */}
+          <nav className="hidden md:flex items-center gap-8 justify-self-center">
+            <button onClick={() => handleNav('hub')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
+              Home
             </button>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
-              <div className="py-2 flex flex-col">
-                <button onClick={() => handleNav('resources')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Mental health resources in your country</button>
-                <button onClick={() => handleNav('breathing')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Breathing technique</button>
-                <button onClick={() => handleNav('54321')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">5 4 3 2 1</button>
-              </div>
-            </div>
-          </div>
-
-          <button onClick={() => handleNav('about')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
-            About
-          </button>
-        </nav>
-
-        {/* Right side controls & Auth */}
-        <div className="hidden md:flex items-center gap-4 justify-self-end">
-
-          {/* Minimalist Audio & Theme Toggles */}
-          <div className="flex items-center gap-1 mr-2">
-            <button onClick={toggleAudio} title="Toggle Ocean Soundscape" className={`p-1.5 rounded-full transition-colors opacity-70 hover:opacity-100 ${textColor}`}>
-              {isAudioPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-            </button>
-            <button onClick={() => setThemeMode(isSkyMode ? 'night' : 'sky')} title="Toggle Day/Night" className={`p-1.5 rounded-full transition-colors opacity-70 hover:opacity-100 ${textColor}`}>
-              {isSkyMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-          </div>
-
-          {/* Pill Button for Auth / User Menu */}
-          {isGuestMode ? (
-            <button
-              onClick={() => setShowAuthModal(true)}
-              className="px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 hover:scale-105 transition-all"
-            >
-              Sign In
-            </button>
-          ) : (
+            
+            {/* Practice Dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 transition-all">
-                <span className="truncate max-w-[100px]">{user?.email?.split('@')[0]}</span>
-                <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+              <button className={`flex items-center gap-1 text-sm font-bold transition-colors py-2 ${textColor} ${textHoverColor}`}>
+                Practice <ChevronDown className="w-3 h-3 opacity-70" />
               </button>
-              <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
                 <div className="py-2 flex flex-col">
-                  <button onClick={() => handleNav('growth')} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">
-                    🌱 Growth
-                  </button>
-                  <button onClick={logout} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
-                    <LogOut className="w-4 h-4" /> Sign Out
-                  </button>
+                   <button onClick={() => handleNav('checkin')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Check in</button>
+                   <button onClick={() => handleNav('beliefs')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Reframe</button>
+                   <button onClick={() => handleNav('friends')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Social Circle</button>
                 </div>
               </div>
             </div>
-          )}
+
+            <button onClick={() => handleNav('connect')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
+              Connect
+            </button>
+
+            {/* Feeling down? Dropdown */}
+            <div className="relative group">
+              <button className={`flex items-center gap-1 text-sm font-bold transition-colors py-2 whitespace-nowrap ${textColor} ${textHoverColor}`}>
+                Feeling down? <ChevronDown className="w-3 h-3 opacity-70" />
+              </button>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
+                <div className="py-2 flex flex-col">
+                   <button onClick={() => handleNav('resources')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Mental health resources in your country</button>
+                   <button onClick={() => handleNav('breathing')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">Breathing technique</button>
+                   <button onClick={() => handleNav('54321')} className="text-left px-5 py-2.5 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">5 4 3 2 1</button>
+                </div>
+              </div>
+            </div>
+
+            <button onClick={() => handleNav('about')} className={`text-sm font-bold transition-colors ${textColor} ${textHoverColor}`}>
+              About
+            </button>
+          </nav>
+
+          {/* Right side controls & Auth */}
+          <div className="hidden md:flex items-center gap-4 justify-self-end">
+            
+            {/* Minimalist Audio & Theme Toggles */}
+            <div className="flex items-center gap-1 mr-2">
+              <button onClick={toggleAudio} title="Toggle Ocean Soundscape" className={`p-1.5 rounded-full transition-colors opacity-70 hover:opacity-100 ${textColor}`}>
+                {isAudioPlaying ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </button>
+              <button onClick={() => setThemeMode(isSkyMode ? 'night' : 'sky')} title="Toggle Day/Night" className={`p-1.5 rounded-full transition-colors opacity-70 hover:opacity-100 ${textColor}`}>
+                {isSkyMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {/* Pill Button for Auth / User Menu */}
+            {isGuestMode ? (
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 hover:scale-105 transition-all"
+              >
+                Sign In
+              </button>
+            ) : (
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-bold shadow-lg shadow-slate-900/20 hover:bg-slate-800 transition-all">
+                  <span className="truncate max-w-[100px]">{user?.email?.split('@')[0]}</span>
+                  <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+                </button>
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 overflow-hidden">
+                  <div className="py-2 flex flex-col">
+                     <button onClick={() => handleNav('growth')} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+                       🌱 Growth
+                     </button>
+                     <button onClick={logout} className="flex items-center gap-2 text-left px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
+                       <LogOut className="w-4 h-4" /> Sign Out
+                     </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`p-2 rounded-lg ${textColor}`}>
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation Panel */}
@@ -135,7 +133,7 @@ export function Header({ activeTab, setActiveTab }) {
           <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-xl overflow-hidden text-slate-800">
             <div className="flex flex-col p-4 max-h-[80vh] overflow-y-auto">
               <button onClick={() => handleNav('hub')} className="text-left py-3 px-4 font-medium border-b border-slate-50">Home</button>
-
+              
               <div className="py-2 px-4 border-b border-slate-50">
                 <div className="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-2 mt-2">Practice</div>
                 <div className="flex flex-col ml-2 space-y-1">
@@ -183,10 +181,9 @@ export function Header({ activeTab, setActiveTab }) {
       </header>
 
       {/* Auth Modal */}
-      {
-        showAuthModal && (
-          <AuthModal onClose={() => setShowAuthModal(false)} />
-        )}
+      {showAuthModal && (
+        <AuthModal onClose={() => setShowAuthModal(false)} />
+      )}
     </>
   );
 }
