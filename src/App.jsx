@@ -164,7 +164,7 @@ function MainContent({ initialTab = 'hub' }) {
           {activeTab === 'breathing' && <BreathingVisualizer />}
           {activeTab === 'beliefs' && <ReframeThoughts />}
           {activeTab === 'friends' && <SocialCircle />}
-          {activeTab === 'resources' && <ResourceHub />}
+          {activeTab === 'resources' && <ResourceHub setActiveTab={setActiveTab} />}
           {activeTab === 'growth' && <GrowthDashboard setActiveTab={setActiveTab} />}
           {activeTab === 'account' && <AccountPage setActiveTab={setActiveTab} />}
           {activeTab === 'connect' && <Connect setActiveTab={setActiveTab} />}

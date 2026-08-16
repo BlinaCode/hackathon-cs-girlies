@@ -10,11 +10,33 @@ import yayOtter from '../assets/images/yayotter.png';
 function FishIcon() {
     return (
         <svg viewBox="0 0 50 30" className="w-full h-full drop-shadow-sm">
-            <path d="M 8 15 C 8 8, 28 6, 36 15 C 28 24, 8 22, 8 15 Z" fill="#A4D3DE" stroke="#7AABB8" strokeWidth="1.5" />
-            <path d="M 36 15 L 46 8 L 44 15 L 46 22 Z" fill="#A4D3DE" stroke="#7AABB8" strokeWidth="1.5" />
+            <path
+                d="M 8 15 C 8 8, 28 6, 36 15 C 28 24, 8 22, 8 15 Z"
+                fill="#A4D3DE"
+                stroke="#7AABB8"
+                strokeWidth="1.5"
+            />
+            <path
+                d="M 36 15 L 46 8 L 44 15 L 46 22 Z"
+                fill="#A4D3DE"
+                stroke="#7AABB8"
+                strokeWidth="1.5"
+            />
             <circle cx="15" cy="12" r="1.8" fill="#4A2511" />
-            <path d="M 22 10 C 20 13, 20 17, 22 20" stroke="#7AABB8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-            <path d="M 27 11 C 25 14, 25 16, 27 19" stroke="#7AABB8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+            <path
+                d="M 22 10 C 20 13, 20 17, 22 20"
+                stroke="#7AABB8"
+                strokeWidth="1.2"
+                fill="none"
+                strokeLinecap="round"
+            />
+            <path
+                d="M 27 11 C 25 14, 25 16, 27 19"
+                stroke="#7AABB8"
+                strokeWidth="1.2"
+                fill="none"
+                strokeLinecap="round"
+            />
         </svg>
     );
 }
@@ -22,8 +44,20 @@ function FishIcon() {
 function SeaweedIcon() {
     return (
         <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm">
-            <path d="M 12 38 C 6 28, 18 20, 12 10 C 8 4, 14 2, 14 2" stroke="#8BAE7B" strokeWidth="4" strokeLinecap="round" fill="none" />
-            <path d="M 24 38 C 30 26, 18 18, 25 10 C 29 4, 24 2, 25 2" stroke="#A5C496" strokeWidth="4" strokeLinecap="round" fill="none" />
+            <path
+                d="M 12 38 C 6 28, 18 20, 12 10 C 8 4, 14 2, 14 2"
+                stroke="#8BAE7B"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+            />
+            <path
+                d="M 24 38 C 30 26, 18 18, 25 10 C 29 4, 24 2, 25 2"
+                stroke="#A5C496"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+            />
         </svg>
     );
 }
@@ -41,10 +75,33 @@ function BalanceRocksIcon() {
 function SeashellIcon() {
     return (
         <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm">
-            <path d="M 10 32 C 6 16, 34 16, 30 32 C 34 37, 6 37, 10 32 Z" fill="#F5B2B8" stroke="#E08B95" strokeWidth="1.2" />
-            <path d="M 20 35 L 13 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
-            <path d="M 20 35 L 20 17" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-            <path d="M 20 35 L 27 20" stroke="#FFFFFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
+            <path
+                d="M 10 32 C 6 16, 34 16, 30 32 C 34 37, 6 37, 10 32 Z"
+                fill="#F5B2B8"
+                stroke="#E08B95"
+                strokeWidth="1.2"
+            />
+            <path
+                d="M 20 35 L 13 20"
+                stroke="#FFFFFF"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                opacity="0.8"
+            />
+            <path
+                d="M 20 35 L 20 17"
+                stroke="#FFFFFF"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.8"
+            />
+            <path
+                d="M 20 35 L 27 20"
+                stroke="#FFFFFF"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                opacity="0.8"
+            />
         </svg>
     );
 }
@@ -52,8 +109,21 @@ function SeashellIcon() {
 function SandDollarIcon() {
     return (
         <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm">
-            <circle cx="20" cy="20" r="16" fill="#F5E8C9" stroke="#E3CE9E" strokeWidth="1.5" />
-            <g stroke="#D1B882" strokeWidth="1.2" fill="none" opacity="0.85" strokeLinecap="round">
+            <circle
+                cx="20"
+                cy="20"
+                r="16"
+                fill="#F5E8C9"
+                stroke="#E3CE9E"
+                strokeWidth="1.5"
+            />
+            <g
+                stroke="#D1B882"
+                strokeWidth="1.2"
+                fill="none"
+                opacity="0.85"
+                strokeLinecap="round"
+            >
                 <path d="M20 10 C21.5 15, 21.5 20, 20 25 M20 10 C18.5 15, 18.5 20, 20 25" />
                 <path d="M10 20 C15 21.5, 20 21.5, 25 20 M10 20 C15 18.5, 20 18.5, 25 20" />
             </g>
@@ -64,8 +134,21 @@ function SandDollarIcon() {
 function SeaGlassIcon() {
     return (
         <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm">
-            <path d="M 18 6 C 28 4, 35 14, 32 26 C 28 35, 14 36, 8 28 C 4 18, 10 8, 18 6 Z" fill="#CFE2F3" stroke="#A4D3DE" strokeWidth="1.5" opacity="0.9" />
-            <path d="M 16 10 C 24 10, 28 16, 26 26" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.6" />
+            <path
+                d="M 18 6 C 28 4, 35 14, 32 26 C 28 35, 14 36, 8 28 C 4 18, 10 8, 18 6 Z"
+                fill="#CFE2F3"
+                stroke="#A4D3DE"
+                strokeWidth="1.5"
+                opacity="0.9"
+            />
+            <path
+                d="M 16 10 C 24 10, 28 16, 26 26"
+                stroke="#FFFFFF"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                fill="none"
+                opacity="0.6"
+            />
         </svg>
     );
 }
@@ -73,7 +156,14 @@ function SeaGlassIcon() {
 function CoastalElementIcon() {
     return (
         <svg viewBox="0 0 40 40" className="w-full h-full drop-shadow-sm">
-            <path d="M 20 36 L 20 6 M 20 12 L 30 6 M 20 18 L 32 12 M 20 24 L 30 18 M 20 12 L 10 6 M 20 18 L 8 12 M 20 24 L 10 18" stroke="#84A8A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <path
+                d="M 20 36 L 20 6 M 20 12 L 30 6 M 20 18 L 32 12 M 20 24 L 30 18 M 20 12 L 10 6 M 20 18 L 8 12 M 20 24 L 10 18"
+                stroke="#84A8A6"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
         </svg>
     );
 }
@@ -90,16 +180,63 @@ const DECOR_ICONS = {
 
 // Accents pulled only from "Paleta de Colores Suaves del Mar"
 const GROUNDING_STEPS = [
-    { sense: 'See', count: 5, prompt: 'things you can SEE around you (a color, a shadow, an object)', icon: '👀', decor: ['fish', 'seaweed'], image: contentOtter, accent: '#CFE2F3' },
-    { sense: 'Touch', count: 4, prompt: 'things you can TOUCH nearby (your clothes, chair, carpet, cold water)', icon: '✋', decor: ['rocks', 'shell'], image: contentOtter, accent: '#E8E2D1' },
-    { sense: 'Hear', count: 3, prompt: 'things you can HEAR around you (ambient room noise, distant traffic, your breath)', icon: '👂', decor: ['sanddollar', 'seaglass'], image: contentOtter, accent: '#A4D3DE' },
-    { sense: 'Smell', count: 2, prompt: 'things you can SMELL (coffee, fresh air, paper, soap)', icon: '👃', decor: ['coastal', 'seaweed'], image: contentOtter, accent: '#D9E7D0' },
-    { sense: 'Taste', count: 1, prompt: 'thing you can TASTE (mint, water, or notice your tongue)', icon: '👅', decor: ['fish', 'shell'], image: yayOtter, accent: '#F5E8C7' },
+    {
+        sense: 'See',
+        count: 5,
+        prompt: 'things you can SEE around you (a color, a shadow, an object)',
+        icon: '👀',
+        decor: ['fish', 'seaweed'],
+        image: contentOtter,
+        accent: '#CFE2F3',
+    },
+    {
+        sense: 'Touch',
+        count: 4,
+        prompt: 'things you can TOUCH nearby (your clothes, chair, carpet, cold water)',
+        icon: '✋',
+        decor: ['rocks', 'shell'],
+        image: contentOtter,
+        accent: '#E8E2D1',
+    },
+    {
+        sense: 'Hear',
+        count: 3,
+        prompt: 'things you can HEAR around you (ambient room noise, distant traffic, your breath)',
+        icon: '👂',
+        decor: ['sanddollar', 'seaglass'],
+        image: contentOtter,
+        accent: '#A4D3DE',
+    },
+    {
+        sense: 'Smell',
+        count: 2,
+        prompt: 'things you can SMELL (coffee, fresh air, paper, soap)',
+        icon: '👃',
+        decor: ['coastal', 'seaweed'],
+        image: contentOtter,
+        accent: '#D9E7D0',
+    },
+    {
+        sense: 'Taste',
+        count: 1,
+        prompt: 'thing you can TASTE (mint, water, or notice your tongue)',
+        icon: '👅',
+        decor: ['fish', 'shell'],
+        image: yayOtter,
+        accent: '#F5E8C7',
+    },
 ];
 
 function OtterAvatar({ imageSrc }) {
+    const { isSkyMode } = useWellness();
+
     return (
-        <div className="w-full h-full rounded-2xl overflow-hidden bg-[#FAFBF0] shadow-inner flex items-center justify-center">
+        <div
+            className="w-full h-full rounded-2xl overflow-hidden shadow-inner flex items-center justify-center"
+            style={{
+                background: isSkyMode ? '#FAFBF0' : '#1E2226',
+            }}
+        >
             <img
                 src={imageSrc}
                 alt="Sisu the Otter"
@@ -110,9 +247,15 @@ function OtterAvatar({ imageSrc }) {
 }
 
 export function FiveFourThreeTwoOne({ onExit }) {
-    const { toggleResourceCompletion } = useWellness();
+    const {
+        toggleResourceCompletion,
+        isSkyMode,
+    } = useWellness();
+
     const [stepIndex, setStepIndex] = useState(0);
-    const [found, setFound] = useState(() => GROUNDING_STEPS.map(s => Array(s.count).fill(false)));
+    const [found, setFound] = useState(() =>
+        GROUNDING_STEPS.map(s => Array(s.count).fill(false))
+    );
     const [finished, setFinished] = useState(false);
 
     const step = GROUNDING_STEPS[stepIndex];
@@ -148,23 +291,48 @@ export function FiveFourThreeTwoOne({ onExit }) {
 
     return (
         <div className="max-w-2xl mx-auto space-y-6 pb-10 px-2 sm:px-0">
+
+            {/* Title */}
             <div className="text-center space-y-1.5">
                 <span
                     className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm"
-                    style={{ background: '#F5E8C9', color: '#4A2511' }}
+                    style={
+                        isSkyMode
+                            ? {
+                                background: '#F5E8C9',
+                                color: '#4A2511',
+                            }
+                            : {
+                                background: '#5A4A2E',
+                                color: '#F5E8C9',
+                            }
+                    }
                 >
                     Anxiety & Panic Relief
                 </span>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold" style={{ color: '#4A2511' }}>
+
+                <h2
+                    className={`font-display text-2xl sm:text-3xl font-bold ${isSkyMode
+                            ? 'text-bluey-950'
+                            : 'text-slate-100'
+                        }`}
+                >
                     5-4-3-2-1 Grounding Journey
                 </h2>
-                <p className="text-xs sm:text-sm max-w-md mx-auto font-medium" style={{ color: '#7A5A3A' }}>
+
+                <p
+                    className={`text-xs sm:text-sm max-w-md mx-auto font-medium ${isSkyMode
+                            ? 'text-bluey-700'
+                            : 'text-bluey-300'
+                        }`}
+                >
                     Walk the shoreline with Sisu, one sense at a time, until your mind settles back into the present.
                 </p>
             </div>
 
             {!finished ? (
                 <>
+                    {/* Step progress */}
                     <div className="flex items-center justify-center gap-2">
                         {GROUNDING_STEPS.map((s, idx) => (
                             <div
@@ -172,22 +340,44 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 className="h-2 rounded-full transition-all"
                                 style={{
                                     width: idx === stepIndex ? '2rem' : '0.5rem',
-                                    background: idx <= stepIndex ? '#A4D3DE' : '#E8E2D1',
+                                    background:
+                                        idx <= stepIndex
+                                            ? isSkyMode
+                                                ? '#A4D3DE'
+                                                : '#3E6B78'
+                                            : isSkyMode
+                                                ? '#E8E2D1'
+                                                : '#3A3F45',
                                 }}
                             />
                         ))}
                     </div>
 
+                    {/* Main Grounding Card */}
                     <div
                         className="rounded-3xl border p-6 sm:p-10 space-y-6 shadow-xl transition-all relative overflow-hidden"
-                        style={{ background: `${step.accent}66`, borderColor: step.accent }}
+                        style={
+                            isSkyMode
+                                ? {
+                                    background: `${step.accent}66`,
+                                    borderColor: step.accent,
+                                }
+                                : {
+                                    background: `${step.accent}26`,
+                                    borderColor: `${step.accent}88`,
+                                }
+                        }
                     >
+                        {/* Decorative icons */}
                         {step.decor.map((key, i) => {
                             const Icon = DECOR_ICONS[key];
+
                             return (
                                 <span
                                     key={i}
-                                    className={`absolute w-10 h-10 sm:w-12 sm:h-12 opacity-90 ${i === 0 ? 'top-4 left-5' : 'top-6 right-6'
+                                    className={`absolute w-10 h-10 sm:w-12 sm:h-12 opacity-90 ${i === 0
+                                            ? 'top-4 left-5'
+                                            : 'top-6 right-6'
                                         }`}
                                 >
                                     <Icon />
@@ -195,18 +385,47 @@ export function FiveFourThreeTwoOne({ onExit }) {
                             );
                         })}
 
+                        {/* Otter + Step Information */}
                         <div className="flex flex-col items-center gap-3 relative z-10">
-                            <div className="w-24 h-24 rounded-2xl p-1.5 shadow-sm bg-white">
+
+                            <div
+                                className="w-24 h-24 rounded-2xl p-1.5 shadow-sm"
+                                style={{
+                                    background: isSkyMode
+                                        ? '#FFFFFF'
+                                        : '#1E2226',
+                                    border: isSkyMode
+                                        ? '1px solid #E8E2D1'
+                                        : '1px solid #3A3F45',
+                                }}
+                            >
                                 <OtterAvatar imageSrc={step.image} />
                             </div>
-                            <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: '#4A2511' }}>
+
+                            <span
+                                className="text-[11px] font-bold uppercase tracking-widest"
+                                style={{
+                                    color: isSkyMode
+                                        ? '#4A2511'
+                                        : '#D9F4F7',
+                                }}
+                            >
                                 Step {stepIndex + 1} of {GROUNDING_STEPS.length}
                             </span>
-                            <h3 className="font-display text-xl sm:text-2xl font-bold text-center" style={{ color: '#4A2511' }}>
+
+                            <h3
+                                className="font-display text-xl sm:text-2xl font-bold text-center"
+                                style={{
+                                    color: isSkyMode
+                                        ? '#4A2511'
+                                        : '#F5FBFC',
+                                }}
+                            >
                                 {step.icon} Name {step.count} {step.prompt}
                             </h3>
                         </div>
 
+                        {/* Number Buttons */}
                         <div className="flex flex-wrap justify-center gap-3 relative z-10">
                             {Array.from({ length: step.count }).map((_, i) => (
                                 <button
@@ -215,19 +434,51 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 flex items-center justify-center text-lg font-bold transition-all shadow-sm"
                                     style={
                                         found[stepIndex][i]
-                                            ? { background: '#A4D3DE', borderColor: '#7AABB8', color: '#FFFFFF', transform: 'scale(0.95)' }
-                                            : { background: '#FAFBF0', borderColor: '#E8E2D1', color: '#7A5A3A' }
+                                            ? {
+                                                background: isSkyMode
+                                                    ? '#A4D3DE'
+                                                    : '#3E6B78',
+                                                borderColor: isSkyMode
+                                                    ? '#7AABB8'
+                                                    : '#5FA0AF',
+                                                color: '#FFFFFF',
+                                                transform: 'scale(0.95)',
+                                            }
+                                            : {
+                                                background: isSkyMode
+                                                    ? '#FAFBF0'
+                                                    : '#1E2226',
+                                                borderColor: isSkyMode
+                                                    ? '#E8E2D1'
+                                                    : '#3A3F45',
+                                                color: isSkyMode
+                                                    ? '#7A5A3A'
+                                                    : '#B8BCC0',
+                                            }
                                     }
                                 >
-                                    {found[stepIndex][i] ? <CheckCircle2 className="w-6 h-6" /> : i + 1}
+                                    {found[stepIndex][i] ? (
+                                        <CheckCircle2 className="w-6 h-6" />
+                                    ) : (
+                                        i + 1
+                                    )}
                                 </button>
                             ))}
                         </div>
-                        <p className="text-center text-[11px] font-medium relative z-10" style={{ color: '#7A5A3A' }}>
+
+                        <p
+                            className="text-center text-[11px] font-medium relative z-10"
+                            style={{
+                                color: isSkyMode
+                                    ? '#7A5A3A'
+                                    : '#9AA0A6',
+                            }}
+                        >
                             Tap a circle each time you notice one — no need to rush.
                         </p>
                     </div>
 
+                    {/* Navigation */}
                     <div className="flex gap-3">
                         <button
                             onClick={goBack}
@@ -235,17 +486,51 @@ export function FiveFourThreeTwoOne({ onExit }) {
                             className="flex-1 py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all border"
                             style={
                                 isFirstStep
-                                    ? { opacity: 0.4, cursor: 'not-allowed', background: '#E8E2D1', borderColor: '#D6CBAE', color: '#7A5A3A' }
-                                    : { background: '#FAFBF0', borderColor: '#E8E2D1', color: '#4A2511' }
+                                    ? {
+                                        opacity: 0.4,
+                                        cursor: 'not-allowed',
+                                        background: isSkyMode
+                                            ? '#E8E2D1'
+                                            : '#2A2E33',
+                                        borderColor: isSkyMode
+                                            ? '#D6CBAE'
+                                            : '#3A3F45',
+                                        color: isSkyMode
+                                            ? '#7A5A3A'
+                                            : '#8A8F94',
+                                    }
+                                    : {
+                                        background: isSkyMode
+                                            ? '#FAFBF0'
+                                            : '#1E2226',
+                                        borderColor: isSkyMode
+                                            ? '#E8E2D1'
+                                            : '#3A3F45',
+                                        color: isSkyMode
+                                            ? '#4A2511'
+                                            : '#E5E7EB',
+                                    }
                             }
                         >
                             <ArrowLeft className="w-4 h-4" />
                             Back
                         </button>
+
                         <button
                             onClick={goNext}
                             className="flex-1 py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
-                            style={{ background: '#A4D3DE', color: '#4A2511' }}
+                            style={
+                                isSkyMode
+                                    ? {
+                                        background: '#A4D3DE',
+                                        color: '#4A2511',
+                                    }
+                                    : {
+                                        background:
+                                            'linear-gradient(to right, #3E6B78, #5FA0AF)',
+                                        color: '#F5FBFC',
+                                    }
+                            }
                         >
                             {isLastStep ? 'Finish Practice' : 'Next'}
                             <ArrowRight className="w-4 h-4" />
@@ -253,33 +538,91 @@ export function FiveFourThreeTwoOne({ onExit }) {
                     </div>
                 </>
             ) : (
-                <div className="rounded-3xl border p-8 sm:p-12 text-center space-y-4 shadow-xl" style={{ background: '#FAFBF0', borderColor: '#E8E2D1' }}>
+
+                /* Finished State */
+                <div
+                    className="rounded-3xl border p-8 sm:p-12 text-center space-y-4 shadow-xl"
+                    style={
+                        isSkyMode
+                            ? {
+                                background: '#FAFBF0',
+                                borderColor: '#E8E2D1',
+                            }
+                            : {
+                                background: '#1E2226',
+                                borderColor: '#3A3F45',
+                            }
+                    }
+                >
                     <div className="w-28 h-28 mx-auto">
                         <OtterAvatar imageSrc={yayOtter} />
                     </div>
-                    <h3 className="font-display text-2xl font-bold" style={{ color: '#4A2511' }}>
+
+                    <h3
+                        className="font-display text-2xl font-bold"
+                        style={{
+                            color: isSkyMode
+                                ? '#4A2511'
+                                : '#F5FBFC',
+                        }}
+                    >
                         Well Grounded! 🌊
                     </h3>
-                    <p className="text-xs sm:text-sm max-w-sm mx-auto font-medium" style={{ color: '#7A5A3A' }}>
+
+                    <p
+                        className="text-xs sm:text-sm max-w-sm mx-auto font-medium"
+                        style={{
+                            color: isSkyMode
+                                ? '#7A5A3A'
+                                : '#AEB6BC',
+                        }}
+                    >
                         You walked through every sense with Sisu. However you're feeling right now, you met this moment with care.
                     </p>
+
                     <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+
                         <button
                             onClick={restart}
                             className="px-6 py-3 rounded-2xl font-bold text-xs transition-all border"
-                            style={{ background: '#FFFFFF', borderColor: '#E8E2D1', color: '#4A2511' }}
+                            style={
+                                isSkyMode
+                                    ? {
+                                        background: '#FFFFFF',
+                                        borderColor: '#E8E2D1',
+                                        color: '#4A2511',
+                                    }
+                                    : {
+                                        background: '#1E2226',
+                                        borderColor: '#3A3F45',
+                                        color: '#E5E7EB',
+                                    }
+                            }
                         >
                             Practice Again
                         </button>
+
                         {onExit && (
                             <button
                                 onClick={onExit}
                                 className="px-6 py-3 rounded-2xl font-bold text-xs transition-all shadow-md"
-                                style={{ background: '#A4D3DE', color: '#4A2511' }}
+                                style={
+                                    isSkyMode
+                                        ? {
+                                            background: '#A4D3DE',
+                                            color: '#4A2511',
+                                        }
+                                        : {
+                                            background:
+                                                'linear-gradient(to right, #3E6B78, #5FA0AF)',
+                                            color: '#F5FBFC',
+                                        }
+                                }
                             >
                                 Back to Library
                             </button>
                         )}
+
                     </div>
                 </div>
             )}

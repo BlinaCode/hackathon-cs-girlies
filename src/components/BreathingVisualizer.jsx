@@ -14,7 +14,6 @@ import {
 } from "../hooks/useBreathingTimer";
 import { useBreathingPresence } from "../hooks/useBreathingPresence";
 import { useWellness } from "../context/WellnessContext";
-import { OtterMascot } from "./OtterMascot";
 import mantaSvg from "../assets/svg/mantadeyogaplaya.svg";
 
 function CoastalElementIcon() {
@@ -132,26 +131,23 @@ export function BreathingVisualizer() {
         </span>
 
         <h2
-          className={`font-display text-2xl sm:text-3xl font-bold flex items-center justify-center gap-2 ${
-            isSkyMode ? "text-bluey-950" : "text-slate-100"
-          }`}
+          className={`font-display text-2xl sm:text-3xl font-bold flex items-center justify-center gap-2 ${isSkyMode ? "text-bluey-950" : "text-slate-100"
+            }`}
         >
           <Compass
-            className={`w-6 h-6 ${
-              isSkyMode
-                ? "text-bluey-500"
-                : "text-seafoam-400"
-            }`}
+            className={`w-6 h-6 ${isSkyMode
+              ? "text-bluey-500"
+              : "text-seafoam-400"
+              }`}
           />
           Ocean Wave Breathing
         </h2>
 
         <p
-          className={`text-xs sm:text-sm max-w-md mx-auto font-medium ${
-            isSkyMode
-              ? "text-bluey-700"
-              : "text-bluey-300"
-          }`}
+          className={`text-xs sm:text-sm max-w-md mx-auto font-medium ${isSkyMode
+            ? "text-bluey-700"
+            : "text-bluey-300"
+            }`}
         >
           Synchronize your breath with expanding ocean waves
           to calm your nervous system.
@@ -162,54 +158,29 @@ export function BreathingVisualizer() {
       {participants.length > 0 && (
         <div className="flex items-center justify-center gap-2">
           <span
-            className={`inline-flex items-center gap-2 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm border ${
-              isSkyMode
-                ? "bg-white border-bluey-200 text-bluey-700"
-                : "bg-bluey-900 border-bluey-700 text-bluey-200"
-            }`}
+            className={`inline-flex items-center gap-2 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm border ${isSkyMode
+              ? "bg-white border-bluey-200 text-bluey-700"
+              : "bg-bluey-900 border-bluey-700 text-bluey-200"
+              }`}
           >
             <span
-              className={`w-2 h-2 rounded-full animate-pulse ${
-                isSkyMode
-                  ? "bg-bluey-400"
-                  : "bg-seafoam-400"
-              }`}
+              className={`w-2 h-2 rounded-full animate-pulse ${isSkyMode
+                ? "bg-bluey-400"
+                : "bg-seafoam-400"
+                }`}
             />
 
             {participants.length === 1
               ? `${participants[0].name} is breathing with you`
-              : `${participants[0].name} and ${
-                  participants.length - 1
-                } other${
-                  participants.length - 1 === 1
-                    ? ""
-                    : "s"
-                } are breathing with you`}
+              : `${participants[0].name} and ${participants.length - 1
+              } other${participants.length - 1 === 1
+                ? ""
+                : "s"
+              } are breathing with you`}
           </span>
         </div>
       )}
 
-      {/* Sisu Mascot */}
-      <OtterMascot
-        expression={
-          showCelebration
-            ? "celebrating"
-            : isActive
-              ? "breathing"
-              : "caring"
-        }
-        speech={
-          showCelebration
-            ? `Wonderful job! You completed ${lastSessionCycles} wave ${
-                lastSessionCycles === 1
-                  ? "cycle"
-                  : "cycles"
-              }. Feel that ocean calm within you.`
-            : isActive
-              ? "Follow the expanding ocean wave. Breathe in peace, exhale tension."
-              : "Use the arrows to pick a technique, then press Start."
-        }
-      />
 
       {/* Mode progress dots */}
       <div className="flex items-center justify-center gap-2">
@@ -239,13 +210,13 @@ export function BreathingVisualizer() {
         style={
           isSkyMode
             ? {
-                background: `${accent}33`,
-                borderColor: accent,
-              }
+              background: `${accent}33`,
+              borderColor: accent,
+            }
             : {
-                background: `${accent}26`,
-                borderColor: `${accent}88`,
-              }
+              background: `${accent}26`,
+              borderColor: `${accent}88`,
+            }
         }
       >
         <span className="absolute w-10 h-10 sm:w-12 sm:h-12 opacity-90 top-6 right-6">
@@ -276,11 +247,10 @@ export function BreathingVisualizer() {
                 </div>
 
                 <div
-                  className={`font-display font-bold text-xl sm:text-2xl ${
-                    isSkyMode
-                      ? "text-bluey-950"
-                      : "text-slate-100"
-                  }`}
+                  className={`font-display font-bold text-xl sm:text-2xl ${isSkyMode
+                    ? "text-bluey-950"
+                    : "text-slate-100"
+                    }`}
                 >
                   Peace Achieved
                 </div>
@@ -324,11 +294,10 @@ export function BreathingVisualizer() {
             {/* Technique name */}
             <div className="text-center space-y-1 relative z-10">
               <h3
-                className={`font-display text-lg sm:text-xl font-bold ${
-                  isSkyMode
-                    ? ""
-                    : "text-slate-100"
-                }`}
+                className={`font-display text-lg sm:text-xl font-bold ${isSkyMode
+                  ? ""
+                  : "text-slate-100"
+                  }`}
                 style={
                   isSkyMode
                     ? { color: "#4A2511" }
@@ -339,11 +308,10 @@ export function BreathingVisualizer() {
               </h3>
 
               <p
-                className={`text-xs sm:text-sm max-w-sm mx-auto font-medium ${
-                  isSkyMode
-                    ? ""
-                    : "text-slate-400"
-                }`}
+                className={`text-xs sm:text-sm max-w-sm mx-auto font-medium ${isSkyMode
+                  ? ""
+                  : "text-slate-400"
+                  }`}
                 style={
                   isSkyMode
                     ? { color: "#7A5A3A" }
@@ -364,29 +332,29 @@ export function BreathingVisualizer() {
                 style={
                   isActive
                     ? {
-                        opacity: 0.4,
-                        cursor: "not-allowed",
-                        background: isSkyMode
-                          ? "#E8E2D1"
-                          : "#2A2E33",
-                        borderColor: isSkyMode
-                          ? "#D6CBAE"
-                          : "#3A3F45",
-                        color: isSkyMode
-                          ? "#7A5A3A"
-                          : "#8A8F94",
-                      }
+                      opacity: 0.4,
+                      cursor: "not-allowed",
+                      background: isSkyMode
+                        ? "#E8E2D1"
+                        : "#2A2E33",
+                      borderColor: isSkyMode
+                        ? "#D6CBAE"
+                        : "#3A3F45",
+                      color: isSkyMode
+                        ? "#7A5A3A"
+                        : "#8A8F94",
+                    }
                     : {
-                        background: isSkyMode
-                          ? "#FAFBF0"
-                          : "#1E2226",
-                        borderColor: isSkyMode
-                          ? "#E8E2D1"
-                          : "#3A3F45",
-                        color: isSkyMode
-                          ? "#4A2511"
-                          : "#E5E7EB",
-                      }
+                      background: isSkyMode
+                        ? "#FAFBF0"
+                        : "#1E2226",
+                      borderColor: isSkyMode
+                        ? "#E8E2D1"
+                        : "#3A3F45",
+                      color: isSkyMode
+                        ? "#4A2511"
+                        : "#E5E7EB",
+                    }
                 }
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -394,9 +362,8 @@ export function BreathingVisualizer() {
 
               <div className="relative w-56 h-56 sm:w-72 sm:h-72 flex items-center justify-center shrink-0">
                 <div
-                  className={`absolute inset-3 rounded-full border-2 transition-all duration-1000 ${
-                    isActive ? "animate-ripple" : ""
-                  }`}
+                  className={`absolute inset-3 rounded-full border-2 transition-all duration-1000 ${isActive ? "animate-ripple" : ""
+                    }`}
                   style={{
                     borderColor: `${accent}66`,
                     background: `${accent}22`,
@@ -404,60 +371,58 @@ export function BreathingVisualizer() {
                 />
 
                 <div
-                  className={`w-44 h-44 sm:w-56 sm:h-56 rounded-full border flex flex-col items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-1000 ${
-                    currentPhase.name === "Inhale"
-                      ? "scale-110"
-                      : currentPhase.name === "Exhale"
-                        ? "scale-90"
-                        : "scale-100"
-                  }`}
+                  className={`w-44 h-44 sm:w-56 sm:h-56 rounded-full border flex flex-col items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-1000 ${currentPhase.name === "Inhale"
+                    ? "scale-110"
+                    : currentPhase.name === "Exhale"
+                      ? "scale-90"
+                      : "scale-100"
+                    }`}
                   style={
                     isSkyMode
                       ? currentPhase.name === "Inhale"
                         ? {
-                            background:
-                              "rgba(255,255,255,0.55)",
-                            borderColor: "#A4D3DE",
-                            boxShadow:
-                              "inset 0 4px 16px rgba(255,255,255,0.7)",
-                          }
+                          background:
+                            "rgba(255,255,255,0.55)",
+                          borderColor: "#A4D3DE",
+                          boxShadow:
+                            "inset 0 4px 16px rgba(255,255,255,0.7)",
+                        }
                         : currentPhase.name === "Exhale"
                           ? {
-                              background:
-                                "rgba(245,232,201,0.5)",
-                              borderColor: "#E3CE9E",
-                            }
+                            background:
+                              "rgba(245,232,201,0.5)",
+                            borderColor: "#E3CE9E",
+                          }
                           : {
-                              background: "#FAFBF0",
-                              borderColor: "#E8E2D1",
-                            }
+                            background: "#FAFBF0",
+                            borderColor: "#E8E2D1",
+                          }
                       : currentPhase.name === "Inhale"
                         ? {
-                            background:
-                              "rgba(164,211,222,0.18)",
-                            borderColor: "#5FA0AF",
-                            boxShadow:
-                              "inset 0 2px 14px rgba(255,255,255,0.15)",
-                          }
+                          background:
+                            "rgba(164,211,222,0.18)",
+                          borderColor: "#5FA0AF",
+                          boxShadow:
+                            "inset 0 2px 14px rgba(255,255,255,0.15)",
+                        }
                         : currentPhase.name === "Exhale"
                           ? {
-                              background:
-                                "rgba(20,24,28,0.5)",
-                              borderColor: "#3A3F45",
-                            }
+                            background:
+                              "rgba(20,24,28,0.5)",
+                            borderColor: "#3A3F45",
+                          }
                           : {
-                              background:
-                                "rgba(30,34,38,0.6)",
-                              borderColor: "#4A4F55",
-                            }
+                            background:
+                              "rgba(30,34,38,0.6)",
+                            borderColor: "#4A4F55",
+                          }
                   }
                 >
                   <span
-                    className={`text-xs uppercase font-bold tracking-widest mb-1 ${
-                      isSkyMode
-                        ? ""
-                        : "text-bluey-300"
-                    }`}
+                    className={`text-xs uppercase font-bold tracking-widest mb-1 ${isSkyMode
+                      ? ""
+                      : "text-bluey-300"
+                      }`}
                     style={
                       isSkyMode
                         ? { color: "#7A5A3A" }
@@ -468,11 +433,10 @@ export function BreathingVisualizer() {
                   </span>
 
                   <span
-                    className={`font-display text-4xl sm:text-5xl font-bold ${
-                      isSkyMode
-                        ? ""
-                        : "text-slate-100"
-                    }`}
+                    className={`font-display text-4xl sm:text-5xl font-bold ${isSkyMode
+                      ? ""
+                      : "text-slate-100"
+                      }`}
                     style={
                       isSkyMode
                         ? { color: "#4A2511" }
@@ -483,11 +447,10 @@ export function BreathingVisualizer() {
                   </span>
 
                   <span
-                    className={`text-xs mt-[13px] font-bold ${
-                      isSkyMode
-                        ? ""
-                        : "text-slate-400"
-                    }`}
+                    className={`text-xs mt-[13px] font-bold ${isSkyMode
+                      ? ""
+                      : "text-slate-400"
+                      }`}
                     style={
                       isSkyMode
                         ? { color: "#7AABB8" }
@@ -507,29 +470,29 @@ export function BreathingVisualizer() {
                 style={
                   isActive
                     ? {
-                        opacity: 0.4,
-                        cursor: "not-allowed",
-                        background: isSkyMode
-                          ? "#E8E2D1"
-                          : "#2A2E33",
-                        borderColor: isSkyMode
-                          ? "#D6CBAE"
-                          : "#3A3F45",
-                        color: isSkyMode
-                          ? "#7A5A3A"
-                          : "#8A8F94",
-                      }
+                      opacity: 0.4,
+                      cursor: "not-allowed",
+                      background: isSkyMode
+                        ? "#E8E2D1"
+                        : "#2A2E33",
+                      borderColor: isSkyMode
+                        ? "#D6CBAE"
+                        : "#3A3F45",
+                      color: isSkyMode
+                        ? "#7A5A3A"
+                        : "#8A8F94",
+                    }
                     : {
-                        background: isSkyMode
-                          ? "#FAFBF0"
-                          : "#1E2226",
-                        borderColor: isSkyMode
-                          ? "#E8E2D1"
-                          : "#3A3F45",
-                        color: isSkyMode
-                          ? "#4A2511"
-                          : "#E5E7EB",
-                      }
+                      background: isSkyMode
+                        ? "#FAFBF0"
+                        : "#1E2226",
+                      borderColor: isSkyMode
+                        ? "#E8E2D1"
+                        : "#3A3F45",
+                      color: isSkyMode
+                        ? "#4A2511"
+                        : "#E5E7EB",
+                    }
                 }
               >
                 <ChevronRight className="w-5 h-5" />
@@ -544,14 +507,14 @@ export function BreathingVisualizer() {
                 style={
                   isSkyMode
                     ? {
-                        background: "#A4D3DE",
-                        color: "#4A2511",
-                      }
+                      background: "#A4D3DE",
+                      color: "#4A2511",
+                    }
                     : {
-                        background:
-                          "linear-gradient(to right, #3E6B78, #5FA0AF)",
-                        color: "#F5FBFC",
-                      }
+                      background:
+                        "linear-gradient(to right, #3E6B78, #5FA0AF)",
+                      color: "#F5FBFC",
+                    }
                 }
               >
                 {isActive ? (
@@ -568,15 +531,15 @@ export function BreathingVisualizer() {
                 style={
                   isSkyMode
                     ? {
-                        background: "#FAFBF0",
-                        borderColor: "#E8E2D1",
-                        color: "#7A5A3A",
-                      }
+                      background: "#FAFBF0",
+                      borderColor: "#E8E2D1",
+                      color: "#7A5A3A",
+                    }
                     : {
-                        background: "#1E2226",
-                        borderColor: "#3A3F45",
-                        color: "#B8BCC0",
-                      }
+                      background: "#1E2226",
+                      borderColor: "#3A3F45",
+                      color: "#B8BCC0",
+                    }
                 }
                 title="Reset Timer"
               >
@@ -590,17 +553,17 @@ export function BreathingVisualizer() {
                   style={
                     isSkyMode
                       ? {
-                          background: "#D9E7D0",
-                          borderColor: "#B9D1AE",
-                          color: "#3F5A34",
-                        }
+                        background: "#D9E7D0",
+                        borderColor: "#B9D1AE",
+                        color: "#3F5A34",
+                      }
                       : {
-                          background:
-                            "rgba(74,158,101,0.18)",
-                          borderColor:
-                            "rgba(74,158,101,0.4)",
-                          color: "#8FD9A8",
-                        }
+                        background:
+                          "rgba(74,158,101,0.18)",
+                        borderColor:
+                          "rgba(74,158,101,0.4)",
+                        color: "#8FD9A8",
+                      }
                   }
                 >
                   <CheckCircle className="w-4 h-4" />
@@ -612,9 +575,8 @@ export function BreathingVisualizer() {
         )}
 
         <p
-          className={`text-center text-[11px] font-medium relative z-10 ${
-            isSkyMode ? "" : "text-slate-400"
-          }`}
+          className={`text-center text-[11px] font-medium relative z-10 ${isSkyMode ? "" : "text-slate-400"
+            }`}
           style={
             isSkyMode
               ? { color: "#7A5A3A" }
