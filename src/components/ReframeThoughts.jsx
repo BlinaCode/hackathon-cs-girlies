@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Brain, Plus, Sparkles, TrendingDown, CheckCircle, ArrowRight } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 import { OtterMascot } from './OtterMascot';
@@ -13,12 +13,28 @@ const EMPTY_PRACTICE = {
 };
 
 export function ReframeThoughts() {
-  const { beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus, mascotState, isSkyMode } = useWellness();
+  const {
+    beliefs, beliefPractices, addBelief, addBeliefPractice, updateBeliefStatus,
+    mascotState, isSkyMode, pendingReframeBeliefId, setPendingReframeBeliefId
+  } = useWellness();
 
   const activeBeliefs = beliefs.filter(b => b.status === 'active');
 
-  const [selectedBeliefId, setSelectedBeliefId] = useState(activeBeliefs[0]?.id || '');
-  const [showNewForm, setShowNewForm] = useState(activeBeliefs.length === 0);
+  const [selectedBeliefId, setSelectedBeliefId] = useState(pendingReframeBeliefId || activeBeliefs[0]?.id || '');
+  const [showNewForm, setShowNewForm] = useState(!pendingReframeBeliefId && activeBeliefs.length === 0);
+
+  // Consume a pending selection handed off from elsewhere (e.g. Growth
+  // Dashboard's "Reframe" action) so this opens on that specific thought
+  // instead of whatever was already selected — only on mount, since this
+  // page's own selector should take over after that.
+  useEffect(() => {
+    if (pendingReframeBeliefId) {
+      setSelectedBeliefId(pendingReframeBeliefId);
+      setShowNewForm(false);
+      setPendingReframeBeliefId(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // New-belief form
   const [statement, setStatement] = useState('');
