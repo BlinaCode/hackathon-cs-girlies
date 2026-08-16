@@ -35,7 +35,7 @@ CREATE TRIGGER on_auth_user_created
 
 -- 2. Mood Check-Ins Table
 CREATE TABLE IF NOT EXISTS public.mood_checkins (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   mood TEXT NOT NULL, -- Calm, Happy, Anxious, Overwhelmed, Exhausted, Hopeful
   energy_level INT DEFAULT 3, -- 1 to 5 scale
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS public.mood_checkins (
 
 -- 3. Beliefs (recurring thought the user re-works over time)
 CREATE TABLE IF NOT EXISTS public.beliefs (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   statement VARCHAR(1000) NOT NULL,
   meaning_to_me VARCHAR(1000),
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS public.beliefs (
 
 -- 3b. Belief practices (one row per session; same belief_id = re-practice)
 CREATE TABLE IF NOT EXISTS public.belief_practices (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   belief_id UUID REFERENCES public.beliefs(id) ON DELETE CASCADE,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   initial_belief_score INT NOT NULL CHECK (initial_belief_score BETWEEN 1 AND 100),
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS public.belief_practices (
 
 -- 4. Friends circle (store raw answers; tier is derived by the app)
 CREATE TABLE IF NOT EXISTS public.friends (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   name VARCHAR(200) NOT NULL,
   contact_frequency SMALLINT CHECK (contact_frequency BETWEEN 1 AND 5),     -- Q1
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS public.friends (
 
 -- 5. Completed Resources Table (which wellness guides the user finished)
 CREATE TABLE IF NOT EXISTS public.completed_resources (
-  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   resource_id TEXT NOT NULL,
   completed_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
