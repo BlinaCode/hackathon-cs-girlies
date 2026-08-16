@@ -121,15 +121,9 @@ function MainContent({ initialTab = 'hub' }) {
             </div>
           </div>
 
-        {activeTab === 'hub' && <HomeHub setActiveTab={setActiveTab} />}
-        {activeTab === 'checkin' && <MoodCheckIn />}
-        {activeTab === 'breathing' && <BreathingVisualizer />}
-        {activeTab === 'beliefs' && <ReframeThoughts />}
-        {activeTab === 'friends' && <SocialCircle />}
-        {activeTab === 'resources' && <ResourceHub />}
-        {activeTab === 'growth' && <GrowthDashboard />}
-        {activeTab === '54321' && <FiveFourThreeTwoOne onExit={() => setActiveTab('hub')} />}
-      </main>
+          {/* FIX 3: Removed dead code and kept only HomeHub here */}
+          <HomeHub setActiveTab={setActiveTab} />
+
           {/* White Section for Scrolling */}
           <div className="w-full bg-white flex flex-col items-center justify-center min-h-[50vh] p-8 text-center shadow-inner relative z-10">
             <h2 className="text-2xl sm:text-3xl font-display font-bold text-bluey-900 mb-4">A Space to Breathe</h2>
@@ -151,7 +145,8 @@ function MainContent({ initialTab = 'hub' }) {
           {activeTab === 'about' && <ComingSoonPlaceholder title="About Sisu" />}
           {activeTab === '54321' && <ComingSoonPlaceholder title="5-4-3-2-1 Grounding Technique" />}
         </main>
-      )}
+      )
+      }
 
       {/* Sandy Shoreline Decor */}
       <div
@@ -193,7 +188,7 @@ function MainContent({ initialTab = 'hub' }) {
           </div>
         </div>
       </footer>
-    </div>
+    </div >
   );
 }
 
