@@ -57,87 +57,14 @@ function RockIcon() {
   );
 }
 
-function HomeHub({ setActiveTab }) {
-  const { mascotState, breathingStreak, moodLogs, isSkyMode, beliefs } = useWellness();
-  const [wisdomIndex, setWisdomIndex] = useState(0);
 
-  const nextWisdom = () => {
-    setWisdomIndex((prev) => (prev + 1) % BEACH_WISDOM.length);
-  };
 
+function ComingSoonPlaceholder({ title }) {
   return (
-    <div className="space-y-8">
-      {/* Hero Coastal Card */}
-      <div className={`rounded-3xl p-8 sm:p-12 text-center space-y-5 shadow-2xl relative overflow-hidden transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-seashell-100/90 border border-seashell-300 text-seashell-500 text-xs font-bold mb-1 shadow-sm">
-          <span>🦪 Inviting Beach & Aquatic Vibes</span>
-        </div>
-
-        <h1 className={`font-display text-3xl sm:text-5xl font-bold leading-tight ${isSkyMode ? 'text-bluey-950' : 'text-white'}`}>
-          Find Your Inner Calm, One Wave at a Time
-        </h1>
-
-        <p className={`text-xs sm:text-base max-w-xl mx-auto leading-relaxed ${isSkyMode ? 'text-bluey-800' : 'text-bluey-200'}`}>
-          Welcome to Sisu. Practice ocean tide breathing, record your feelings with shoreline check-ins, and anchor your daily mental wellness.
-        </p>
-
-        <div className="flex flex-wrap justify-center gap-3 pt-3">
-          <button
-            onClick={() => setActiveTab('checkin')}
-            className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-bluey-500 to-bluey-600 hover:from-bluey-400 hover:to-bluey-500 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all flex items-center gap-2"
-          >
-            <span>Start Mood Check-In</span>
-            <span>🌊</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('breathing')}
-            className={`px-7 py-3.5 rounded-2xl border font-bold text-xs transition-all flex items-center gap-2 ${isSkyMode
-              ? 'bg-white border-bluey-300 text-bluey-950 hover:bg-bluey-50 shadow-sm'
-              : 'bg-bluey-800 border-bluey-700 text-bluey-100 hover:bg-bluey-700'
-              }`}
-          >
-            <span>Practice Ocean Breathing</span>
-            <span>💨</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Zen Beach Wisdom Quote Card */}
-      <div className={`rounded-3xl p-6 sm:p-8 space-y-3 relative transition-all ${isSkyMode ? 'bg-gradient-to-r from-cream-100/90 via-bluey-50/80 to-cream-100/90 border border-cream-300/80 shadow-md' : 'bg-gradient-to-r from-bluey-900/90 via-bluey-950 to-bluey-900/90 border border-bluey-700 shadow-md'}`}>
-        <div className="flex justify-between items-center">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-bluey-600 dark:text-bluey-300 flex items-center gap-1.5">
-            <span>✨</span> Beach Wisdom of the Day
-          </span>
-          <button
-            onClick={nextWisdom}
-            className="text-[11px] font-bold text-bluey-600 dark:text-bluey-300 hover:underline flex items-center gap-1"
-          >
-            <span>Next Wave</span> <span>🌊</span>
-          </button>
-        </div>
-        <blockquote className={`font-display text-lg sm:text-xl italic font-medium ${isSkyMode ? 'text-bluey-950' : 'text-bluey-50'}`}>
-          "{BEACH_WISDOM[wisdomIndex].quote}"
-        </blockquote>
-        <p className={`text-xs font-semibold text-right ${isSkyMode ? 'text-bluey-700' : 'text-bluey-300'}`}>
-          — {BEACH_WISDOM[wisdomIndex].author}
-        </p>
-      </div>
-
-      {/* Quick Statistics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
-          <div className="text-4xl font-display font-bold text-bluey-500">{moodLogs.length}</div>
-          <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Check-Ins Logged</div>
-        </div>
-        <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
-          <div className="text-4xl font-display font-bold text-amber-500">{breathingStreak.count} Days</div>
-          <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Breathing Streak</div>
-        </div>
-        <div className={`rounded-2xl p-6 text-center space-y-1 transition-all ${isSkyMode ? 'glass-card-day' : 'glass-card-night'}`}>
-          <div className="text-4xl font-display font-bold text-seashell-500">{beliefs.length}</div>
-          <div className={`text-xs font-semibold ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>Beliefs Reframed</div>
-        </div>
-      </div>
+    <div className="flex flex-col items-center justify-center p-12 text-center bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-200 shadow-sm min-h-[40vh] w-full">
+      <div className="text-4xl mb-4">🚧</div>
+      <h2 className="text-2xl font-display font-bold text-slate-800 mb-2">{title}</h2>
+      <p className="text-slate-600">This feature is currently under development. Please check back later!</p>
     </div>
   );
 }
@@ -148,18 +75,51 @@ function MainContent({ initialTab = 'hub' }) {
   useSupabaseSync();
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden text-slate-100 font-body">
-      {/* Subtle Background Beach Decor - Water Ripples */}
-      <div className="pointer-events-none absolute top-0 left-0 right-0 h-96 opacity-30 z-0">
-        <svg viewBox="0 0 1440 320" className="w-full h-full object-cover">
-          <path fill={isSkyMode ? '#B2EBF2' : '#00695C'} fillOpacity="0.4" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,150,768,203,864,208C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-        </svg>
-      </div>
+    <div className={`min-h-screen flex flex-col relative text-slate-100 font-body ${isSkyMode ? 'bg-cream-50' : 'bg-bluey-950'}`}>
+
+      {/* Subtle Background Beach Decor - Water Ripples (Only when NOT on hub to keep hub clean) */}
+      {activeTab !== 'hub' && (
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-96 opacity-30 z-0">
+          <svg viewBox="0 0 1440 320" className="w-full h-full object-cover">
+            <path fill={isSkyMode ? '#B2EBF2' : '#00695C'} fillOpacity="0.4" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,150,768,203,864,208C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+          </svg>
+        </div>
+      )}
+
+
 
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
-        <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
+      {activeTab === 'hub' ? (
+        <main className="flex-1 w-full z-10 flex flex-col">
+          {/* Hero Section */}
+          <div className="relative w-full overflow-hidden">
+            {/* The full image in normal flow */}
+            <picture>
+              <source media="(min-width: 640px)" srcSet={portadaImg} />
+              <img src={portadaCelularImg} alt="Sisu Hero" className="w-full h-auto object-cover min-h-[60vh] sm:min-h-[70vh] -mt-16 sm:-mt-48" />
+            </picture>
+
+            {/* Bottom Gradient Fade */}
+            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-0"></div>
+
+            {/* Hero Typography overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-start pt-24 sm:pt-44 px-4 text-center z-10">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-slate-900 drop-shadow-md max-w-3xl mb-4 sm:mb-6">
+                Find Your Inner Calm,<br className="hidden sm:block" /> One Wave at a Time
+              </h1>
+              <p className="text-base sm:text-lg text-slate-800 font-medium max-w-2xl drop-shadow-md mb-6 sm:mb-8 px-2">
+                Practice ocean tide breathing, record your feelings with shoreline check-ins, and anchor your daily mental wellness.
+              </p>
+              <button
+                onClick={() => setActiveTab('checkin')}
+                className="px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base shadow-2xl transition-all hover:scale-105 flex items-center gap-2 pointer-events-auto"
+              >
+                Start Mood Check-In
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
 
         {activeTab === 'hub' && <HomeHub setActiveTab={setActiveTab} />}
         {activeTab === 'checkin' && <MoodCheckIn />}
@@ -170,10 +130,32 @@ function MainContent({ initialTab = 'hub' }) {
         {activeTab === 'growth' && <GrowthDashboard />}
         {activeTab === '54321' && <FiveFourThreeTwoOne onExit={() => setActiveTab('hub')} />}
       </main>
+          {/* White Section for Scrolling */}
+          <div className="w-full bg-white flex flex-col items-center justify-center min-h-[50vh] p-8 text-center shadow-inner relative z-10">
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-bluey-900 mb-4">A Space to Breathe</h2>
+            <p className="text-bluey-700 max-w-2xl mx-auto">
+              Welcome to your daily mental wellness companion. Sisu provides a calming environment to check in with yourself, practice ocean tide breathing, and gently reframe your thoughts.
+            </p>
+          </div>
+        </main>
+      ) : (
+        <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
+          <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
+          {activeTab === 'checkin' && <MoodCheckIn />}
+          {activeTab === 'breathing' && <BreathingVisualizer />}
+          {activeTab === 'beliefs' && <ReframeThoughts />}
+          {activeTab === 'friends' && <SocialCircle />}
+          {activeTab === 'resources' && <ResourceHub />}
+          {activeTab === 'growth' && <GrowthDashboard />}
+          {activeTab === 'connect' && <ComingSoonPlaceholder title="Connect" />}
+          {activeTab === 'about' && <ComingSoonPlaceholder title="About Sisu" />}
+          {activeTab === '54321' && <ComingSoonPlaceholder title="5-4-3-2-1 Grounding Technique" />}
+        </main>
+      )}
 
       {/* Sandy Shoreline Decor */}
       <div
-        className="relative w-full h-28 sm:h-40 overflow-hidden bg-cream-200 mt-auto"
+        className={`relative w-full h-28 sm:h-40 overflow-hidden mt-auto ${isSkyMode ? 'bg-cream-200' : 'bg-bluey-900'}`}
         style={{
           maskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
           WebkitMaskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
@@ -181,7 +163,7 @@ function MainContent({ initialTab = 'hub' }) {
       >
         <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
           backgroundImage: 'repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, transparent 2px, transparent 20px)'
-        }}></div>
+        }} />
 
         {SAND_DECOR_ITEMS.map(item => (
           <div
