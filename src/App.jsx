@@ -162,7 +162,7 @@ function MainContent({ initialTab = 'hub' }) {
           )}
           {activeTab === 'checkin' && <MoodCheckIn />}
           {activeTab === 'breathing' && <BreathingVisualizer />}
-          {activeTab === 'beliefs' && <ReframeThoughts />}
+          {activeTab === 'beliefs' && <ReframeThoughts setActiveTab={setActiveTab} />}
           {activeTab === 'friends' && <SocialCircle />}
           {activeTab === 'resources' && <ResourceHub setActiveTab={setActiveTab} />}
           {activeTab === 'growth' && <GrowthDashboard setActiveTab={setActiveTab} />}

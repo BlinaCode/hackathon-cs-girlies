@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { TrendingUp, Flame, Heart, Brain, BookOpen, Award, X, CheckCircle2, Trash2, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { TrendingUp, Flame, Heart, Brain, BookOpen, Award, X, CheckCircle2, Trash2, ArrowRight, Sparkles, Loader2, HeartHandshake } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
+import { useAuth } from '../context/AuthContext';
+import { suggestGrowthAnalysis } from '../services/aiSuggestions';
 import lotoSvg from '../assets/svg/flordeloto.svg';
 import { OtterMascot } from './OtterMascot';
 import otterCheckin from '../assets/images/otter-checkin.png';
@@ -54,9 +56,34 @@ export function GrowthDashboard({ setActiveTab }) {
     moodLogs, beliefs, beliefPractices, completedResources, breathingStreak, isSkyMode,
     updateBeliefStatus, deleteBelief, setPendingReframeBeliefId
   } = useWellness();
+  const { user, fetchProfile } = useAuth();
 
   const [showThoughtsModal, setShowThoughtsModal] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+
+  // AI-assisted growth analysis (Gemini via the analyze-growth Edge Function)
+  const [aiEnabled, setAiEnabled] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState('');
+  const [analyzeError, setAnalyzeError] = useState('');
+
+  useEffect(() => {
+    if (!user) {
+      setAiEnabled(false);
+      return;
+    }
+    let cancelled = false;
+    fetchProfile()
+      .then((data) => {
+        if (!cancelled) setAiEnabled(!!data?.ai_features_enabled);
+      })
+      .catch(() => {
+        if (!cancelled) setAiEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
   // Calculate mood counts
   const moodCounts = moodLogs.reduce((acc, log) => {
@@ -75,6 +102,26 @@ export function GrowthDashboard({ setActiveTab }) {
     { title: 'Scholar of Well-Being', unlocked: completedResources.length >= 1, desc: 'Completed a mental health resource guide', portrait: shellOtter },
   ];
   const allUnlocked = milestones.every(m => m.unlocked);
+
+  const handleAnalyze = async () => {
+    setAnalyzing(true);
+    setAnalyzeError('');
+    try {
+      const result = await suggestGrowthAnalysis({
+        moodCounts,
+        totalCheckIns,
+        breathingStreakCount: breathingStreak.count,
+        totalReframes,
+        completedResourcesCount: completedResources.length,
+        unlockedMilestones: milestones.filter(m => m.unlocked).map(m => m.title),
+      });
+      setAnalysis(result.analysis);
+    } catch (err) {
+      setAnalyzeError(err.message || 'Could not get an AI analysis right now.');
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const stats = [
     { icon: Flame, label: 'Breathing Streak', value: `${breathingStreak.count} Days`, tone: 'dune' },
@@ -163,6 +210,55 @@ export function GrowthDashboard({ setActiveTab }) {
           );
         })}
       </div>
+
+      {/* AI-assisted growth analysis */}
+      {aiEnabled && (
+        <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-4 transition-all border ${
+          isSkyMode
+            ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
+            : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'
+        }`}>
+          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className={`font-display text-lg font-bold flex items-center gap-2 ${isSkyMode ? 'text-lagoon-950' : 'text-white'}`}>
+                <Sparkles className={`w-4 h-4 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
+                Analyze your report with AI
+              </h3>
+              <p className={`text-xs sm:text-sm font-medium mt-1 ${isSkyMode ? 'text-lagoon-700' : 'text-lagoon-300'}`}>
+                A short, gentle reflection on your check-in trends, streak, and milestones.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleAnalyze}
+              disabled={analyzing || totalCheckIns === 0}
+              className={`shrink-0 px-5 py-3 rounded-2xl border font-semibold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-60 ${isSkyMode ? 'bg-white/70 border-lagoon-500/30 text-lagoon-600 hover:bg-white' : 'bg-lagoon-500/10 border-lagoon-500/30 text-lagoon-300 hover:bg-lagoon-500/20'}`}
+            >
+              {analyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              {analyzing ? 'Analyzing...' : 'Analyze with AI'}
+            </button>
+          </div>
+
+          {totalCheckIns === 0 && (
+            <p className={`relative text-xs italic ${isSkyMode ? 'text-lagoon-600' : 'text-lagoon-400'}`}>
+              Log a mood check-in first so there's something to analyze.
+            </p>
+          )}
+
+          {analysis && (
+            <div className={`relative p-4 rounded-2xl border flex items-start gap-2.5 text-xs sm:text-sm font-medium ${isSkyMode ? 'bg-white/70 border-lagoon-200' : 'bg-lagoon-900/40 border-lagoon-800'}`}>
+              <HeartHandshake className={`w-4 h-4 mt-0.5 shrink-0 ${isSkyMode ? 'text-lagoon-500' : 'text-lagoon-400'}`} />
+              <p className={isSkyMode ? 'text-lagoon-900' : 'text-lagoon-100'}>{analysis}</p>
+            </div>
+          )}
+
+          {analyzeError && (
+            <div className={`relative p-3 rounded-xl text-xs font-semibold ${isSkyMode ? 'bg-blush-200/60 text-otterfur-500' : 'bg-blush-300/10 text-blush-300'}`}>
+              {analyzeError}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Mood Distribution & Milestones */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
