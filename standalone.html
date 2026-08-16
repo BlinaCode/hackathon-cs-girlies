@@ -217,7 +217,8 @@
       VALUE_LOGS: 'sisu_value_logs',
       COMPLETED_RESOURCES: 'sisu_completed_resources',
       BREATHING_STREAK: 'sisu_breathing_streak',
-      THEME_MODE: 'sisu_theme_mode'
+      THEME_MODE: 'sisu_theme_mode',
+      JOURNAL_ENTRIES: 'sisu_journal_entries'
     };
 
     const getStored = (key, fallback) => {
@@ -590,6 +591,21 @@
       const [energy, setEnergy] = useState(3);
       const [reflection, setReflection] = useState('');
       const [saved, setSaved] = useState(false);
+      const [journalSaved, setJournalSaved] = useState(false);
+
+      const handleSaveJournal = () => {
+        if (!reflection.trim()) return;
+        const entries = getStored(STORAGE_KEYS.JOURNAL_ENTRIES, []);
+        const newEntry = {
+          id: Date.now(),
+          text: reflection,
+          timestamp: new Date().toISOString()
+        };
+        setStored(STORAGE_KEYS.JOURNAL_ENTRIES, [newEntry, ...entries]);
+        setReflection('');
+        setJournalSaved(true);
+        setTimeout(() => setJournalSaved(false), 2500);
+      };
 
       const options = [
         { name: 'Calm', emoji: '🌊', desc: 'Peaceful tide' },
@@ -643,9 +659,7 @@
                         type="button"
                         onClick={() => setMood(item.name)}
                         className={`p-4 rounded-2xl border text-center transition-all ${mood === item.name
-                          ? (isSkyMode
-                            ? 'border-bluey-500 bg-gradient-to-br from-bluey-100 to-bluey-50 text-bluey-950 font-bold ring-2 ring-bluey-400 shadow-md shadow-bluey-200/50'
-                            : 'border-bluey-400 bg-bluey-800 text-white font-bold ring-2 ring-bluey-500 shadow-lg shadow-bluey-950/80')
+                          ? 'border-seashell-300 bg-cream-200 text-bluey-900 font-bold ring-2 ring-seashell-200 shadow-md shadow-seashell-200/50'
                           : (isSkyMode
                             ? 'border-bluey-200/80 bg-white/60 text-bluey-800 hover:bg-bluey-50 hover:border-bluey-300'
                             : 'border-bluey-800/80 bg-bluey-950/50 text-bluey-200 hover:bg-bluey-800/40')
@@ -659,11 +673,20 @@
                   </div>
                 </div>
 
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-bluey-500 via-bluey-600 to-bluey-700 hover:from-bluey-400 hover:to-bluey-600 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2"
+                >
+                  <span>Record Mood Check-In</span>
+                  <span>🌊</span>
+                </button>
+
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <label className={`text-xs font-bold uppercase tracking-wider ${isSkyMode ? 'text-bluey-800' : 'text-bluey-300'}`}>
                       2. Energy Level (1 = Low Tide, 5 = High Energy)
                     </label>
+
                     <span className="text-xs font-bold text-bluey-500">{energy} / 5</span>
                   </div>
                   <EnergyDragSlider energy={energy} setEnergy={setEnergy} isSkyMode={isSkyMode} />
@@ -687,15 +710,18 @@
                       : 'bg-bluey-950/80 border-bluey-700 text-bluey-950 placeholder-bluey-400'
                       }`}
                   />
+                  <button
+                    type="button"
+                    onClick={handleSaveJournal}
+                    disabled={!reflection.trim()}
+                    className={`px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center gap-2 ${!reflection.trim()
+                      ? 'bg-cream-100 text-bluey-300 cursor-not-allowed'
+                      : 'bg-cream-200 hover:bg-cream-300 text-bluey-900'
+                      }`}
+                  >
+                    <span>{journalSaved ? 'Saved! 📝' : 'Save Journal'}</span>
+                  </button>
                 </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-bluey-500 via-bluey-600 to-bluey-700 hover:from-bluey-400 hover:to-bluey-600 text-white font-bold text-xs shadow-lg shadow-bluey-500/30 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2"
-                >
-                  <span>Record Mood Check-In</span>
-                  <span>🌊</span>
-                </button>
               </form>
             )}
           </div>
@@ -796,13 +822,6 @@
               }`}
             style={{ minHeight: `${Math.max(340, 220 + otherBreathers.length * 16)}px` }}
           >
-            {/* Underwater shimmer layer */}
-            <div
-              className="absolute inset-0 z-0 opacity-20 pointer-events-none animate-[wave-drift_8s_linear_infinite]"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(120deg, transparent, transparent 40px, rgba(255,255,255,0.15) 40px, rgba(255,255,255,0.15) 80px)'
-              }}
-            />
 
             {/* Other breathers — each bubble reflects that external user's own phase */}
             {!completed && otherBreathers.map((user, i) => {
