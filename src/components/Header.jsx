@@ -128,6 +128,8 @@ export function Header({ activeTab, setActiveTab }) {
           </div>
         </div>
 
+
+
         {/* Mobile Navigation Panel */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-xl overflow-hidden text-slate-800">
