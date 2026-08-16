@@ -12,6 +12,9 @@ import { SocialCircle } from './components/SocialCircle';
 import { ResourceHub } from './components/ResourceHub';
 import { GrowthDashboard } from './components/GrowthDashboard';
 import { FiveFourThreeTwoOne } from './components/FiveFourThreeTwoOne';
+import { ArrowRight } from 'lucide-react';
+import portadaImg from './assets/portada.png';
+import portadaCelularImg from './assets/portada-celular.png';
 
 const BEACH_WISDOM = [
   { quote: "Notice how the ocean never rushes, yet washes away all footprints on the shore. Give yourself time to settle.", author: "Zen Shoreline Reflection" },
@@ -120,9 +123,6 @@ function MainContent({ initialTab = 'hub' }) {
               </button>
             </div>
           </div>
-
-          {/* FIX 3: Removed dead code and kept only HomeHub here */}
-          <HomeHub setActiveTab={setActiveTab} />
 
           {/* White Section for Scrolling */}
           <div className="w-full bg-white flex flex-col items-center justify-center min-h-[50vh] p-8 text-center shadow-inner relative z-10">
