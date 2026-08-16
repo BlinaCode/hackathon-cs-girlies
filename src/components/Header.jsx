@@ -16,6 +16,21 @@ export function Header({ activeTab, setActiveTab }) {
     setMobileMenuOpen(false);
   };
 
+  const navItems = [
+    { id: 'checkin', label: 'Check-In', icon: '🌊' },
+    { id: 'breathing', label: 'Breathing', icon: '💨' },
+    { id: 'beliefs', label: 'Reframe', icon: '🧠' },
+    { id: 'friends', label: 'Circle', icon: '🫂' },
+    { id: 'resources', label: 'Library', icon: '📖' },
+    { id: 'growth', label: 'Growth', icon: '🌱' },
+    { id: '54321', label: '5-4-3-2-1', icon: '🖐️' }
+  ];
+
+  return (
+    <>
+      <header className={`p-4 sticky top-0 z-50 border-b backdrop-blur-xl transition-all ${isSkyMode ? 'bg-white/80 border-bluey-200/80 shadow-sm' : 'bg-bluey-950/90 border-bluey-800 shadow-md'}`}>
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+
   // Header background logic for minimalist look
   const headerBgClass = activeTab === 'hub' 
     ? 'fixed w-full top-0 left-0 right-0 bg-white/60 backdrop-blur-md border-b border-white/20 text-slate-900' 
@@ -120,6 +135,18 @@ export function Header({ activeTab, setActiveTab }) {
             )}
           </div>
 
+        {/* Mobile Navigation Dropdown */}
+        <div className="md:hidden flex overflow-x-auto mt-2 py-2 gap-1 border-t border-bluey-200/40 no-scrollbar">
+          {navItems.map(item => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${activeTab === item.id
+                ? 'bg-bluey-500 text-white font-bold'
+                : (isSkyMode ? 'bg-bluey-100/50 text-bluey-800 hover:bg-bluey-200' : 'bg-bluey-800/80 text-bluey-200 hover:bg-bluey-700')
+                }`}
+            >
+              {item.label}
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center">
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`p-2 rounded-lg ${textColor}`}>
