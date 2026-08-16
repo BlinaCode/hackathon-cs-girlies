@@ -16,6 +16,7 @@ import { GrowthDashboard } from './components/GrowthDashboard';
 import { FiveFourThreeTwoOne } from './components/FiveFourThreeTwoOne';
 import { AboutSisu } from './components/AboutSisu';
 import { AccountPage } from './components/AccountPage';
+import { Connect } from './components/Connect';
 import { ArrowRight } from 'lucide-react';
 import portadaImg from './assets/portada.png';
 import portadaCelularImg from './assets/portada-celular.png';
@@ -52,16 +53,6 @@ const SAND_DECOR_ITEMS = [
   { id: 11, img: svgSandDollar, left: '87%', bottom: '20px', size: 30, rotation: 25 },
   { id: 12, img: svgRocks, left: '93%', bottom: '8px', size: 30, rotation: 0 },
 ];
-
-function ComingSoonPlaceholder({ title }) {
-  return (
-    <div className="flex flex-col items-center justify-center p-12 text-center bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-200 shadow-sm min-h-[40vh] w-full">
-      <div className="text-4xl mb-4">🚧</div>
-      <h2 className="text-2xl font-display font-bold text-slate-800 mb-2">{title}</h2>
-      <p className="text-slate-600">This feature is currently under development. Please check back later!</p>
-    </div>
-  );
-}
 
 function MainContent({ initialTab = 'hub' }) {
   const [activeTab, setActiveTabState] = useLocalStorage(STORAGE_KEYS.ACTIVE_TAB, initialTab);
@@ -166,7 +157,7 @@ function MainContent({ initialTab = 'hub' }) {
         </main>
       ) : (
         <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
-          {activeTab !== 'checkin' && activeTab !== 'about' && activeTab !== 'account' && activeTab !== 'growth' && (
+          {activeTab !== 'checkin' && activeTab !== 'about' && activeTab !== 'account' && activeTab !== 'growth' && activeTab !== 'connect' && (
             <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
           )}
           {activeTab === 'checkin' && <MoodCheckIn />}
@@ -176,7 +167,7 @@ function MainContent({ initialTab = 'hub' }) {
           {activeTab === 'resources' && <ResourceHub setActiveTab={setActiveTab} />}
           {activeTab === 'growth' && <GrowthDashboard setActiveTab={setActiveTab} />}
           {activeTab === 'account' && <AccountPage setActiveTab={setActiveTab} />}
-          {activeTab === 'connect' && <ComingSoonPlaceholder title="Connect" />}
+          {activeTab === 'connect' && <Connect setActiveTab={setActiveTab} />}
           {activeTab === 'about' && <AboutSisu />}
           {activeTab === '54321' && <FiveFourThreeTwoOne />}
         </main>
