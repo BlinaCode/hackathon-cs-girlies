@@ -80,3 +80,28 @@
 .animate-wave-slide { animation: waveSlide 22s linear infinite; }
 .animate-tide-pulse { animation: tidePulse 6s ease-in-out infinite; }
 .animate-shell-glow { animation: shellGlow 3.5s ease-in-out infinite; }
+
+/* A small mascot slowly swimming a full lap around something (e.g. the
+   Social Circle diagram). The outer element sweeps the orbit; the inner
+   element counter-rotates at the same speed so the mascot itself stays
+   upright throughout, rather than spinning in place. */
+@keyframes orbitSwim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes orbitSwimReverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+.animate-orbit-swim { animation: orbitSwim 42s linear infinite; }
+.animate-orbit-swim-reverse { animation: orbitSwimReverse 42s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-orbit-swim,
+  .animate-orbit-swim-reverse,
+  .animate-otter-float,
+  .animate-ripple,
+  .animate-tide-pulse {
+    animation: none;
+  }
+}
