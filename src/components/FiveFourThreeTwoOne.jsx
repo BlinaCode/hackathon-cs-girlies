@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useWellness } from '../context/WellnessContext';
 
-import contentOtter from '../assests/images/contentotter.png';
-import yayOtter from '../assests/images/yayotter.png';
+import contentOtter from '../assets/images/contentotter.png';
+import yayOtter from '../assets/images/yayotter.png';
 
 // --- Decorative Icons Sourced from "Elementos de Bienestar" ---
 
