@@ -40,18 +40,27 @@ const BEACH_WISDOM = [
 ];
 
 const SAND_DECOR_ITEMS = [
-  { id: 1, img: svgShell, left: '4%', bottom: '18px', size: 34, rotation: -12 },
-  { id: 2, img: svgRocks, left: '11%', bottom: '8px', size: 46, rotation: 0 },
-  { id: 3, img: svgStarfish, left: '19%', bottom: '28px', size: 26, rotation: 20 },
-  { id: 4, img: svgSandDollar, left: '27%', bottom: '14px', size: 32, rotation: 0 },
-  { id: 5, img: svgAlgae, left: '35%', bottom: '10px', size: 45, rotation: -10 },
-  { id: 6, img: svgRocks, left: '44%', bottom: '22px', size: 38, rotation: 0 },
-  { id: 7, img: svgShell, left: '53%', bottom: '16px', size: 28, rotation: 8 },
-  { id: 8, img: svgFish, left: '61%', bottom: '6px', size: 32, rotation: 0 },
-  { id: 9, img: svgStarfish, left: '70%', bottom: '26px', size: 32, rotation: -18 },
-  { id: 10, img: svgAlgae2, left: '78%', bottom: '12px', size: 40, rotation: 5 },
-  { id: 11, img: svgSandDollar, left: '87%', bottom: '20px', size: 30, rotation: 25 },
-  { id: 12, img: svgRocks, left: '93%', bottom: '8px', size: 30, rotation: 0 },
+  // Left cluster
+  { id: 1, img: svgRocks, left: '2%', bottom: '5px', size: 75, rotation: -5 },
+  { id: 2, img: svgAlgae, left: '4%', bottom: '15px', size: 80, rotation: -15 },
+  { id: 3, img: svgShell, left: '8%', bottom: '12px', size: 50, rotation: 20 },
+  
+  // Mid-left cluster
+  { id: 4, img: svgStarfish, left: '25%', bottom: '28px', size: 60, rotation: -25 },
+  { id: 5, img: svgSandDollar, left: '32%', bottom: '10px', size: 45, rotation: 10 },
+  
+  // Center cluster
+  { id: 6, img: svgRocks, left: '48%', bottom: '8px', size: 90, rotation: 5 },
+  { id: 7, img: svgFish, left: '52%', bottom: '25px', size: 60, rotation: -10 },
+  { id: 8, img: svgShell, left: '58%', bottom: '18px', size: 40, rotation: -15 },
+
+  // Mid-right cluster
+  { id: 9, img: svgAlgae2, left: '75%', bottom: '5px', size: 100, rotation: 15 },
+  { id: 10, img: svgStarfish, left: '82%', bottom: '22px', size: 50, rotation: 35 },
+  
+  // Right cluster
+  { id: 11, img: svgSandDollar, left: '92%', bottom: '15px', size: 60, rotation: -5 },
+  { id: 12, img: svgRocks, left: '95%', bottom: '0px', size: 70, rotation: 10 },
 ];
 
 function MainContent({ initialTab = 'hub' }) {
@@ -94,7 +103,7 @@ function MainContent({ initialTab = 'hub' }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className={`min-h-screen flex flex-col relative text-slate-100 font-body ${isSkyMode ? 'bg-cream-50' : 'bg-bluey-950'}`}>
+    <div className={`min-h-screen flex flex-col relative text-slate-100 font-body ${isSkyMode ? 'bg-cream-50' : 'bg-midnight-950'}`}>
       
       {/* The Global Ocean Transition */}
       <OceanTransition isTransitioning={isTransitioning} />
@@ -103,7 +112,7 @@ function MainContent({ initialTab = 'hub' }) {
       {activeTab !== 'hub' && (
         <div className="pointer-events-none absolute top-0 left-0 right-0 h-96 opacity-30 z-0">
           <svg viewBox="0 0 1440 320" className="w-full h-full object-cover">
-            <path fill={isSkyMode ? '#B2EBF2' : '#00695C'} fillOpacity="0.4" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,150,768,203,864,208C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+            <path fill={isSkyMode ? '#B2EBF2' : '#1D2636'} fillOpacity="0.4" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,150,768,203,864,208C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
           </svg>
         </div>
       )}
@@ -127,7 +136,7 @@ function MainContent({ initialTab = 'hub' }) {
             </picture>
 
             {/* Bottom Gradient Fade */}
-            <div className={`absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t ${isSkyMode ? 'from-white via-white/80' : 'from-bluey-950 via-bluey-950/80'} to-transparent pointer-events-none z-0`}></div>
+            <div className={`absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t ${isSkyMode ? 'from-white via-white/80' : 'from-midnight-950 via-midnight-950/80'} to-transparent pointer-events-none z-0`}></div>
 
             {/* Hero Typography overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-start pt-24 sm:pt-44 px-4 text-center z-10">
@@ -148,7 +157,7 @@ function MainContent({ initialTab = 'hub' }) {
           </div>
 
           {/* Solid Section for Scrolling */}
-          <div className={`w-full ${isSkyMode ? 'bg-white' : 'bg-bluey-950'} flex flex-col items-center justify-center min-h-[50vh] p-8 text-center shadow-inner relative z-10`}>
+          <div className={`w-full ${isSkyMode ? 'bg-white' : 'bg-midnight-950'} flex flex-col items-center justify-center min-h-[50vh] p-8 text-center shadow-inner relative z-10`}>
             <h2 className={`text-2xl sm:text-3xl font-display font-bold ${isSkyMode ? 'text-bluey-900' : 'text-slate-100'} mb-4`}>A Space to Breathe</h2>
             <p className={`${isSkyMode ? 'text-bluey-700' : 'text-slate-400'} max-w-2xl mx-auto`}>
               Welcome to your daily mental wellness companion. Sisu provides a calming environment to check in with yourself, practice ocean tide breathing, and gently reframe your thoughts.
@@ -176,7 +185,7 @@ function MainContent({ initialTab = 'hub' }) {
 
       {/* Sandy Shoreline Decor */}
       <div
-        className={`relative w-full h-28 sm:h-40 overflow-hidden mt-auto ${isSkyMode ? 'bg-cream-200' : 'bg-bluey-900'}`}
+        className={`relative w-full h-28 sm:h-40 overflow-hidden mt-auto ${isSkyMode ? 'bg-cream-200' : 'bg-midnight-900'}`}
         style={{
           maskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
           WebkitMaskImage: 'linear-gradient(to top, black 55%, transparent 100%)',
@@ -205,7 +214,7 @@ function MainContent({ initialTab = 'hub' }) {
       </div>
 
       {/* Coastal Footer */}
-      <footer className={`border-t py-6 text-center text-xs font-medium relative z-10 transition-all ${isSkyMode ? 'border-bluey-200 text-bluey-700 bg-cream-50/70' : 'border-bluey-800 text-bluey-300 bg-bluey-950'}`}>
+      <footer className={`border-t py-6 text-center text-xs font-medium relative z-10 transition-all ${isSkyMode ? 'border-bluey-200 text-bluey-700 bg-cream-50/70' : 'border-midnight-800 text-midnight-muted bg-midnight-950'}`}>
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
           <div>© 2026 Sisu Health & Wellness • Beach Vibes & Zen Companion</div>
           <div className="flex items-center gap-3 text-[11px]">

@@ -146,7 +146,7 @@ export function GrowthDashboard({ setActiveTab }) {
               } ${
                 isSkyMode
                   ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-                  : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'
+                  : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'
               }`}
             >
               <span className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full mx-auto ${STAT_TONES[tone].medallion}`}>
@@ -171,7 +171,7 @@ export function GrowthDashboard({ setActiveTab }) {
         <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-4 transition-all border ${
           isSkyMode
             ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-            : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'
+            : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'
         }`}>
           <SeaweedFlourish className="hidden sm:block absolute -bottom-2 left-4 w-8 h-14 opacity-70" />
 
@@ -214,7 +214,7 @@ export function GrowthDashboard({ setActiveTab }) {
         <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-4 transition-all border ${
           isSkyMode
             ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-            : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'
+            : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'
         }`}>
           <ShellFlourish className="hidden sm:block absolute -bottom-2 right-6 w-10 h-8 opacity-70" />
 
@@ -229,12 +229,12 @@ export function GrowthDashboard({ setActiveTab }) {
                 key={m.title}
                 className={`p-3 rounded-2xl border flex items-center gap-3 transition-all ${
                   m.unlocked
-                    ? (isSkyMode ? 'bg-white/70 border-lagoon-200 shadow-sm' : 'bg-lagoon-900/50 border-lagoon-700')
-                    : (isSkyMode ? 'bg-dune-50/40 border-dune-100 opacity-70' : 'bg-lagoon-950/30 border-lagoon-800 opacity-60')
+                    ? (isSkyMode ? 'bg-white/70 border-lagoon-200 shadow-sm' : 'bg-midnight-900/50 border-midnight-800')
+                    : (isSkyMode ? 'bg-dune-50/40 border-dune-100 opacity-70' : 'bg-midnight-950/30 border-midnight-900 opacity-60')
                 }`}
               >
                 <div className={`w-11 h-11 rounded-full overflow-hidden shrink-0 border ${
-                  isSkyMode ? 'bg-white border-lagoon-100' : 'bg-lagoon-950 border-lagoon-700'
+                  isSkyMode ? 'bg-white border-lagoon-100' : 'bg-midnight-950 border-midnight-800'
                 }`}>
                   <img
                     src={m.portrait}
@@ -275,7 +275,7 @@ export function GrowthDashboard({ setActiveTab }) {
         <div className={`relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl space-y-4 transition-all border ${
           isSkyMode
             ? 'bg-gradient-to-br from-white via-lagoon-50 to-blush-100 border-white/60'
-            : 'bg-gradient-to-br from-lagoon-950 via-lagoon-900 to-[#1a2f38] border-lagoon-800'
+            : 'bg-gradient-to-br from-midnight-950 via-midnight-900 to-[#1D2636] border-midnight-800'
         }`}>
           <SandDollarFlourish className="hidden sm:block absolute -top-2 right-8 w-10 h-10 opacity-60" />
 
@@ -287,7 +287,7 @@ export function GrowthDashboard({ setActiveTab }) {
               <div
                 key={log.id}
                 className={`p-3.5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs ${
-                  isSkyMode ? 'bg-white/60 border-lagoon-100' : 'bg-lagoon-900/40 border-lagoon-800'
+                  isSkyMode ? 'bg-white/60 border-lagoon-100' : 'bg-midnight-900/40 border-midnight-800'
                 }`}
               >
                 <div className="space-y-1">
@@ -312,7 +312,7 @@ export function GrowthDashboard({ setActiveTab }) {
       {showThoughtsModal && (
         <div className="fixed inset-0 z-50 bg-lagoon-950/70 backdrop-blur-md flex items-center justify-center p-4">
           <div className={`relative border rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-5 shadow-2xl max-h-[85vh] flex flex-col ${
-            isSkyMode ? 'bg-white border-lagoon-200' : 'bg-lagoon-900 border-lagoon-700'
+            isSkyMode ? 'bg-white border-lagoon-200' : 'bg-midnight-900 border-midnight-800'
           }`}>
             <button
               onClick={() => { setShowThoughtsModal(false); setConfirmDeleteId(null); }}
@@ -349,8 +349,8 @@ export function GrowthDashboard({ setActiveTab }) {
                       key={b.id}
                       className={`p-3.5 rounded-2xl border transition-all ${
                         isResolved
-                          ? (isSkyMode ? 'bg-dune-50/40 border-dune-100 opacity-60' : 'bg-lagoon-950/30 border-lagoon-800 opacity-50')
-                          : (isSkyMode ? 'bg-white border-lagoon-200 shadow-sm' : 'bg-lagoon-950/40 border-lagoon-700')
+                          ? (isSkyMode ? 'bg-dune-50/40 border-dune-100 opacity-60' : 'bg-midnight-950/30 border-midnight-800 opacity-50')
+                          : (isSkyMode ? 'bg-white border-lagoon-200 shadow-sm' : 'bg-midnight-950/40 border-midnight-800')
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">

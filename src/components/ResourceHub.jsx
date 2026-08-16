@@ -234,71 +234,71 @@ export function ResourceHub({ setActiveTab }) {
   };
 
   const nightColors = {
-    pageText: '#F8EFD7',
-    secondaryText: '#C5B8A8',
-    mutedText: '#D8C7B0',
+    pageText: '#E8F1F8',
+    secondaryText: '#A9C2D8',
+    mutedText: '#A9C2D8',
 
-    title: '#F5E8C7',
-    subtitle: '#D6CBAE',
+    title: '#E8F1F8',
+    subtitle: '#A9C2D8',
 
-    searchBackground: '#17212B',
-    searchBorder: '#52616B',
-    searchText: '#F8EFD7',
-    searchIcon: '#B8AC9E',
-    placeholder: '#9BA8AD',
+    searchBackground: '#080C11',
+    searchBorder: '#1D2636',
+    searchText: '#E8F1F8',
+    searchIcon: '#A9C2D8',
+    placeholder: '#A9C2D8',
 
-    inactiveTabBackground: '#24313B',
-    inactiveTabBorder: '#52616B',
-    inactiveTabText: '#F8EFD7',
-    inactiveTabHover: '#30404A',
+    inactiveTabBackground: '#121822',
+    inactiveTabBorder: '#1D2636',
+    inactiveTabText: '#E8F1F8',
+    inactiveTabHover: '#2A374A',
 
-    activeTabBackground: '#D47A8C',
-    activeTabBorder: '#D47A8C',
+    activeTabBackground: '#2A374A',
+    activeTabBorder: '#2A374A',
     activeTabText: '#FFFFFF',
 
-    waterStart: '#173B46',
-    waterEnd: '#102A33',
+    waterStart: '#080C11',
+    waterEnd: '#121822',
 
-    cardStart: '#3B4650',
-    cardEnd: '#29343D',
+    cardStart: '#121822',
+    cardEnd: '#121822',
 
-    cardText: '#F8EFD7',
-    cardSecondaryText: '#C5B8A8',
-    cardMutedText: '#B8AC9E',
+    cardText: '#E8F1F8',
+    cardSecondaryText: '#A9C2D8',
+    cardMutedText: '#A9C2D8',
 
-    iconBackground: 'rgba(23,33,43,0.75)',
+    iconBackground: 'rgba(29,38,54,0.75)',
 
-    incompleteCheckBackground: 'rgba(48,64,74,0.85)',
-    incompleteCheckBorder: '#52616B',
-    incompleteCheckText: '#C5D0D4',
+    incompleteCheckBackground: 'rgba(18,24,34,0.85)',
+    incompleteCheckBorder: '#1D2636',
+    incompleteCheckText: '#A9C2D8',
 
-    completedCheckBackground: '#294238',
-    completedCheckBorder: '#6F9D7E',
-    completedCheckText: '#B7D9B0',
+    completedCheckBackground: '#2A374A',
+    completedCheckBorder: '#E8F1F8',
+    completedCheckText: '#FFFFFF',
 
-    modalOverlay: 'rgba(0,0,0,0.72)',
-    modalBackground: '#17212B',
-    modalBorder: '#52616B',
+    modalOverlay: 'rgba(8,12,17,0.72)',
+    modalBackground: '#121822',
+    modalBorder: '#1D2636',
 
-    contentBackground: '#24313B',
-    contentBorder: '#52616B',
-    contentText: '#F1E8D7',
+    contentBackground: '#121822',
+    contentBorder: '#1D2636',
+    contentText: '#E8F1F8',
 
-    stepBackground: '#202B34',
-    stepBorder: '#52616B',
-    stepText: '#F1E8D7',
+    stepBackground: '#080C11',
+    stepBorder: '#1D2636',
+    stepText: '#E8F1F8',
 
-    numberBackground: '#38515B',
-    numberText: '#F8EFD7',
+    numberBackground: '#2A374A',
+    numberText: '#E8F1F8',
 
-    primaryButton: '#D47A8C',
+    primaryButton: '#2A374A',
     primaryButtonText: '#FFFFFF',
 
-    ctaStart: '#173B46',
-    ctaEnd: '#29434C',
-    ctaBorder: '#5D8791',
-    ctaTitle: '#F4F1E8',
-    ctaText: '#D4DFE2'
+    ctaStart: '#121822',
+    ctaEnd: '#080C11',
+    ctaBorder: '#1D2636',
+    ctaTitle: '#E8F1F8',
+    ctaText: '#A9C2D8'
   };
 
   const colors = isSkyMode

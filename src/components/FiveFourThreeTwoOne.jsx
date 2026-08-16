@@ -234,7 +234,7 @@ function OtterAvatar({ imageSrc }) {
         <div
             className="w-full h-full rounded-2xl overflow-hidden shadow-inner flex items-center justify-center"
             style={{
-                background: isSkyMode ? '#FAFBF0' : '#1E2226',
+                background: isSkyMode ? '#FAFBF0' : '#121822',
             }}
         >
             <img
@@ -303,7 +303,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 color: '#4A2511',
                             }
                             : {
-                                background: '#5A4A2E',
+                                background: '#1D2636',
                                 color: '#F5E8C9',
                             }
                     }
@@ -314,7 +314,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                 <h2
                     className={`font-display text-2xl sm:text-3xl font-bold ${isSkyMode
                             ? 'text-bluey-950'
-                            : 'text-slate-100'
+                            : 'text-midnight-text'
                         }`}
                 >
                     5-4-3-2-1 Grounding Journey
@@ -323,7 +323,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                 <p
                     className={`text-xs sm:text-sm max-w-md mx-auto font-medium ${isSkyMode
                             ? 'text-bluey-700'
-                            : 'text-bluey-300'
+                            : 'text-midnight-muted'
                         }`}
                 >
                     Walk the shoreline with Sisu, one sense at a time, until your mind settles back into the present.
@@ -344,10 +344,10 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                         idx <= stepIndex
                                             ? isSkyMode
                                                 ? '#A4D3DE'
-                                                : '#3E6B78'
+                                                : '#2A374A'
                                             : isSkyMode
                                                 ? '#E8E2D1'
-                                                : '#3A3F45',
+                                                : '#1D2636',
                                 }}
                             />
                         ))}
@@ -393,10 +393,10 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 style={{
                                     background: isSkyMode
                                         ? '#FFFFFF'
-                                        : '#1E2226',
+                                        : '#121822',
                                     border: isSkyMode
                                         ? '1px solid #E8E2D1'
-                                        : '1px solid #3A3F45',
+                                        : '1px solid #1D2636',
                                 }}
                             >
                                 <OtterAvatar imageSrc={step.image} />
@@ -407,7 +407,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 style={{
                                     color: isSkyMode
                                         ? '#4A2511'
-                                        : '#D9F4F7',
+                                        : '#E8F1F8',
                                 }}
                             >
                                 Step {stepIndex + 1} of {GROUNDING_STEPS.length}
@@ -418,7 +418,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 style={{
                                     color: isSkyMode
                                         ? '#4A2511'
-                                        : '#F5FBFC',
+                                        : '#E8F1F8',
                                 }}
                             >
                                 {step.icon} Name {step.count} {step.prompt}
@@ -437,23 +437,23 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                             ? {
                                                 background: isSkyMode
                                                     ? '#A4D3DE'
-                                                    : '#3E6B78',
+                                                    : '#2A374A',
                                                 borderColor: isSkyMode
                                                     ? '#7AABB8'
-                                                    : '#5FA0AF',
+                                                    : '#2A374A',
                                                 color: '#FFFFFF',
                                                 transform: 'scale(0.95)',
                                             }
                                             : {
                                                 background: isSkyMode
                                                     ? '#FAFBF0'
-                                                    : '#1E2226',
+                                                    : '#121822',
                                                 borderColor: isSkyMode
                                                     ? '#E8E2D1'
-                                                    : '#3A3F45',
+                                                    : '#1D2636',
                                                 color: isSkyMode
                                                     ? '#7A5A3A'
-                                                    : '#B8BCC0',
+                                                    : '#A9C2D8',
                                             }
                                     }
                                 >
@@ -471,7 +471,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                             style={{
                                 color: isSkyMode
                                     ? '#7A5A3A'
-                                    : '#9AA0A6',
+                                    : '#A9C2D8',
                             }}
                         >
                             Tap a circle each time you notice one — no need to rush.
@@ -491,24 +491,24 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                         cursor: 'not-allowed',
                                         background: isSkyMode
                                             ? '#E8E2D1'
-                                            : '#2A2E33',
+                                            : '#121822',
                                         borderColor: isSkyMode
                                             ? '#D6CBAE'
-                                            : '#3A3F45',
+                                            : '#1D2636',
                                         color: isSkyMode
                                             ? '#7A5A3A'
-                                            : '#8A8F94',
+                                            : '#A9C2D8',
                                     }
                                     : {
                                         background: isSkyMode
                                             ? '#FAFBF0'
-                                            : '#1E2226',
+                                            : '#121822',
                                         borderColor: isSkyMode
                                             ? '#E8E2D1'
-                                            : '#3A3F45',
+                                            : '#1D2636',
                                         color: isSkyMode
                                             ? '#4A2511'
-                                            : '#E5E7EB',
+                                            : '#E8F1F8',
                                     }
                             }
                         >
@@ -527,8 +527,8 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                     }
                                     : {
                                         background:
-                                            'linear-gradient(to right, #3E6B78, #5FA0AF)',
-                                        color: '#F5FBFC',
+                                            '#2A374A',
+                                        color: '#E8F1F8',
                                     }
                             }
                         >
@@ -549,8 +549,8 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                 borderColor: '#E8E2D1',
                             }
                             : {
-                                background: '#1E2226',
-                                borderColor: '#3A3F45',
+                                background: '#121822',
+                                borderColor: '#1D2636',
                             }
                     }
                 >
@@ -563,7 +563,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                         style={{
                             color: isSkyMode
                                 ? '#4A2511'
-                                : '#F5FBFC',
+                                : '#E8F1F8',
                         }}
                     >
                         Well Grounded! 🌊
@@ -574,7 +574,7 @@ export function FiveFourThreeTwoOne({ onExit }) {
                         style={{
                             color: isSkyMode
                                 ? '#7A5A3A'
-                                : '#AEB6BC',
+                                : '#A9C2D8',
                         }}
                     >
                         You walked through every sense with Sisu. However you're feeling right now, you met this moment with care.
@@ -593,9 +593,9 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                         color: '#4A2511',
                                     }
                                     : {
-                                        background: '#1E2226',
-                                        borderColor: '#3A3F45',
-                                        color: '#E5E7EB',
+                                        background: '#121822',
+                                        borderColor: '#1D2636',
+                                        color: '#E8F1F8',
                                     }
                             }
                         >
@@ -614,8 +614,8 @@ export function FiveFourThreeTwoOne({ onExit }) {
                                         }
                                         : {
                                             background:
-                                                'linear-gradient(to right, #3E6B78, #5FA0AF)',
-                                            color: '#F5FBFC',
+                                                '#2A374A',
+                                            color: '#E8F1F8',
                                         }
                                 }
                             >

@@ -111,7 +111,7 @@ export function WellnessProvider({ children }) {
   useEffect(() => {
     document.body.className = isSkyMode
       ? 'bg-gradient-to-b from-cream-50 via-bluey-50 to-bluey-100 text-bluey-950 min-h-screen font-body antialiased selection:bg-bluey-300 selection:text-bluey-950'
-      : 'bg-gradient-to-b from-[#061B24] via-[#0E3442] to-[#061B24] text-bluey-50 min-h-screen font-body antialiased selection:bg-bluey-500 selection:text-white';
+      : 'bg-midnight-950 text-midnight-text min-h-screen font-body antialiased selection:bg-midnight-700 selection:text-white';
   }, [isSkyMode]);
 
   // Log a new mood check-in

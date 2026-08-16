@@ -70,7 +70,7 @@ function PastEntriesJournal({ logs, isSkyMode }) {
   return (
     <div className="flex flex-col h-full relative z-10 space-y-6">
       {/* Mini Calendar Header */}
-      <div className={`flex flex-col border-b pb-4 ${isSkyMode ? 'border-[#E5E5E5]' : 'border-[#2A3432]'}`}>
+      <div className={`flex flex-col border-b pb-4 ${isSkyMode ? 'border-[#E5E5E5]' : 'border-midnight-800'}`}>
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-display text-lg tracking-wide">{monthNames[month]} {year}</h3>
           <div className="flex gap-2">
@@ -342,7 +342,7 @@ export function MoodCheckIn() {
         <div className={`flex-1 lg:w-1/2 rounded-t-[1.5rem] lg:rounded-tr-none lg:rounded-l-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-r-0 lg:origin-right animate-book-page-left relative overflow-hidden
           ${isSkyMode
             ? 'bg-[#FAFAFA] border-[#E5E5E5] text-lagoon-950'
-            : 'bg-[#1C2321] border-[#2A3432] text-lagoon-50'}`}
+            : 'bg-midnight-950 border-midnight-800 text-midnight-text'}`}
         >
           {/* Decorative SVGs */}
           <div className="absolute top-0 left-0 opacity-15 pointer-events-none w-24 sm:w-32 -translate-x-4 -translate-y-4">
@@ -361,7 +361,7 @@ export function MoodCheckIn() {
         <div className={`flex-1 lg:w-1/2 rounded-b-[1.5rem] lg:rounded-bl-none lg:rounded-r-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 ease-in-out border lg:border-l-0 lg:origin-left animate-book-page-right relative overflow-hidden
           ${isSkyMode
             ? 'bg-[#FDFDFD] border-[#E5E5E5] text-lagoon-950'
-            : 'bg-[#202725] border-[#2A3432] text-lagoon-50'}`}
+            : 'bg-midnight-900 border-midnight-800 text-midnight-text'}`}
         >
           {/* Decorative SVGs */}
           <div className="absolute bottom-0 right-0 opacity-[0.15] pointer-events-none w-48 sm:w-64 translate-x-4 translate-y-4">
@@ -453,7 +453,7 @@ export function MoodCheckIn() {
                   className={`w-full py-2 bg-transparent text-base font-serif italic transition-all duration-300 resize-none focus:outline-none border-b focus:border-current opacity-80 focus:opacity-100 ${
                     isSkyMode
                       ? 'border-[#E5E5E5] placeholder-lagoon-400'
-                      : 'border-[#2A3432] placeholder-lagoon-600'
+                      : 'border-midnight-800 placeholder-midnight-muted'
                   }`}
                 />
               </div>
