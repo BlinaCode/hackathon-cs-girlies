@@ -133,7 +133,9 @@ function MainContent({ initialTab = 'hub' }) {
         </main>
       ) : (
         <main className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 space-y-8 z-10">
-          <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
+          {activeTab !== 'checkin' && (
+            <OtterMascot expression={activeTab === 'breathing' ? 'breathing' : mascotState.expression} speech={mascotState.speech} />
+          )}
           {activeTab === 'checkin' && <MoodCheckIn />}
           {activeTab === 'breathing' && <BreathingVisualizer />}
           {activeTab === 'beliefs' && <ReframeThoughts />}

@@ -96,12 +96,32 @@
 .animate-orbit-swim { animation: orbitSwim 42s linear infinite; }
 .animate-orbit-swim-reverse { animation: orbitSwimReverse 42s linear infinite; }
 
+/* Gentle selection "pop" for tappable icon buttons (mood picker, tags, etc.)
+   — a quick overshoot on select so the interaction reads as soft & bouncy
+   rather than a flat state-toggle. */
+@keyframes selectPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.16); }
+  100% { transform: scale(1.05); }
+}
+.animate-select-pop { animation: selectPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Small ring expanding outward from a just-picked mood icon, echoing the
+   otter's water ripples. Purely decorative, pointer-events-none. */
+@keyframes pickRipple {
+  0% { transform: scale(0.4); opacity: 0.55; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+.animate-pick-ripple { animation: pickRipple 0.6s ease-out; }
+
 @media (prefers-reduced-motion: reduce) {
   .animate-orbit-swim,
   .animate-orbit-swim-reverse,
   .animate-otter-float,
   .animate-ripple,
-  .animate-tide-pulse {
+  .animate-tide-pulse,
+  .animate-select-pop,
+  .animate-pick-ripple {
     animation: none;
   }
 }
