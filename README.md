@@ -1,150 +1,159 @@
-# 🦦 Sisu - Health & Wellness Companion
-> Understanding yourself and slowing the world around you
+# 🦦 Sisu — Health & Wellness Companion
 
-## What is Sisu?
+> **Understanding yourself and slowing the world around you.**
 
-Sisu is an interactive mental health and wellness web application immersing users in a welcoming ocean-themed environment with a caring sea otter ("Sisu the Otter") that helps guide the user through daily emotional check-ins, soothing breathing exercises, core value tracking, and curated mental health resources. It creates a judgment-free space for users to reflect on emotions, negative thoughts, their personal goals and build healthy mental health habits.
+Sisu is an interactive wellness web application designed to provide a calm, low-pressure space for reflection, breathing exercises, grounding activities, and personal check-ins.
 
----
+Built during a hackathon by the **Computer Science Girlies** team, Sisu combines an ocean-themed interface, an expressive otter mascot, interactive wellness tools, and optional cloud synchronization.
 
-## 🌊 User Experience
+## ✨ Features
 
-1. **Questionnaire Onboarding**
-   - New users are greeted with a gentle health check-in (how they feel, how they physically feel, and what has been on their mind); this personalizes where they will be redirected to in the app. These questions can also be skipped.
+* 🌊 **Mood Check-ins** — Record your mood, energy level, and optional reflections.
+* 🫧 **Interactive Breathing Visualizer** — Guided breathing exercises including Box Breathing, 4-7-8 breathing, and Ocean Calm.
+* 🦦 **Sisu the Otter** — An interactive mascot that responds to user activity throughout the application.
+* 🤝 **Connect** — A shared breathing experience where users can see others participating in real time.
+* 💭 **Reframe Thoughts** — A guided tool for turning difficult thoughts into more constructive perspectives.
+* 🧭 **Core Values** — Reflect on relationships, connections, and personal values.
+* 👀 **5-4-3-2-1 Grounding** — An interactive sensory grounding exercise.
+* 📚 **Resource Hub** — A collection of wellness and mental-health resources.
+* 🌧️ **Ambient Soundscapes** — Ocean waves, rain, and stream sounds with volume controls.
+* 📈 **Growth Dashboard** — View check-ins, streaks, and mood trends over time.
+* 🌙 **Day/Night Modes** — Switch between light and dark visual environments.
+* 👤 **Guest Mode** — Use the application without creating an account, with data stored locally.
+* ☁️ **Optional Cloud Sync** — Supabase authentication and database synchronization for users who want their data available across devices.
 
-2. **Sisu the Otter Mascot**
-   - Cute and expressive otter that appears in the app at the top of the page; it will react to the user's activity and offer words of encouragement and guidance. 
+## 👩‍💻 My Contributions
 
-3. **Day/Night Modes**
-   - The user can choose whether or not to have a light or dark mode ("sky") while in the application.
-   
-## 🌊 Features
+As a member of the development team, I worked primarily on the backend/integration side while also contributing to application functionality and UI.
 
-1. **Mood Check-in**
-   - Quick and easy emotional check-in with mood selection, energy level toggle, and optional reflective journaling
-   - Sisu is responsive to what is shared and will offer guidance and encouragement
+My contributions included:
 
-2. **Interactive Ocean Wave Breathing Visualizer**
-   - Animated ocean bubble breathing exercise supporting these techniques, matching the bubble animation:
-     - **Box Breathing (4-4-4-4)** – Focus & stress relief
-     - **4-7-8 Relaxing Breath** – Deep relaxation & sleep prep
-     - **Ocean Calm Breath** – Soothing rhythm 
+* Developed the **Connect/Friend Circle functionality**.
+* Implemented navigation between the **Friend Circle and Breathing experience**.
+* Worked on the **breathing-session flow** and interaction logic.
+* Implemented the `useBreathingPresence` hook for displaying users participating in the breathing experience.
+* Added a **breathing-session completion/celebration experience**.
+* Worked on the application's **soundscape functionality**.
+* Fixed styling issues in the **Resource Hub** and aligned it with the project's design system.
+* Updated application navigation in `App.jsx`.
+* Worked with **Supabase/local development and testing** for application synchronization and presence functionality.
+* Tested the user flow and helped integrate features across the application.
 
-3. **Connect**
-   - Users can join a live server where other users are participating in breathing exercises in real time. 
-   - Includes other users' otters
+## 🏆 Hackathon
 
-4. **Reframe Thoughts**
-   - A CBT-style tool that guides users to challenge and reframe negative thoughts into more positive and helpful ones.
+Sisu was created as part of the **Computer Science Girlies Hackathon**.
 
-5. **Core Values**
-   - Users can define and check-in with their relationship connectedness through answering a few questions regarding contact frequency, conversations, trust, closeness, understanding,       and support.
-   - Encourages users to think about how strong that connection is.
+🏅 **Award: Most Viral**
 
-6. **5-4-3-2-1 Grounding Exercis**
-   - Classic sensory grounding technique for anxiety:
-     - sight, smell, touch, hearing, taste*
-7. **Resource Hub**
-   - A curated list of mental health resources including grounding techniques, CBT resources, emergency hotlines (country-specific), and sleep solutions.
+The project was developed collaboratively under a time constraint, requiring the team to divide responsibilities, integrate features, troubleshoot issues, and iterate quickly.
 
-8. **Ambient Sea Soundscapes**
-   - Built-in soothing ambient audio player of Ocean Waves, Rain, Stream with volume control
-   - Plays in the background for calm ambience
+## 🛠️ Tech Stack
 
-9. **Growth Dashboard**
-   - Tracks a user's check-ins, streaks, and progress over time.
-   - Includes graphs and charts of mood trends
+### Frontend
 
-10. **Account & Guest Mode**
-    - **Guest Access**: No login needed, saved locally on device.
-    - **Cloud Sync**: Optional Supabase Auth & PostgreSQL sync across devices.
+* React
+* Vite
+* JavaScript
+* Tailwind CSS
+* Custom CSS
 
-11. **About Sisu**
-   - A page dedicated to introducing Sisu the Otter and the purpose of the app.
+### Backend & Data
 
----
-## Design Philosophy
+* Supabase
+* PostgreSQL
+* Supabase Authentication
+* Local storage / guest mode
 
-**Frictionless entry**
-- We placed emphasis on allowing users to access all of our platform’s resources on guest mode and instead provided an optional cloud sync if they wanted to create an account.
+### Other
 
-**Calm UX**
-- Since mental health is a sensitive topic, we ensured that the user had a calm experience through carefully guarded and empathetic interactions and an accessible HTML.
+* React Context
+* Custom React hooks
+* Real-time presence functionality
+* Responsive UI
 
-**Sea Design**
-- Throughout the webpage, we used a consistent sea theme through a uniform color palette of light blues, greens and browns, the otter mascot, Sisu and the scattered images of sea items like shells and rocks. This projected to the user a cohesive and serene environment that differentiated our product from other tools available.  
-
-**Empathise on mobile usage**
-- To allow for quick accessibility to our website’s resources, we placed a high importance on how the webpage will be viewed on mobile devices.
-
-## Tech Stack
-
-**Frontend**
-- The UI was built with a combination of React and Vite and styled with Tailwind CSS and custom CSS theming. 
-
-**Data**
-- Data is stored locally by default, however it can be stored in Supabase for usage over multiple devices. 
-
-**State**
-- It is run with a React context for the wellness and authentication aspects and uses custom hooks for storage synchronization, timers and sound effects.  
-
-## Who is Sisu for
-
-Sisu is aimed at anyone who wants a low pressure and convenient way to keep track of their mental health through check-in and exercises. This application is not meant to replace professional healthcare workers, however it assists users to practice taking care of themselves and provides connection to other resources when needed. 
-
-
-## 📁 Repository Structure
+## 🏗️ Project Structure
 
 ```text
 hackathon-cs-girlies/
-├── golden-rules.md               # Core Engineering & Architecture Rules
-├── README.md                     # Project Overview & Setup Guide
+├── src/
+│   ├── components/
+│   ├── context/
+│   ├── hooks/
+│   ├── services/
+│   └── styles/
+├── supabase/
 ├── architecture/
-│   └── README.md                 # System Architecture & Layering Rules
-├── agents/                       # AI Agent specification
-│   ├── .architect.md             # AI Agent architect prompt
-│   ├── .engineer.md              # AI Agent engineer prompt
-│   └──  .README.md               # Agent architecture overview
+├── agents/
 ├── context/
-│   ├── ai-constraints.md         # Runtime & AI context guidelines
-│   └── design-contracts.md       # Component, Hook, & Service contracts
-├── design_sessions/              # All the design sessions
-│   ├── active-design.md          # Currently active design session
-│   └── TEMPLATE.md               # Design session template
-├── languages/                    # Language conventions
-│   └── README.md                 # Language guidelines 
-├──  node_modules/                # Json package
-├── src/                          # All the source code  
-├── assets/                       # All images used
-│   ├── components/               # React components 
-│   ├── context/                  # React context 
-│   ├── hooks/                    # React JS hooks
-│   ├── services/                 # React JS Service modules
-│   └── styles/                   # All the styles 
-│        ├── App.jsx              # The entry point to the application
-│        └── main.jsx             # The entry point to the application
-├── supabase/                     # Supabase database schema and configuration
-└── workflows/                    # AI workflow commands ($prepare, $design-session, etc.)
-
-
-
----
+├── design_sessions/
+├── languages/
+├── workflows/
+├── .vscode/
+├── README.md
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+└── index.html
+```
 
 ## 🚀 Getting Started
 
-1. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+### 1. Clone the repository
 
-2. **Environment Configuration**
-   Create `.env` in root:
-   ```env
-   VITE_SUPABASE_URL=https://your-supabase-id.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-key
-   ```
+```bash
+git clone https://github.com/BlinaCode/hackathon-cs-girlies.git
+cd hackathon-cs-girlies
+```
 
-3. **Start Development Server**
-   ```bash
-   npm run dev
-   ```
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+If Supabase is not configured, the application can operate using its local/guest functionality where supported.
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+The application will then be available through the local development URL provided by Vite.
+
+## 🎨 Design Philosophy
+
+### Frictionless Entry
+
+Sisu provides guest access so users can explore the application's features without being required to create an account.
+
+### Calm UX
+
+The interface uses a consistent ocean-inspired environment and gentle interactions to create a comfortable experience.
+
+### Consistent Visual Language
+
+Ocean colors, the Sisu otter mascot, and themed illustrations are used throughout the application to create a cohesive visual identity.
+
+### Responsive Experience
+
+The application was designed with mobile usage and accessibility in mind, allowing users to access its tools across different screen sizes.
+
+## 👥 Team Project
+
+Sisu was created collaboratively by the **Computer Science Girlies** hackathon team.
+
+This repository is a fork of the team's original repository. The project was developed collaboratively, and the **My Contributions** section above highlights the areas I personally worked on.
+
+## ⚠️ Disclaimer
+
+Sisu is a wellness and self-reflection application and is **not a replacement for professional healthcare or emergency services**. Its tools are intended to support reflection, grounding, and general wellbeing.
