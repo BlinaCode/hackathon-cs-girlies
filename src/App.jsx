@@ -80,7 +80,13 @@ function MainContent({ initialTab = 'hub' }) {
   useSupabaseSync();
 
   return (
-    <div className={`min-h-screen flex flex-col relative text-slate-100 font-body ${isSkyMode ? 'bg-cream-50' : 'bg-bluey-950'}`}>
+    <div
+  className={`min-h-screen flex flex-col relative font-body transition-colors duration-300 ${
+    isSkyMode
+      ? 'bg-cream-50 text-bluey-950'
+      : 'bg-bluey-950 text-slate-100'
+  }`}
+>
 
       {/* Subtle Background Beach Decor - Water Ripples (Only when NOT on hub to keep hub clean) */}
       {activeTab !== 'hub' && (
